@@ -1,4 +1,4 @@
-from src.fastaReader import read
+from bioKit.fastaReader import read
 import re
 
 # TODO: Convert this to a more universal and more easy-to-use tool.

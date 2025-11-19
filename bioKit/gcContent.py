@@ -58,13 +58,13 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
     is_gc = [1 if b in 'GC' else 0 for b in seq]
 
     gc_count = sum(is_gc[:window])
-    gc_list = [(0, window, round(gc_count / window * 100, 2))]
+    gc_list = [(0, window, round((gc_count / window) * 100, 2))]
 
     for i in range(step, n - window + 1, step):
         gc_count -= sum(is_gc[i-step: i])
         gc_count += sum(is_gc[i+window-step: i+window])
 
-        gc_percent = round(gc_count / window * 100, 2)
+        gc_percent = round((gc_count / window) * 100, 2)
         gc_list.append((i, i+window, gc_percent))
 
     return gc_list

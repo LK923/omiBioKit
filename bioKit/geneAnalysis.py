@@ -1,4 +1,4 @@
-from src.sequenceAnalysis import Sequence
+from bioKit.sequenceAnalysis import Sequence
 
 
 class Gene(Sequence):

@@ -1,5 +1,5 @@
-from src.geneAnalysis import Gene
-from src.fastaReader import read
+from bioKit.geneAnalysis import Gene
+from bioKit.fastaReader import read
 
 
 class Genome(object):
