@@ -1,72 +1,78 @@
-from src.fastaReader import read
+def rnaTranslate(
+    rna_seq: str, stopSign: bool = False,
+    frame: int = 0, augStart: bool = False
+) -> str:
+    """Translate an RNA sequence into an amino acid sequence."""
 
-# TODO: Convert this to a more universal and more easy-to-use tool.
+    if not rna_seq or len(rna_seq) < 3:
+        return ""
+
+    if frame not in (0, 1, 2):
+        raise ValueError(f"Invalid frame: {frame}, Frame must be 0, 1, or 2.")
+
+    codon_table = {  # Standard genetic code
+        'UUU': 'F', 'UUC': 'F',  # Phenylalanine
+        'UUA': 'L', 'UUG': 'L',  # Leucine
+        'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',  # Serine
+        'UAU': 'Y', 'UAC': 'Y',  # Tyrosine
+        'UAA': '*', 'UAG': '*',  # Stop codons
+        'UGU': 'C', 'UGC': 'C',  # Cysteine
+        'UGA': '*',              # Stop codon
+        'UGG': 'W',              # Tryptophan
+
+        'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',  # Leucine
+        'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',  # Proline
+        'CAU': 'H', 'CAC': 'H',  # Histidine
+        'CAA': 'Q', 'CAG': 'Q',  # Glutamine
+        'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',  # Arginine
+
+        'AUU': 'I', 'AUC': 'I', 'AUA': 'I',  # Isoleucine
+        'AUG': 'M',                          # Methionine (Start)
+        'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',  # Threonine
+        'AAU': 'N', 'AAC': 'N',  # Asparagine
+        'AAA': 'K', 'AAG': 'K',  # Lysine
+        'AGU': 'S', 'AGC': 'S',  # Serine
+        'AGA': 'R', 'AGG': 'R',  # Arginine
+
+        'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',  # Valine
+        'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',  # Alanine
+        'GAU': 'D', 'GAC': 'D',  # Aspartic acid
+        'GAA': 'E', 'GAG': 'E',  # Glutamic acid
+        'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',  # Glycine
+    }
+
+    aa = []
+    start_idx = 0
+    seq = rna_seq.upper()[frame:]
+
+    if augStart:
+        for j in range(0, len(seq) - 2, 3):
+            if seq[j: j+3] == "AUG":
+                start_idx = j
+                break
+        else:
+            return ""
+
+    for i in range(start_idx, len(seq) - 2, 3):
+        codon = seq[i: i+3]
+
+        amino = codon_table.get(codon)
+        if amino is None:
+            raise ValueError(f"Invalid codon '{codon}' in RNA sequence")
+
+        if amino == "*":
+            if stopSign:
+                aa.append("*")
+            break
+
+        aa.append(amino)
+
+    return "".join(aa)
 
 
 def main() -> None:
-    input_file = './data/translate_input.fasta'
-    output_file = './output/translate_output.txt'
-    results = []
-
-    for rna_seq in list(read(input_file).values()):
-        results.append(translate(rna_seq))
-
-    write_output(results, output_file)
-
-
-def translate(rna_seq: str) -> str:
-    """Translate an RNA sequence into an amino acid sequence."""
-    amino_acid_to_codons = {  # Standard genetic code
-        'F': ['UUU', 'UUC'],
-        'L': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
-        'S': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'],
-        'Y': ['UAU', 'UAC'],
-        '*': ['UAA', 'UAG', 'UGA'],
-        'C': ['UGU', 'UGC'],
-        'W': ['UGG'],
-        'P': ['CCU', 'CCC', 'CCA', 'CCG'],
-        'H': ['CAU', 'CAC'],
-        'Q': ['CAA', 'CAG'],
-        'R': ['CGU', 'CGC', 'CGA', 'CGG', 'AGA', 'AGG'],
-        'I': ['AUU', 'AUC', 'AUA'],
-        'M': ['AUG'],
-        'T': ['ACU', 'ACC', 'ACA', 'ACG'],
-        'N': ['AAU', 'AAC'],
-        'K': ['AAA', 'AAG'],
-        'V': ['GUU', 'GUC', 'GUA', 'GUG'],
-        'A': ['GCU', 'GCC', 'GCA', 'GCG'],
-        'D': ['GAU', 'GAC'],
-        'E': ['GAA', 'GAG'],
-        'G': ['GGU', 'GGC', 'GGA', 'GGG']
-    }
-
-    codon_table = {
-        codon: aa for aa, codons in amino_acid_to_codons.items()
-        for codon in codons
-        }  # Invert the mapping
-
-    seq_length = len(rna_seq)  # Length of the RNA sequence
-    amino_acid_seq = []
-
-    # Iterate over the RNA sequence in steps of 3 (codon length)
-    for i in range(0, seq_length - 2, 3):
-        # Extract codon
-        codon = rna_seq[i: i+3]
-        if codon_table[codon] == '*':
-            break  # Stop translation at stop codon
-        amino_acid_seq.append(codon_table[codon])
-
-    return "".join(amino_acid_seq)
-
-
-def write_output(amino_acid_seq, output_file) -> None:
-    """Write the amino acid sequences to the output file."""
-    with open(output_file, "w") as f:
-        f.write("---------\n")
-        for result in amino_acid_seq:
-            f.write(f"{result}\n")
-            f.write("---------\n")
-    print(output_file)  # Print the output file path
+    aa = rnaTranslate("AAAAUGAAAUAA", stopSign=True, frame=1)
+    print(aa)
 
 
 if __name__ == "__main__":
