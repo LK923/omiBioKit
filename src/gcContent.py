@@ -22,7 +22,7 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
 
     first_window = seq[:window]
     gc_count = sum(1 for b in first_window if b in 'GC')
-    gc_list = [((0, window, round(gcContent(first_window) * 100, 2)))]
+    gc_list = [(0, window, round(gcContent(first_window) * 100, 2))]
 
     for i in range(step, len(seq) - window + 1, step):
         bases_seen = seq[i-step: i]
