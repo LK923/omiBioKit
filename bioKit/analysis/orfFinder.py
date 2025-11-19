@@ -5,7 +5,7 @@ import re
 
 
 def main() -> None:
-    input_file = r".\data\orf.fa"
+    input_file = r"./examples/data/orf.fa"
     sequences = read(input_file)
     seq = None
     for s in sequences.values():

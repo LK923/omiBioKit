@@ -102,7 +102,7 @@ def read(file_name: str) -> dict:
 
 
 def main():
-    input_path = r".\data\example_fa.fasta"
+    input_path = r"./examples/data/example_fa.fasta"
     seq_dict = read(input_path)
     print(seq_dict)
 

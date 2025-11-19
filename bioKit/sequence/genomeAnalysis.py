@@ -199,7 +199,7 @@ class Genome(object):
 def main():
     gene = Gene("CCCCAGCGAGGCAGCTACTA", "Name", "Organism")
     genome = Genome("Organism")
-    genome.read_fasta(r".\data\example_fa.fasta")
+    genome.read_fasta(r"./examples/data/example_fa.fasta")
     genome.add_gene(gene)
     print(genome)
     print(genome.genes)
