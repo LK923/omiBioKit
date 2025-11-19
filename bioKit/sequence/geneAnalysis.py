@@ -1,4 +1,6 @@
-from bioKit.sequenceAnalysis import Sequence
+from bioKit.sequence.sequenceAnalysis import Sequence
+
+# TODO: Needs modification
 
 
 class Gene(Sequence):

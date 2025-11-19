@@ -1,5 +1,7 @@
-from bioKit.geneAnalysis import Gene
-from bioKit.fastaReader import read
+from bioKit.sequence.geneAnalysis import Gene
+from bioKit.io.fastaReader import read
+
+# TODO: Needs modification
 
 
 class Genome(object):

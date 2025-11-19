@@ -1,18 +1,23 @@
-from bioKit.fastaReader import read
+from bioKit.io.fastaReader import read
 import re
 
-# TODO: Convert this to a more universal and more easy-to-use tool.
+# TODO: Needs modification
 
 
 def main() -> None:
-    input_file = r".\data\example_fa.fasta"
-    output_file_name = r".\output\orf_example_output.txt"
+    input_file = r".\data\orf.fa"
     sequences = read(input_file)
+    seq = None
+    for s in sequences.values():
+        seq = s
+    print(find_orfs(seq))
 
-    write_orfs(sequences, output_file_name)
 
-
-def find_orfs(seq: str, overLap: bool = False) -> list:
+def find_orfs(
+    seq: str,
+    overLap: bool = False,
+    translate: bool = False
+) -> list:
     """ Find non-overlapping ORFs in a sequence.
 
     Find all non-overlapping Open Reading Frames (ORFs) in the given sequence.
@@ -49,15 +54,15 @@ def find_orfs(seq: str, overLap: bool = False) -> list:
         end_pos = start_pos + len(orf) - 1
         # Append information for every ORF to outputs list.
         # Get amino acid sequence of ORFs through calling translate().
+        if translate is True:
+            orf = dnaTranslate(orf, stopSign=False)
         outputs.append(
-            f"{orf}\n"
-            f"start={start_pos}, end={end_pos}, length={len(orf)}\n"
-            f"amino acid sequence: {translate(orf)}\n\n"
+            (start_pos, end_pos, orf)
         )
     return outputs
 
 
-def translate(seq: str, stopSign: bool = True) -> str:
+def dnaTranslate(seq: str, stopSign: bool = True) -> str:
     """ Translate DNA sequence to amino acid sequence.
 
     Translate a CODING STRAND DNA sequence to correspond amino acid sequence.
@@ -115,56 +120,6 @@ def translate(seq: str, stopSign: bool = True) -> str:
         aa_seq.append(codon_table[codon])
     # Returns a string of the sequence of amino acid.
     return "".join(aa_seq)
-
-
-def write_orfs(sequences: dict, output_file_name: str) -> None:
-    """ Write ORFs to output file.
-
-    Write the results of orfs from sequences
-    In a text file called "orf_output.txt".
-
-    Args:
-    sequences: a dictionary that contains sequence name and the sequence.
-    example:
-
-    {
-    "seq1": AAAATGCCCTTTGGGTAA,
-    "seq2": AGCTAGTCTGTTATCGTA
-    }
-
-    Write:
-    For every sequence, write the name of the sequence,
-    Every ORFs in every sequence,
-    and the total number of ORFs in the sequences.
-    Example:
-
-        "
-        >seq1:
-        ORF1: ATGCCCTAA
-        start=1, end=9, length=9
-        amino acid sequence: MP*
-
-        ORF2: ATGGGGTAG
-        start=10, end=18, length=9
-        amino acid sequence: MG*
-
-        Total ORFs found in seq1: 2
-
-        ----------------------------
-        "
-    """
-    with open(output_file_name, "w") as f:
-        # Write results for every sequence.
-        for key in sequences.keys():
-            orfs_in_seq = find_orfs(sequences[key])
-            f.write(f">{key}:\n")
-            for i, orf in enumerate(orfs_in_seq, start=1):
-                f.write(f"ORF{i}: {orf}")
-            f.write(
-                f"Total ORFs found in {key}: {len(orfs_in_seq)}\n\n"
-                "----------------------------\n"
-            )
-    print(f"Output file: {output_file_name}")  # Notify user
 
 
 if __name__ == "__main__":

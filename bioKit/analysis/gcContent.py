@@ -1,4 +1,4 @@
-from fastaReader import read
+from bioKit.io.fastaReader import read
 import matplotlib.pyplot as plt
 
 
