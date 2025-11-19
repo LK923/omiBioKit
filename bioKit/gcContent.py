@@ -2,7 +2,7 @@ from fastaReader import read
 import matplotlib.pyplot as plt
 
 
-def gcContent(
+def gc(
     seq: str, percent: bool = False, accuracy: int = 5
 ) -> float | str:
     """Calculate the GC content of a DNA sequence.
@@ -20,6 +20,8 @@ def gcContent(
 
     if not seq:
         return 0.0 if not percent else "0.00%"
+    if not isinstance(seq, str):
+        raise TypeError(f"Expected str, got {type(seq).__name__}")
     seq = seq.upper()
     gc_content = (seq.count("C") + seq.count("G")) / len(seq)
 
@@ -37,6 +39,7 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
 
     Raises:
         ValueError: if window or step is not positive.
+        TypeError: if seq is not a string.
 
     Returns:
         list[tuple]: A list of tuples, each containing (start, end, GC%).
@@ -44,6 +47,8 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
 
     if not seq:
         return []
+    if not isinstance(seq, str):
+        raise TypeError(f"Expected str, got {type(seq).__name__}")
     if window <= 0 or step <= 0:
         raise ValueError("window and step should be positive numbers")
 
@@ -71,6 +76,14 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
 
 
 def draw_sliding_gc(gc_list: list[tuple]) -> None:
+    """Visualize sliding window GC content.
+
+    Args:
+        gc_list (list[tuple]): List of tuples containing (start, end, GC%).
+    """
+
+    if not gc_list:
+        return
     positions = [(start + end) / 2 for start, end, _ in gc_list]
     gc_vals = [gc for _, _, gc in gc_list]
     avg_gc = sum(gc_vals) / len(gc_vals)
@@ -99,7 +112,7 @@ def main():
     for seq in seq_dict.values():
         sequence = seq
     res = sliding_gc(sequence)
-    draw_sliding_gc(res)
+    print(res)
 
 
 if __name__ == "__main__":
