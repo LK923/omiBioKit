@@ -107,12 +107,12 @@ def draw_sliding_gc(gc_list: list[tuple]) -> None:
 
 def main():
     input_path = r"./examples/data/gc.fa"
-    seq_dict = read(input_path)
+    seq_dict = read(input_path, as_str=True)
     sequence = None
     for seq in seq_dict.values():
         sequence = seq
     res = sliding_gc(sequence)
-    print(res)
+    draw_sliding_gc(res)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from bioKit.sequence.sequenceAnalysis import Sequence
 
 
 class FastaFormatError(Exception):
@@ -9,7 +10,7 @@ class FastaFormatError(Exception):
         super().__init__(message)
 
 
-def read(file_name: str) -> dict:
+def read(file_name: str, as_str: bool = False) -> dict:
     """Read fasta file and return sequence and name mapping.
 
     Read fasta file and return sequence, name mapping in a dictionary.
@@ -54,7 +55,9 @@ def read(file_name: str) -> dict:
             raise FastaFormatError(f"Sequence Name '{name}' Already Exists")
         if not seq:
             raise FastaFormatError(f"Sequence Missing for {name}")
-        sequences[name] = "".join(seq)
+        sequences[name] = (
+            "".join(seq) if as_str else Sequence("".join(seq))
+        )
 
     match ext:
         case ".fasta" | ".fa" | ".fna":
@@ -103,8 +106,9 @@ def read(file_name: str) -> dict:
 
 def main():
     input_path = r"./examples/data/example_fa.fasta"
-    seq_dict = read(input_path)
-    print(seq_dict)
+    seq_dict = read(input_path, as_str=False)
+    for seq in seq_dict.values():
+        print(seq.type)
 
 
 if __name__ == "__main__":

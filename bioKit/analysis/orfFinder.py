@@ -6,7 +6,7 @@ import re
 
 def main() -> None:
     input_file = r"./examples/data/orf.fa"
-    sequences = read(input_file)
+    sequences = read(input_file, as_str=True)
     seq = None
     for s in sequences.values():
         seq = s

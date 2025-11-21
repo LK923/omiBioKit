@@ -82,7 +82,7 @@ class Sequence:
         comp = self.sequence.translate(comp_table)
         return Sequence(comp, rna=self._is_rna)
 
-    def reverse_complement(self) -> "Sequence":
+    def rev_complement(self) -> "Sequence":
         """Return the reverse complement of the sequence."""
         if self._is_rna is True:
             rev_comp_table = str.maketrans("AUCGN", "UAGCN")
@@ -123,7 +123,7 @@ class Sequence:
         return self.sequence
 
     def __repr__(self) -> str:
-        return f"Sequence('{self.sequence}')"
+        return f"Sequence('{self.sequence}', rna={self._is_rna})"
 
     def __getitem__(self, idx) -> str:
         return self.sequence[idx]
@@ -149,7 +149,7 @@ def main():
     print(dna)
     print(f"Type: {dna.type}")
     print(f"Complement: {dna.complement()}")
-    print(f"Reversed complement: {dna.reverse_complement()}")
+    print(f"Reversed complement: {dna.rev_complement()}")
     print(f"gc_content: {dna.gc_content(percent=True)}")
 
 

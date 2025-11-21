@@ -169,7 +169,7 @@ class Genome(object):
 
     def read_fasta(self, file_name):
         """Read genes from a FASTA file and add them to the genome."""
-        gene_dict = read(file_name)
+        gene_dict = read(file_name, as_str=True)
         for name in gene_dict.keys():
             self.add_gene(Gene(gene_dict[name], name, self.organism))
 
