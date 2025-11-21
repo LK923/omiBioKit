@@ -1,9 +1,11 @@
-from bioKit.io.fastaReader import read
-from bioKit.sequence.sequenceAnalysis import Sequence
 import matplotlib.pyplot as plt
+from typing import Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bioKit.sequence.sequenceAnalysis import Sequence
 
 
-def gc(seq: Sequence | str, percent: bool = False) -> float | str:
+def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
     """Calculate the GC content of a DNA sequence.
 
     Args:
@@ -14,7 +16,7 @@ def gc(seq: Sequence | str, percent: bool = False) -> float | str:
     Returns:
         float | str: GC content as a float or percentage string.
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError("Sequence must be of type Sequence or string")
     if isinstance(seq, str):
@@ -24,7 +26,7 @@ def gc(seq: Sequence | str, percent: bool = False) -> float | str:
 
 
 def sliding_gc(
-    seq: Sequence | str,
+    seq: Union["Sequence", str],
     window: int = 100,
     step: int = 10
 ) -> list[tuple]:
@@ -42,7 +44,7 @@ def sliding_gc(
     Returns:
         list[tuple]: A list of tuples, each containing (start, end, GC%).
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     if not seq:
         return []
     if not isinstance(seq, (Sequence, str)):
@@ -77,7 +79,7 @@ def sliding_gc(
 
 def draw_sliding_gc(
     gc_list: list[tuple],
-    seq: Sequence | str | None = None,
+    seq: Union["Sequence", str, None] = None,
     window_avg: bool = True
 ) -> None:
     """Visualize GC content from sliding window analysis.
@@ -133,11 +135,8 @@ def draw_sliding_gc(
 
 
 def main():
-    input_path = r"./examples/data/gc.fa"
-    seq_dict = read(input_path)
-    sequence = seq_dict["example"]
-    res = sliding_gc(sequence)
-    draw_sliding_gc(res)
+    from bioKit.sequence.sequenceAnalysis import Sequence  # noqa
+    print(gc("AGCTAGCTAGTCGTAC"))
 
 
 if __name__ == "__main__":

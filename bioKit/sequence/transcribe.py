@@ -1,11 +1,14 @@
-from bioKit.sequence.sequenceAnalysis import Sequence
+from typing import Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bioKit.sequence.sequenceAnalysis import Sequence
 
 
 def transcribe(
     seq: str,
     strand: str = "+",
     as_str: bool = False
-) -> Sequence | str:
+) -> Union["Sequence", str]:
     """Transcribe a DNA seq sequence to RNA.
 
     Args:
@@ -21,7 +24,7 @@ def transcribe(
     Returns:
         Sequence | str: transcribed RNA sequence
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError("Sequence must be of type Sequence or string")
     if isinstance(seq, str):
@@ -34,7 +37,7 @@ def transcribe(
 def reverse_transcribe(
     seq: str,
     as_str: bool = False
-) -> Sequence | str:
+) -> Union["Sequence", str]:
     """Reverse transcribe a RNA seq sequence to DNA.
 
     Args:
@@ -48,7 +51,7 @@ def reverse_transcribe(
     Returns:
         Sequence | str: reverse transcribed DNA sequence
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError("Sequence must be of type Sequence or string")
     if isinstance(seq, str):

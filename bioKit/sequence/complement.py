@@ -1,7 +1,13 @@
-from bioKit.sequence.sequenceAnalysis import Sequence
+from typing import Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bioKit.sequence.sequenceAnalysis import Sequence
 
 
-def complement(seq: Sequence | str, as_str: bool = False) -> Sequence | str:
+def complement(
+    seq: Union["Sequence", str],
+    as_str: bool = False
+) -> Union["Sequence", str]:
     """Complement a given sequence.
 
     Args:
@@ -15,7 +21,7 @@ def complement(seq: Sequence | str, as_str: bool = False) -> Sequence | str:
     Returns:
         Sequence | str: Complemented sequence.
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
         raise TypeError("Sequence must be of type Sequence or string")
@@ -26,7 +32,10 @@ def complement(seq: Sequence | str, as_str: bool = False) -> Sequence | str:
     return (res.sequence if as_str is True else res)
 
 
-def reverse_complement(seq: Sequence | str, as_str: bool = False) -> str:
+def reverse_complement(
+    seq: Union["Sequence", str],
+    as_str: bool = False
+) -> Union["Sequence", str]:
     """Reverse complement a given sequence.
 
     Args:
@@ -40,7 +49,7 @@ def reverse_complement(seq: Sequence | str, as_str: bool = False) -> str:
     Returns:
         str: Reverse complemented sequence.
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
         raise TypeError("Sequence must be of type Sequence or string")
