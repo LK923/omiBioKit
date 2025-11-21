@@ -1,48 +1,66 @@
-def main():
-    print(transcribe("ACTG", strand="+"))
+from bioKit.sequence.sequenceAnalysis import Sequence
 
 
-def transcribe(seq: str, strict: bool = True, strand: str = "+") -> str:
-    """Transcribe a seq sequence to RNA.
+def transcribe(
+    seq: str,
+    strand: str = "+",
+    as_str: bool = False
+) -> Sequence | str:
+    """Transcribe a DNA seq sequence to RNA.
 
     Args:
-        seq (str): input seq sequence
-        strict (bool, optional):
-        If True, validate the sequence for valid bases. Defaults to True.
+        seq (Sequence | str): input seq sequence
         strand (str, optional):
         Sense or antisense, either '+' or '-'. Defaults to '+'.
+        as_str (bool, optional):
+        Whether to return the result as a string. Defaults to False.
 
     Raises:
-        TypeError: if seq is not a string or strick is not a bool
-        ValueError: if strand is invalid
-        ValueError: if invalid bases are found in strict mode
+        TypeError: If the input sequence is not of type Sequence or string.
 
     Returns:
-        str: transcribed RNA sequence
+        Sequence | str: transcribed RNA sequence
     """
 
-    if not seq:
-        return ""
-    if not isinstance(seq, str):
-        raise TypeError(f"Expected str, got {type(seq).__name__}")
-    if not isinstance(strict, bool):
-        raise TypeError(f"Expected bool, got {type(seq).__name__}")
-    if strand not in ["+", "-"]:
-        raise ValueError("strand should be either '+' or '-'")
+    if not isinstance(seq, (Sequence, str)):
+        raise TypeError("Sequence must be of type Sequence or string")
+    if isinstance(seq, str):
+        seq = Sequence(seq)
 
-    seq = seq.upper()
+    res = seq.transcribe(strand=strand)
+    return str(res) if as_str else res
 
-    if strict:
-        valid = {"A", "C", "T", "G"}
-        if invalid := set(seq) - valid:
-            raise ValueError(f"Invalid base(s): {invalid}")
 
-    if strand == "+":
-        table = str.maketrans("T", "U")
-        return seq.translate(table)
-    else:
-        table = str.maketrans("ACTG", "UGAC")
-        return seq.translate(table)[::-1]
+def reverse_transcribe(
+    seq: str,
+    as_str: bool = False
+) -> Sequence | str:
+    """Reverse transcribe a RNA seq sequence to DNA.
+
+    Args:
+        seq (Sequence | str): input seq sequence
+        as_str (bool, optional):
+        Whether to return the result as a string. Defaults to False.
+
+    Raises:
+        TypeError: If the input sequence is not of type Sequence or string.
+
+    Returns:
+        Sequence | str: reverse transcribed DNA sequence
+    """
+
+    if not isinstance(seq, (Sequence, str)):
+        raise TypeError("Sequence must be of type Sequence or string")
+    if isinstance(seq, str):
+        seq = Sequence(seq)
+
+    res = seq.reverse_transcribe()
+    return str(res) if as_str else res
+
+
+def main():
+    print([transcribe("ACTG", strand="+")])
+    print([reverse_transcribe("ACTG")])
 
 
 if __name__ == "__main__":

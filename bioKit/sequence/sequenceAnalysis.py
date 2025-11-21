@@ -82,7 +82,7 @@ class Sequence:
         comp = self.sequence.translate(comp_table)
         return Sequence(comp, rna=self._is_rna)
 
-    def rev_complement(self) -> "Sequence":
+    def reverse_complement(self) -> "Sequence":
         """Return the reverse complement of the sequence."""
         if self._is_rna is True:
             rev_comp_table = str.maketrans("AUCGN", "UAGCN")
@@ -104,10 +104,16 @@ class Sequence:
             + self.sequence[end:]
         )
 
-    def transcribe(self) -> "Sequence":
+    def transcribe(self, strand: str = "+") -> "Sequence":
         if self._is_rna is True:
             return self
-        return Sequence(self.sequence.replace("T", "U"), rna=True)
+        if strand not in {"+", "-"}:
+            raise ValueError("strand should be either '+' or '-'")
+        if strand == "+":
+            rna_seq = self.sequence.replace("T", "U")
+        else:
+            rna_seq = self.complement().sequence.replace("T", "U")
+        return Sequence(rna_seq, rna=True)
 
     def reverse_transcribe(self) -> "Sequence":
         if self._is_rna is False:
@@ -144,13 +150,7 @@ class Sequence:
 
 def main():
     dna = Sequence("ACAC", rna=False)
-    rna = Sequence("AUCG")
-    print([dna, rna])
-    print(dna)
-    print(f"Type: {dna.type}")
-    print(f"Complement: {dna.complement()}")
-    print(f"Reversed complement: {dna.rev_complement()}")
-    print(f"gc_content: {dna.gc_content(percent=True)}")
+    print(dna.transcribe())
 
 
 if __name__ == "__main__":
