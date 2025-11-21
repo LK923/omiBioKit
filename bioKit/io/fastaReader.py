@@ -108,7 +108,7 @@ def main():
     input_path = r"./examples/data/example_fa.fasta"
     seq_dict = read(input_path, as_str=False)
     for seq in seq_dict.values():
-        print(seq.type)
+        print(repr(seq))
 
 
 if __name__ == "__main__":

@@ -96,7 +96,7 @@ def draw_sliding_gc(
     Raises:
         TypeError: _description_
     """
-
+    from bioKit.sequence.sequenceAnalysis import Sequence
     if not gc_list:
         return
     if seq:
