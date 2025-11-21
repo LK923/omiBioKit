@@ -24,7 +24,10 @@ def complement(
     from bioKit.sequence.sequenceAnalysis import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError("Sequence must be of type Sequence or string")
+        raise TypeError(
+            "complement() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if isinstance(seq, str):
         seq = Sequence(seq)
 
@@ -52,7 +55,10 @@ def reverse_complement(
     from bioKit.sequence.sequenceAnalysis import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError("Sequence must be of type Sequence or string")
+        raise TypeError(
+            "reverse_complement() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if isinstance(seq, str):
         seq = Sequence(seq)
 

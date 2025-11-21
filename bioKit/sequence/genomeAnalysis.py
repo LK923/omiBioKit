@@ -36,7 +36,10 @@ class Genome(object):
         """
         # check type
         if not isinstance(gene, Gene):
-            raise TypeError("Only Gene objects can be added to the genome.")
+            raise TypeError(
+                "add_gene() argument 'gene' must be Gene, not "
+                + type(gene).__name__
+            )
         # check organism match and unique name
         if gene.organism != self.organism:
             raise ValueError(
@@ -82,8 +85,9 @@ class Genome(object):
         # Invalid type
         else:
             raise TypeError(
-                "remove_gene() expects a Gene object or a gene name string"
-                )
+                "remove_gene() argument 'target' must be Gene or str, not "
+                + type(target).__name__
+            )
 
         self._genes.remove(to_remove)  # remove the gene
         self._gene_names.remove(to_remove.name)  # update name tracking
@@ -199,7 +203,7 @@ class Genome(object):
 def main():
     gene = Gene("CCCCAGCGAGGCAGCTACTA", "Name", "Organism")
     genome = Genome("Organism")
-    genome.read_fasta(r"./examples/data/example_fa.fasta")
+    genome.read_fasta(r"./examples/data/example.fasta")
     genome.add_gene(gene)
     print(genome)
     print(genome.genes)

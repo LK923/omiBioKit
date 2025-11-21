@@ -99,13 +99,13 @@ def read(file_name: str, as_str: bool = False) -> dict:
             store_sequence(current_name, current_seq)
 
     except IOError as e:
-        raise FastaFormatError(f"Error reading file '{file_name}': {e}")
+        raise IOError(f"Error reading file '{file_name}': {e}")
 
     return sequences
 
 
 def main():
-    input_path = r"./examples/data/example_fa.fasta"
+    input_path = r"./examples/data/example.fasta"
     seq_dict = read(input_path, as_str=False)
     for seq in seq_dict.values():
         print(repr(seq))

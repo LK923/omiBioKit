@@ -18,7 +18,10 @@ def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
     """
     from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError("Sequence must be of type Sequence or string")
+        raise TypeError(
+            "gc() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if isinstance(seq, str):
         seq = Sequence(seq)
 
@@ -48,7 +51,10 @@ def sliding_gc(
     if not seq:
         return []
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError(f"Expected Sequence or str, got {type(seq).__name__}")
+        raise TypeError(
+            "sliding_gc() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if window <= 0 or step <= 0:
         raise ValueError("window and step should be positive numbers")
     if isinstance(seq, Sequence):
@@ -101,7 +107,10 @@ def draw_sliding_gc(
         return
     if seq:
         if not isinstance(seq, (Sequence, str)):
-            raise TypeError("Sequence must be of type Sequence or string")
+            raise draw_sliding_gc(
+                "sliding_gc() argument 'seq' must be Sequence or str, not "
+                + type(seq).__name__
+            )
         if isinstance(seq, str):
             seq = Sequence(seq)
         total_avg = seq.gc_content() * 100

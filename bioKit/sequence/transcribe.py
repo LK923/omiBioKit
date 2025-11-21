@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 
 def transcribe(
-    seq: str,
+    seq: Union["Sequence", str],
     strand: str = "+",
     as_str: bool = False
 ) -> Union["Sequence", str]:
@@ -26,7 +26,10 @@ def transcribe(
     """
     from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError("Sequence must be of type Sequence or string")
+        raise TypeError(
+            "transcribe() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if isinstance(seq, str):
         seq = Sequence(seq)
 
@@ -35,7 +38,7 @@ def transcribe(
 
 
 def reverse_transcribe(
-    seq: str,
+    seq: Union["Sequence", str],
     as_str: bool = False
 ) -> Union["Sequence", str]:
     """Reverse transcribe a RNA seq sequence to DNA.
@@ -53,7 +56,10 @@ def reverse_transcribe(
     """
     from bioKit.sequence.sequenceAnalysis import Sequence
     if not isinstance(seq, (Sequence, str)):
-        raise TypeError("Sequence must be of type Sequence or string")
+        raise TypeError(
+            "reverse_transcribe() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
     if isinstance(seq, str):
         seq = Sequence(seq)
 

@@ -31,7 +31,10 @@ class Sequence:
         if sequence is None:
             sequence = ""
         elif not isinstance(sequence, str):
-            raise TypeError("Sequence must be a string")
+            raise TypeError(
+                "Sequence() argument 'sequence' must be str, not "
+                + type(sequence).__name__
+            )
 
         sequence = sequence.upper()  # Convert to uppercase
         if self._is_rna is None:
@@ -146,15 +149,22 @@ class Sequence:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Sequence):
-            return self.sequence == other.sequence
+            return (
+                self.sequence == other.sequence and self.type == other.type
+            )
         elif isinstance(other, str):
             return self.sequence == other.upper()
         return False
 
 
 def main():
-    dna = Sequence("ACACAGCTCGTACACAACAGTCA", rna=False)
-    print(dna.sliding_gc())
+    dna = Sequence("ACTG", rna=False)
+    print(repr(dna))
+    print(f"Length: {len(dna)}")
+    print(f"GC content: {dna.gc_content(percent=True)}")
+    print(f"Complement: {dna.complement()}")
+    print(f"Reverse complement: {dna.reverse_complement()}")
+    print(f"Transcribe: {dna.transcribe()}")
 
 
 if __name__ == "__main__":
