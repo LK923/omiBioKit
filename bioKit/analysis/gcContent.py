@@ -1,35 +1,33 @@
 from bioKit.io.fastaReader import read
+from bioKit.sequence.sequenceAnalysis import Sequence
 import matplotlib.pyplot as plt
 
 
-def gc(
-    seq: str, percent: bool = False, accuracy: int = 5
-) -> float | str:
+def gc(seq: Sequence | str, percent: bool = False) -> float | str:
     """Calculate the GC content of a DNA sequence.
 
     Args:
         seq (str): input sequence
         percent (bool, optional):
         If True, return GC content as a percentage string. Defaults to False.
-        accuracy (int, optional):
-        Decimal places for float output. Defaults to 5.
 
     Returns:
         float | str: GC content as a float or percentage string.
     """
 
-    if not seq:
-        return 0.0 if not percent else "0.00%"
-    if not isinstance(seq, str):
-        raise TypeError(f"Expected str, got {type(seq).__name__}")
-    seq = seq.upper()
-    gc_content = (seq.count("C") + seq.count("G")) / len(seq)
+    if not isinstance(seq, (Sequence, str)):
+        raise TypeError("Sequence must be of type Sequence or string")
+    if isinstance(seq, str):
+        seq = Sequence(seq)
 
-    return (round(gc_content, accuracy) if not percent
-            else f"{gc_content * 100:.2f}%")
+    return seq.gc_content(percent=percent)
 
 
-def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
+def sliding_gc(
+    seq: Sequence | str,
+    window: int = 100,
+    step: int = 10
+) -> list[tuple]:
     """Calculate GC content in a sliding window manner.
 
     Args:
@@ -47,10 +45,12 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
 
     if not seq:
         return []
-    if not isinstance(seq, str):
-        raise TypeError(f"Expected str, got {type(seq).__name__}")
+    if not isinstance(seq, (Sequence, str)):
+        raise TypeError(f"Expected Sequence or str, got {type(seq).__name__}")
     if window <= 0 or step <= 0:
         raise ValueError("window and step should be positive numbers")
+    if isinstance(seq, Sequence):
+        seq = str(seq)
 
     n = len(seq)
     seq = seq.upper()
@@ -75,25 +75,52 @@ def sliding_gc(seq: str, window: int = 100, step: int = 10) -> list[tuple]:
     return gc_list
 
 
-def draw_sliding_gc(gc_list: list[tuple]) -> None:
-    """Visualize sliding window GC content.
+def draw_sliding_gc(
+    gc_list: list[tuple],
+    seq: Sequence | str | None = None,
+    window_avg: bool = True
+) -> None:
+    """Visualize GC content from sliding window analysis.
 
     Args:
-        gc_list (list[tuple]): List of tuples containing (start, end, GC%).
+        gc_list (list[tuple]): List of tuples with (start, end, GC%).
+        seq (Sequence | str | None, optional):
+            Original sequence for total GC content reference.
+            If seq, the total GC content of the sequence will be plotted
+            in the chart. Defaults to None.
+        window_avg (bool, optional):
+            Whether to plot window average GC content.Defaults to True.
+
+    Raises:
+        TypeError: _description_
     """
 
     if not gc_list:
         return
+    if seq:
+        if not isinstance(seq, (Sequence, str)):
+            raise TypeError("Sequence must be of type Sequence or string")
+        if isinstance(seq, str):
+            seq = Sequence(seq)
+        total_avg = seq.gc_content() * 100
+
     positions = [(start + end) / 2 for start, end, _ in gc_list]
     gc_vals = [gc for _, _, gc in gc_list]
-    avg_gc = sum(gc_vals) / len(gc_vals)
+    window_avg = sum(gc_vals) / len(gc_vals)
 
     plt.figure(figsize=(10, 4))
 
-    plt.axhline(
-        y=avg_gc, color='cyan',
-        linestyle='--', label=f'Average GC%: {avg_gc:.2f}%'
-    )
+    if window_avg:
+        plt.axhline(
+            y=window_avg, color='cyan',
+            linestyle='--', label=f'Window average GC%: {window_avg:.2f}%'
+        )
+    if seq:
+        plt.axhline(
+            y=total_avg, color='green',
+            linestyle='dotted', label=f'Total average GC%: {total_avg:.2f}%'
+        )
+
     plt.plot(positions, gc_vals, color='blue', linewidth=1)
 
     plt.title("Sliding Window GC%")
@@ -107,10 +134,8 @@ def draw_sliding_gc(gc_list: list[tuple]) -> None:
 
 def main():
     input_path = r"./examples/data/gc.fa"
-    seq_dict = read(input_path, as_str=True)
-    sequence = None
-    for seq in seq_dict.values():
-        sequence = seq
+    seq_dict = read(input_path)
+    sequence = seq_dict["example"]
     res = sliding_gc(sequence)
     draw_sliding_gc(res)
 

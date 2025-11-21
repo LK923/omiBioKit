@@ -11,9 +11,9 @@ def transcribe(
     Args:
         seq (Sequence | str): input seq sequence
         strand (str, optional):
-        Sense or antisense, either '+' or '-'. Defaults to '+'.
+            Sense or antisense, either '+' or '-'. Defaults to '+'.
         as_str (bool, optional):
-        Whether to return the result as a string. Defaults to False.
+            Whether to return the result as a string. Defaults to False.
 
     Raises:
         TypeError: If the input sequence is not of type Sequence or string.

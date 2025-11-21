@@ -7,7 +7,7 @@ def complement(seq: Sequence | str, as_str: bool = False) -> Sequence | str:
     Args:
         seq (Sequence | str): Input sequence.
         as_str (bool, optional):
-        Whether to return the result as a string. Defaults to False.
+            Whether to return the result as a string. Defaults to False.
 
     Raises:
         TypeError: If the input sequence is not of type Sequence or string.
@@ -32,7 +32,7 @@ def reverse_complement(seq: Sequence | str, as_str: bool = False) -> str:
     Args:
         seq (Sequence | str): Input sequence.
         as_str (bool, optional):
-        Whether to return the result as a string. Defaults to False.
+            Whether to return the result as a string. Defaults to False.
 
     Raises:
         TypeError: If the input sequence is not of type Sequence or string.

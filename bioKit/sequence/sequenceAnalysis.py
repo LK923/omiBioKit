@@ -70,8 +70,12 @@ class Sequence:
 
         gc = self.sequence.count("G") + self.sequence.count("C")
 
-        return (round(gc / seq_length, 3) if not percent
+        return (round(gc / seq_length, 4) if not percent
                 else f"{(gc / seq_length) * 100:.2f}%")
+
+    def sliding_gc(self, window=100, step=10):
+        from bioKit.analysis.gcContent import sliding_gc
+        return sliding_gc(self.sequence, window, step)
 
     def complement(self) -> "Sequence":
         """Return the complement of the sequence."""
@@ -149,8 +153,8 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("ACAC", rna=False)
-    print(dna.transcribe())
+    dna = Sequence("ACACAGCTCGTACACAACAGTCA", rna=False)
+    print(dna.sliding_gc())
 
 
 if __name__ == "__main__":
