@@ -1,5 +1,5 @@
-from bioKit.analysis import sliding_gc, draw_sliding_gc
-from bioKit.io import read
+from omibio.analysis import sliding_gc, draw_sliding_gc
+from omibio.io import read
 
 
 def analyze_gc():

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omibio"
+version = "0.1.0"
+description = "A lightweight and easy-to-use python bioinformatics toolkit"
+readme = "README.md"
+authors = [{name = "OceanMist"}]
+requires-python = ">=3.8"
+dependencies = [
+    "click",
+]
+
+[project.scripts]
+omibio = "omibio.cli:cli"
