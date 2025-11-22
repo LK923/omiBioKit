@@ -13,6 +13,17 @@ class Sequence:
         strict: bool = True
     ):
         """Initialize with a sequence string."""
+
+        if rna is not None and not isinstance(rna, bool):
+            raise TypeError(
+                "Sequence argument 'rna' must be bool or None, got "
+                + type(rna).__name__
+            )
+        if not isinstance(strict, bool):
+            raise TypeError(
+                "Sequence argument 'strict' must be bool or None, got "
+                + type(strict).__name__
+            )
         self._is_rna = rna
         self._strict = strict
         self.sequence = sequence if sequence is not None else ""
@@ -69,7 +80,7 @@ class Sequence:
 
             if invalid := set(sequence) - valid_bases:
                 seq_typ = (
-                    "RNA" if valid_bases is self._VALID_RNA_BASES else "DNA"
+                    "RNA" if valid_bases == self._VALID_RNA_BASES else "DNA"
                 )
                 # Validate sequence contains only A, C, G, T，N
                 raise ValueError(
@@ -100,19 +111,19 @@ class Sequence:
     def complement(self) -> "Sequence":
         """Return the complement of the sequence."""
         if self._is_rna is True:
-            comp_table = str.maketrans("AUCGRYKMBVDH", "UAGCYRMKVBHD")
+            comp_table = str.maketrans("AUCGRYKMBVDHSWN", "UAGCYRMKVBHDSWN")
         else:
-            comp_table = str.maketrans("ATCGRYKMBVDH", "TAGCYRMKVBHD")
+            comp_table = str.maketrans("ATCGRYKMBVDHSWN", "TAGCYRMKVBHDSWN")
         comp = self.sequence.translate(comp_table)
         return Sequence(comp, rna=self._is_rna, strict=self._strict)
 
     def reverse_complement(self) -> "Sequence":
         """Return the reverse complement of the sequence."""
         if self._is_rna is True:
-            rev_comp_table = str.maketrans("AUCGRYKMBVDH", "UAGCYRMKVBHD")
+            rev_comp_tb = str.maketrans("AUCGRYKMBVDHSWN", "UAGCYRMKVBHDSWN")
         else:
-            rev_comp_table = str.maketrans("ATCGRYKMBVDH", "TAGCYRMKVBHD")
-        rev_comp = self.sequence.translate(rev_comp_table)[::-1]
+            rev_comp_tb = str.maketrans("ATCGRYKMBVDHSWN", "TAGCYRMKVBHDSWN")
+        rev_comp = self.sequence.translate(rev_comp_tb)[::-1]
         return Sequence(rev_comp, rna=self._is_rna, strict=self._strict)
 
     def set_base(self, idx: int, new_base: str) -> None:
@@ -136,7 +147,7 @@ class Sequence:
         if strand == "+":
             rna_seq = self.sequence.replace("T", "U")
         else:
-            rna_seq = self.complement().sequence.replace("T", "U")
+            rna_seq = self.reverse_complement().sequence.replace("T", "U")
         return Sequence(rna_seq, rna=True, strict=self._strict)
 
     def reverse_transcribe(self) -> "Sequence":
@@ -182,24 +193,33 @@ class Sequence:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Sequence):
-            return (
-                self.sequence == other.sequence
-                and self._is_rna == other.is_rna
-            )
+            if self._strict or other.strict:
+                return (
+                    self.sequence == other.sequence
+                    and self._is_rna == other.is_rna
+                )
+            else:
+                return self.sequence == other.sequence
+
         elif isinstance(other, str):
             return self.sequence == other.upper()
         return False
 
     def __add__(self, other) -> "Sequence":
         if isinstance(other, Sequence):
-            if self._is_rna != other.is_rna and self._strict:
-                raise TypeError(
-                    "(Strict Mode) "
-                    "Cannot combine RNA sequence and DNA sequence"
-                )
+            strict_mode = self._strict or other.strict
+            if self._is_rna is not None and other.is_rna is not None:
+                if strict_mode and self._is_rna != other.is_rna:
+                    raise TypeError(
+                        "(Strict Mode) "
+                        "Cannot combine RNA sequence and DNA sequence"
+                    )
+                rna_result = self._is_rna
+            else:
+                rna_result = None
             return Sequence(
                 self.sequence + other.sequence,
-                rna=self._is_rna, strict=self._strict
+                rna=rna_result, strict=strict_mode
             )
 
         elif isinstance(other, str):
@@ -244,7 +264,7 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("ACTG", rna=False)
+    dna = Sequence("A", rna=True)
     print(repr(dna))
     print(f"Length: {len(dna)}")
     print(f"GC content: {dna.gc_content(percent=True)}")
