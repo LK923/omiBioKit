@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
 
 
 def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
@@ -16,7 +16,7 @@ def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
     Returns:
         float | str: GC content as a float or percentage string.
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
             "gc() argument 'seq' must be Sequence or str, not "
@@ -47,7 +47,7 @@ def sliding_gc(
     Returns:
         list[tuple]: A list of tuples, each containing (start, end, GC%).
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     if not seq:
         return []
     if not isinstance(seq, (Sequence, str)):
@@ -102,7 +102,7 @@ def draw_sliding_gc(
     Raises:
         TypeError: _description_
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     if not gc_list:
         return
     if seq:
@@ -144,7 +144,7 @@ def draw_sliding_gc(
 
 
 def main():
-    from bioKit.sequence.sequenceAnalysis import Sequence  # noqa
+    from bioKit.sequence.sequence import Sequence  # noqa
     print(gc("AGCTAGCTAGTCGTAC"))
 
 

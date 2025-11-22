@@ -32,7 +32,7 @@ def read(file_name: str, as_str: bool = False) -> dict:
     Raises:
         FastaFormatError: Errors in the file content format.
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     # Check for file format
     file_path = Path(file_name)
     if not file_path.exists():

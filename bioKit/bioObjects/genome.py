@@ -1,4 +1,4 @@
-from bioKit.sequence.geneAnalysis import Gene
+from bioKit.bioObjects.gene import Gene
 from bioKit.io.fastaReader import read
 
 # TODO: Needs modification
@@ -189,27 +189,23 @@ class Genome(object):
 
     def __str__(self) -> str:
         """Return a string representation of the genome."""
-        if self.average_gc_content() is None:
-            avg_gc = "N/A"
-        else:
-            avg_gc = self.average_gc_content(percent=True)
         return (
-            f"Genome of {self.organism}: "
-            f"{len(self)} genes, "
-            f"average GC = {avg_gc}"
+            f"Genome of {self.organism}" + str(self.genes)
         )
 
 
 def main():
-    gene = Gene("CCCCAGCGAGGCAGCTACTA", "Name", "Organism")
+    gene1 = Gene("CCCCAGCGAGGCAGCTACTA", "Name1", "Organism")
+    gene2 = Gene("ACGTAGCTACGTACGTAGCT", "Name2", "Organism")
+    gene3 = Gene("ACAGTCGTACGTACGTACTA", "Name3", "Organism")
     genome = Genome("Organism")
-    genome.read_fasta(r"./examples/data/example.fasta")
-    genome.add_gene(gene)
+    genome.add_gene(gene1)
+    genome.add_gene(gene2)
+    genome.add_gene(gene3)
     print(genome)
-    print(genome.genes)
     print(f"Length: {len(genome)}")
     print(f"Longest: {genome.longest_gene()}")
-    print(genome.get("Name"))
+    print(genome.get("Name1"))
 
 
 if __name__ == "__main__":

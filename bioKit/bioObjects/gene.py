@@ -1,4 +1,4 @@
-from bioKit.sequence.sequenceAnalysis import Sequence
+from bioKit.sequence.sequence import Sequence
 
 # TODO: Needs modification
 

@@ -1,7 +1,7 @@
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
 
 
 def complement(
@@ -21,7 +21,7 @@ def complement(
     Returns:
         Sequence | str: Complemented sequence.
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
@@ -52,7 +52,7 @@ def reverse_complement(
     Returns:
         str: Reverse complemented sequence.
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     # Validate input type
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(

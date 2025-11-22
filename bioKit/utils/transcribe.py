@@ -1,7 +1,7 @@
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
 
 
 def transcribe(
@@ -24,7 +24,7 @@ def transcribe(
     Returns:
         Sequence | str: transcribed RNA sequence
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
             "transcribe() argument 'seq' must be Sequence or str, not "
@@ -54,7 +54,7 @@ def reverse_transcribe(
     Returns:
         Sequence | str: reverse transcribed DNA sequence
     """
-    from bioKit.sequence.sequenceAnalysis import Sequence
+    from bioKit.sequence.sequence import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
             "reverse_transcribe() argument 'seq' must be Sequence or str, not "
