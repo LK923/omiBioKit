@@ -9,7 +9,7 @@ def cli():
 
 
 @cli.command()
-@click.argument("fasta_file", type=click.Path(exsits=True))
+@click.argument("fasta_file", type=click.Path(exists=True))
 def gc(fasta_file: str) -> None:
     """"Calculate the GC content of a sequence from a fasta file."""
     seqs = read(fasta_file)
