@@ -1,7 +1,7 @@
 from omibio.io.fastaReader import read
 from omibio.bioObjects.orf import ORF
 from omibio.sequence import Sequence
-from omibio.utils.translate import dnaTranslate
+from omibio.utils.translate import translate_nt
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}
 
@@ -34,7 +34,7 @@ def find_orfs_in_frame(
                 end_idx = i + 3
                 nt_seq = seq[start_idx: end_idx]
                 aa_seq = (
-                    dnaTranslate(nt_seq, stop_symbol=False) if translate
+                    translate_nt(nt_seq, stop_symbol=False) if translate
                     else None
                 )
                 orf_list.append(

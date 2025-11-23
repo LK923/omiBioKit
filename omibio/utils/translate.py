@@ -1,3 +1,6 @@
+from omibio.sequence.sequence import Sequence
+
+
 DNA_CODON_TABLE = {
     'TTT': 'F', 'TTC': 'F',  # Phenylalanine
     'TTA': 'L', 'TTG': 'L',  # Leucine
@@ -29,101 +32,41 @@ DNA_CODON_TABLE = {
     'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',  # Glycine
 }
 
-RNA_CODON_TABLE = {
-    'UUU': 'F', 'UUC': 'F',  # Phenylalanine
-    'UUA': 'L', 'UUG': 'L',  # Leucine
-    'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',  # Serine
-    'UAU': 'Y', 'UAC': 'Y',  # Tyrosine
-    'UAA': '*', 'UAG': '*',  # Stop codons
-    'UGU': 'C', 'UGC': 'C',  # Cysteine
-    'UGA': '*',              # Stop codon
-    'UGG': 'W',              # Tryptophan
 
-    'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',  # Leucine
-    'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',  # Proline
-    'CAU': 'H', 'CAC': 'H',  # Histidine
-    'CAA': 'Q', 'CAG': 'Q',  # Glutamine
-    'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',  # Arginine
-
-    'AUU': 'I', 'AUC': 'I', 'AUA': 'I',  # Isoleucine
-    'AUG': 'M',                          # Methionine (Start)
-    'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',  # Threonine
-    'AAU': 'N', 'AAC': 'N',  # Asparagine
-    'AAA': 'K', 'AAG': 'K',  # Lysine
-    'AGU': 'S', 'AGC': 'S',  # Serine
-    'AGA': 'R', 'AGG': 'R',  # Arginine
-
-    'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',  # Valine
-    'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',  # Alanine
-    'GAU': 'D', 'GAC': 'D',  # Aspartic acid
-    'GAA': 'E', 'GAG': 'E',  # Glutamic acid
-    'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',  # Glycine
-}
-
-
-def rnaTranslate(
-    rna_seq: str,
+def translate_nt(
+    seq: Sequence | str,
     stop_symbol: bool = True,
     to_stop: bool = False,
     frame: int = 0,
-    augStart: bool = False
+    atg_start: bool = False
 ) -> str:
-    """Translate an RNA sequence into an amino acid sequence."""
-
-    if not rna_seq or len(rna_seq) < 3:
-        return ""
-
-    if frame not in (0, 1, 2):
-        raise ValueError(f"Invalid frame: {frame}, Frame must be 0, 1, or 2.")
-
-    aa_seq = []
-    start_idx = 0
-    seq = rna_seq.upper()[frame:]
-
-    if augStart:
-        for j in range(0, len(seq) - 2, 3):
-            if seq[j: j+3] == "AUG":
-                start_idx = j
-                break
-        else:
-            return ""
-
-    for i in range(start_idx, len(seq) - 2, 3):
-        codon = seq[i: i+3]
-
-        amino = RNA_CODON_TABLE.get(codon, "X")
-
-        if amino == "*":
-            if to_stop:
-                break
-            if not stop_symbol:
-                continue
-
-        aa_seq.append(amino)
-    return "".join(aa_seq)
-
-
-def dnaTranslate(
-    seq: str,
-    stop_symbol: bool = True,
-    to_stop: bool = False,
-    frame: int = 0,
-    atgStart: bool = False
-) -> str:
-    """ Translate DNA sequence to amino acid sequence.
-
-    Translate a CODING STRAND DNA sequence to correspond amino acid sequence.
+    """Translate a nucleotide sequence to an amino acid sequence.
 
     Args:
-    seq:  the coding strand DNA sequence that will be translate.
+        seq (Sequence | str):
+            Input nucleotide sequence.
+        stop_symbol (bool, optional):
+            Whether to include stop codon symbol '*'. Defaults to True.
+        to_stop (bool, optional):
+            Whether to stop translation at the first stop codon.
+            Defaults to False.
+        frame (int, optional):
+            Frame offset (0, 1, or 2). Defaults to 0.
+        atg_start (bool, optional):
+            Whether to start translation at the first ATG codon.
+            Defaults to False.
+
+    Raises:
+        ValueError: If frame is not 0, 1, or 2.
 
     Returns:
-    A amino acid sequence.
-    Example:
-
-        str("MIVRTYLRSLLYTK*")
-
+        str: Translated amino acid sequence.
     """
+    if not isinstance(seq, (Sequence, str)):
+        raise TypeError(
+            "find_otranslaterfs() argument 'seq' must be Sequence or str, not "
+            + type(seq).__name__
+        )
 
     if not seq or len(seq) < 3:
         return ""
@@ -133,9 +76,10 @@ def dnaTranslate(
 
     aa_seq = []
     start_idx = 0
-    seq = seq.upper()[frame:]
+    seq = str(seq).replace("U", "T")
+    seq = seq[frame:]
 
-    if atgStart:
+    if atg_start:
         for j in range(0, len(seq) - 2, 3):
             if seq[j: j+3] == "ATG":
                 start_idx = j
@@ -159,7 +103,7 @@ def dnaTranslate(
 
 
 def main() -> None:
-    aa = dnaTranslate("ATGCGTATACTTAA", stop_symbol=True)
+    aa = translate_nt(Sequence("ATGNNNACT"), stop_symbol=True)
     print(aa)
 
 
