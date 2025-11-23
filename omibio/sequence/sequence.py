@@ -163,6 +163,23 @@ class Sequence:
             self.sequence[start: end], rna=self._is_rna, strict=self._strict
         )
 
+    def translate(
+        self,
+        stop_symbol: bool = True,
+        to_stop: bool = False,
+        frame: int = 0,
+        require_start: bool = False
+    ):
+        from omibio.utils.translate import translate_nt
+
+        return translate_nt(
+            self.sequence,
+            stop_symbol=stop_symbol,
+            to_stop=to_stop,
+            frame=frame,
+            require_start=require_start
+        )
+
     def __len__(self) -> int:
         """Return the length of the sequence."""
         return len(self.sequence)
@@ -260,8 +277,8 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("A", rna=True)
-    print(dna[1: 2])
+    dna = Sequence("AUGAGCAGUCGUAUUCGGACUACGUA")
+    print(dna.translate(stop_symbol=True))
 
 
 if __name__ == "__main__":

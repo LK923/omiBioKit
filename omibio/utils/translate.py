@@ -38,7 +38,7 @@ def translate_nt(
     stop_symbol: bool = True,
     to_stop: bool = False,
     frame: int = 0,
-    atg_start: bool = False
+    require_start: bool = False
 ) -> str:
     """Translate a nucleotide sequence to an amino acid sequence.
 
@@ -52,8 +52,8 @@ def translate_nt(
             Defaults to False.
         frame (int, optional):
             Frame offset (0, 1, or 2). Defaults to 0.
-        atg_start (bool, optional):
-            Whether to start translation at the first ATG codon.
+        require_start (bool, optional):
+            Whether to start translation at the first start codon.
             Defaults to False.
 
     Raises:
@@ -79,7 +79,7 @@ def translate_nt(
     seq = str(seq).replace("U", "T")
     seq = seq[frame:]
 
-    if atg_start:
+    if require_start:
         for j in range(0, len(seq) - 2, 3):
             if seq[j: j+3] == "ATG":
                 start_idx = j
@@ -103,6 +103,7 @@ def translate_nt(
 
 
 def main() -> None:
+    from omibio.sequence.sequence import Sequence
     aa = translate_nt(Sequence("ATGNNNACT"), stop_symbol=True)
     print(aa)
 
