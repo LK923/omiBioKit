@@ -261,12 +261,7 @@ class Sequence:
 
 def main():
     dna = Sequence("A", rna=True)
-    print(repr(dna))
-    print(f"Length: {len(dna)}")
-    print(f"GC content: {dna.gc_content(percent=True)}")
-    print(f"Complement: {dna.complement()}")
-    print(f"Reverse complement: {dna.reverse_complement()}")
-    print(f"Transcribe: {dna.transcribe()}")
+    print(dna[1: 2])
 
 
 if __name__ == "__main__":

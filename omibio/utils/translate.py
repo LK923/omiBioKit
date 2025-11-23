@@ -70,8 +70,68 @@ def rnaTranslate(
     return "".join(aa)
 
 
+def dnaTranslate(seq: str, stopSign: bool = True) -> str:
+    """ Translate DNA sequence to amino acid sequence.
+
+    Translate a CODING STRAND DNA sequence to correspond amino acid sequence.
+
+    Args:
+    seq:  the coding strand DNA sequence that will be translate.
+
+    Returns:
+    A amino acid sequence.
+    Example:
+
+        str("MIVRTYLRSLLYTK*")
+
+    """
+    # Bulid a dictionary that contains Amino Acids as Keys
+    # And list of its correspond Coding Strand DNA Codon as Values.
+    codon_groups = {
+        "M": ["ATG"],  # Start codon
+        "F": ["TTT", "TTC"],
+        "L": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
+        "I": ["ATT", "ATC", "ATA"],
+        "V": ["GTT", "GTC", "GTA", "GTG"],
+        "S": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
+        "P": ["CCT", "CCC", "CCA", "CCG"],
+        "T": ["ACT", "ACC", "ACA", "ACG"],
+        "A": ["GCT", "GCC", "GCA", "GCG"],
+        "Y": ["TAT", "TAC"],
+        "H": ["CAT", "CAC"],
+        "Q": ["CAA", "CAG"],
+        "N": ["AAT", "AAC"],
+        "K": ["AAA", "AAG"],
+        "D": ["GAT", "GAC"],
+        "E": ["GAA", "GAG"],
+        "C": ["TGT", "TGC"],
+        "W": ["TGG"],
+        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
+        "G": ["GGT", "GGC", "GGA", "GGG"],
+        "*": ["TAA", "TAG", "TGA"],  # Stop codons
+    }
+
+    # Expand the codon_groups dictionary to a new dictionary that contains
+    # Every codon as key and its correspond amino acid as value.
+    codon_table = {
+        codon: aa for aa, codons in codon_groups.items()
+        for codon in codons
+        }
+
+    aa_seq = []
+    # Translate every codon in sequence to amino acid.
+    for i in range(0, len(seq) - 2, 3):
+        codon = seq[i: i + 3]
+        if not stopSign:
+            if codon_table[codon] == "*":
+                continue
+        aa_seq.append(codon_table[codon])
+    # Returns a string of the sequence of amino acid.
+    return "".join(aa_seq)
+
+
 def main() -> None:
-    aa = rnaTranslate("AAAAUGAAAUAA", stopSign=True, frame=1)
+    aa = dnaTranslate("ATGCGTATACTTAA", stopSign=True)
     print(aa)
 
 

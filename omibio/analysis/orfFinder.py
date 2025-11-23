@@ -1,125 +1,93 @@
 from omibio.io.fastaReader import read
-import re
+from omibio.bioObjects.orf import ORF
+from omibio.sequence import Sequence
 
-# TODO: Needs modification
+STOP_CODONS = {"TAA", "TAG", "TGA"}
 
 
-def main() -> None:
-    input_file = r"./examples/data/orf.fa"
-    sequences = read(input_file, as_str=True)
-    seq = None
-    for s in sequences.values():
-        seq = s
-    print(find_orfs(seq))
+def find_orfs_in_frame(
+    seq: str,
+    strand: str,
+    frame: int
+) -> list[ORF]:
+
+    orf_list = []
+    curr_start = None
+
+    i = frame
+    seq_len = len(seq)
+    while i + 3 <= seq_len:
+        codon = seq[i: i+3]
+        if codon in STOP_CODONS:
+            if curr_start is not None:
+                start_idx = curr_start
+                end_idx = i + 3
+                nt_seq = seq[start_idx: end_idx]
+                orf_length = end_idx - start_idx
+                orf_list.append(
+                    ORF(
+                        start=start_idx+1, end=end_idx,
+                        nt_seq=nt_seq, length=orf_length,
+                        strand=strand, frame=frame+1
+                    )
+                )
+                curr_start = None
+        else:
+            if codon == "ATG" and curr_start is None:
+                curr_start = i
+        i += 3
+
+    return orf_list
 
 
 def find_orfs(
-    seq: str,
-    overLap: bool = False,
-    translate: bool = False
-) -> list:
-    """ Find non-overlapping ORFs in a sequence.
+    seq: Sequence | str,
+    include_reverse: bool = True,
+    sort_by_length: bool = True
+) -> list[ORF]:
 
-    Find all non-overlapping Open Reading Frames (ORFs) in the given sequence.
+    if isinstance(seq, str):
+        seq = Sequence(seq)
 
-    Args:
-    seq: The seq where ORFs will be found.
+    seq_length = len(seq)
+    results = []
 
-    Returns:
-    A list that contains informations about all ORFs.
-    Example:
-
-        [
-        "ATGGGCTAG
-        start=1, end=9, lenth=9
-        amino acid sequence: MG*",
-        "ORF1: ATGTTTTAA
-        start=1, end=9, length=9
-        amino acid sequence: MF*"
-        ]
-
-    """
-    outputs = []
-    # Build the pattern of ORF for regular expression.
-    if overLap:
-        pattern = re.compile(r"(?=(ATG(?:[ACTG]{3})*?(?:TAA|TGA|TAG)))")
-    else:
-        pattern = re.compile(r"ATG(?:[ATGC]{3})*?(?:TAA|TAG|TGA)")
-    # Find all ORFs in sequences.
-    for match in pattern.finditer(seq):
-        # Get the start/ end position of ORF in sequence
-        # And the lenth of the ORF.
-        orf = match.group(1) if overLap else match.group(0)
-        start_pos = match.start() + 1
-        end_pos = start_pos + len(orf) - 1
-        # Append information for every ORF to outputs list.
-        # Get amino acid sequence of ORFs through calling translate().
-        if translate is True:
-            orf = dnaTranslate(orf, stopSign=False)
-        outputs.append(
-            (start_pos, end_pos, orf)
+    for frame in (0, 1, 2):
+        results.extend(
+            find_orfs_in_frame(seq.sequence, strand='+', frame=frame)
         )
-    return outputs
+
+    if include_reverse:
+        rev_seq = seq.reverse_complement()
+        for frame in (0, 1, 2):
+            rev_orfs = find_orfs_in_frame(
+                rev_seq.sequence, strand='-', frame=frame
+                )
+            for orf in rev_orfs:
+                start = seq_length - orf.end + 1
+                end = seq_length - orf.start + 1
+                orf_length = orf.length
+                nt_seq = orf.nt_seq
+                results.append(
+                    ORF(
+                        start=start, end=end,
+                        nt_seq=nt_seq, length=orf_length,
+                        strand='-', frame=-orf.frame
+                    )
+                )
+
+    if sort_by_length:
+        results.sort(key=lambda orf: orf.length, reverse=True)
+
+    return results
 
 
-def dnaTranslate(seq: str, stopSign: bool = True) -> str:
-    """ Translate DNA sequence to amino acid sequence.
-
-    Translate a CODING STRAND DNA sequence to correspond amino acid sequence.
-
-    Args:
-    seq:  the coding strand DNA sequence that will be translate.
-
-    Returns:
-    A amino acid sequence.
-    Example:
-
-        str("MIVRTYLRSLLYTK*")
-
-    """
-    # Bulid a dictionary that contains Amino Acids as Keys
-    # And list of its correspond Coding Strand DNA Codon as Values.
-    codon_groups = {
-        "M": ["ATG"],  # Start codon
-        "F": ["TTT", "TTC"],
-        "L": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
-        "I": ["ATT", "ATC", "ATA"],
-        "V": ["GTT", "GTC", "GTA", "GTG"],
-        "S": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
-        "P": ["CCT", "CCC", "CCA", "CCG"],
-        "T": ["ACT", "ACC", "ACA", "ACG"],
-        "A": ["GCT", "GCC", "GCA", "GCG"],
-        "Y": ["TAT", "TAC"],
-        "H": ["CAT", "CAC"],
-        "Q": ["CAA", "CAG"],
-        "N": ["AAT", "AAC"],
-        "K": ["AAA", "AAG"],
-        "D": ["GAT", "GAC"],
-        "E": ["GAA", "GAG"],
-        "C": ["TGT", "TGC"],
-        "W": ["TGG"],
-        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
-        "G": ["GGT", "GGC", "GGA", "GGG"],
-        "*": ["TAA", "TAG", "TGA"],  # Stop codons
-    }
-
-    # Expand the codon_groups dictionary to a new dictionary that contains
-    # Every codon as key and its correspond amino acid as value.
-    codon_table = {
-        codon: aa for aa, codons in codon_groups.items()
-        for codon in codons
-        }
-
-    aa_seq = []
-    # Translate every codon in sequence to amino acid.
-    for i in range(0, len(seq) - 2, 3):
-        codon = seq[i: i + 3]
-        if not stopSign:
-            if codon_table[codon] == "*":
-                continue
-        aa_seq.append(codon_table[codon])
-    # Returns a string of the sequence of amino acid.
-    return "".join(aa_seq)
+def main():
+    seq_dict = read(r"./examples/data/orf.fasta")
+    seq = seq_dict["example"]
+    res = find_orfs(seq)
+    print(res)
+    print(len(res))
 
 
 if __name__ == "__main__":

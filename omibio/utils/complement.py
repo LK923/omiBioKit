@@ -67,7 +67,7 @@ def reverse_complement(
 
 
 def main():
-    seq = "AAU"
+    seq = "ATGCCCTAA"
     print([complement(seq, as_str=True)])
     print([reverse_complement(seq)])
 
