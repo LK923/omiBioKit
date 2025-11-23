@@ -42,13 +42,14 @@ def random_fasta(
     seq_num: int,
     length: int,
     alphabet: str = "ATCG",
+    prefix: str = "Sequence",
     weights: list[float] | None = None,
     seed: int | None = None,
 ) -> None:
 
     seq_dict = {}
     for i in range(1, seq_num):
-        seq_dict[f"Sequence_{i}"] = random_seq(
+        seq_dict[f"{prefix}_{i}"] = random_seq(
             length=length, alphabet=alphabet,
             weights=weights, seed=seed, as_str=True,
         )
