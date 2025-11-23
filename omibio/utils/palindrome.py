@@ -1,6 +1,8 @@
 from omibio.io.read_fasta import read
 from omibio.utils.complement import reverse_complement
 
+# TODO: Needs modifications.
+
 
 def main() -> None:
     input_file = r"./examples/data/sim.fa"  # Input file path

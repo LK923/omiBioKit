@@ -1,5 +1,7 @@
 import re
 
+# TODO: Needs modifications.
+
 
 def main():
     sequence = input("Enter sequence: ")

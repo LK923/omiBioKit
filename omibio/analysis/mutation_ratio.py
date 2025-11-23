@@ -1,5 +1,7 @@
 TRANSITIONS = {("A", "G"), ("G", "A"), ("T", "C"), ("C", "T")}
 
+# TODO: Needs modifications.
+
 
 def main():
     seq1 = "ATGCATGCTGAAGCTACTGATGTGCAGCATCAGCTAGCGTATGCACACAC"

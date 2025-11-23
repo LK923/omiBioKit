@@ -1,5 +1,7 @@
 from omibio.io.read_fasta import read
 
+# TODO: Needs modifications.
+
 
 def main() -> None:
     input_file = r"./examples/data/sim.fa"  # Path of input fasta file

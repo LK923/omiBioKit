@@ -1,5 +1,9 @@
+
+# TODO: Needs modifications.
+
+
 def main():
-    print(str(calc_protein_mass("ACDEFGHIKLMNPQRSTVWY")))
+    print(str(calc_protein_mass("A")))
 
 
 def calc_protein_mass(aa_seq: str, accuracy: int = 3) -> float:
