@@ -1,5 +1,5 @@
 import click
-from omibio.io.fastaReader import read
+from omibio.io.read_fasta import read
 from omibio.analysis.orfFinder import find_orfs
 from omibio.utils.random_seq import random_fasta
 

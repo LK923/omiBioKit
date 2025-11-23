@@ -39,7 +39,7 @@ def write_fasta(
 
 
 def main():
-    from fastaReader import read
+    from omibio.io.read_fasta import read
 
     input_path = r"./examples/data/example.fasta"
     output_path = r"./examples/output/write_fasta_output.fasta"

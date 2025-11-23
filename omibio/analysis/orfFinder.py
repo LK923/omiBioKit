@@ -1,4 +1,4 @@
-from omibio.io.fastaReader import read
+from omibio.io.read_fasta import read
 from omibio.bioObjects.orf import ORF
 from omibio.sequence import Sequence
 from omibio.utils.translate import translate_nt

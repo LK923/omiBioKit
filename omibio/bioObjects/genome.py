@@ -1,5 +1,5 @@
 from omibio.bioObjects.gene import Gene
-from omibio.io.fastaReader import read
+from omibio.io.read_fasta import read
 
 # TODO: Needs modification
 
