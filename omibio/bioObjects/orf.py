@@ -10,6 +10,7 @@ class ORF:
     strand: int
     frame: int
     aa_seq: str | None = None
+    seq_id: str | None = None
 
 
 def main():
