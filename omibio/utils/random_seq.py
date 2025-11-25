@@ -48,7 +48,7 @@ def random_fasta(
 ) -> None:
 
     seq_dict = {}
-    for i in range(1, seq_num):
+    for i in range(1, seq_num+1):
         seq_dict[f"{prefix}_{i}"] = random_seq(
             length=length, alphabet=alphabet,
             weights=weights, seed=seed, as_str=True,

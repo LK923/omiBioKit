@@ -3,14 +3,20 @@ class Sequence:
     A class representing a sequence with methods for analysis.
     """
 
-    _VALID_DNA_BASES = {"A", "T", "C", "G", "N"}
-    _VALID_RNA_BASES = {"A", "U", "C", "G", "N"}
+    _VALID_DNA_BASES = {
+        "A", "T", "C", "G",
+        "N", "R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"
+    }
+    _VALID_RNA_BASES = {
+        "A", "U", "C", "G",
+        "N", "R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"
+    }
 
     def __init__(
         self,
         sequence: str | None = None,
         rna: bool | None = None,
-        strict: bool = True
+        strict: bool = False
     ):
         """Initialize with a sequence string."""
 
@@ -84,7 +90,7 @@ class Sequence:
                 )
                 # Validate sequence contains only A, C, G, T，N
                 raise ValueError(
-                    f"Invalid base(s) for {seq_typ} "
+                    f"(Strict Mode) Invalid base(s) for {seq_typ} "
                     f"sequence found: {invalid}"
                 )
 
@@ -179,6 +185,11 @@ class Sequence:
             frame=frame,
             require_start=require_start
         )
+
+    def to_strict(self, as_rna: bool | None = None):
+        if self._strict:
+            return self
+        return Sequence(self.sequence, strict=True, rna=as_rna)
 
     def __len__(self) -> int:
         """Return the length of the sequence."""
@@ -277,8 +288,8 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("AUGAGCAGUCGUAUUCGGACUACGUA")
-    print(dna.translate(stop_symbol=True))
+    dna = Sequence("UAX")
+    print(repr(dna))
 
 
 if __name__ == "__main__":

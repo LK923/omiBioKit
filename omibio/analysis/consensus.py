@@ -1,106 +1,71 @@
 from omibio.io.read_fasta import read
+from omibio.sequence.sequence import Sequence
+from collections import defaultdict
 
-# TODO: Needs modifications.
+IUPAC_CODES = {
+    frozenset({'A', 'G'}): 'R', frozenset({'C', 'T'}): 'Y',
+    frozenset({'G', 'C'}): 'S', frozenset({'A', 'T'}): 'W',
+    frozenset({'G', 'T'}): 'K', frozenset({'A', 'C'}): 'M',
+    frozenset({"C", "G", "T"}): "B", frozenset({"A", "G", "T"}): "D",
+    frozenset({"A", "C", "T"}): "H", frozenset({"A", "C", "G"}): "V"
+}
+
+
+def find_consensus(
+    seq_list: list[str | Sequence],
+    as_str: bool = False,
+    gap_chars: str = "-?.",
+    as_rna: bool = False
+) -> str | Sequence:
+
+    if not seq_list:
+        return ""
+    if not isinstance(seq_list, list):
+        raise TypeError(
+            "Sequence argument 'strict' must be bool or None, got "
+            + type(seq_list).__name__
+        )
+    seq_list = [str(s).upper() for s in seq_list]
+
+    if len(set(map(len, seq_list))) != 1:
+        raise ValueError("All sequences must be of the same length")
+
+    consensus = []
+
+    for i in range(len(seq_list[0])):
+        base_scores = defaultdict(int)
+        for seq in seq_list:
+            base = seq[i].replace("U", "T")
+            if base in gap_chars:
+                continue
+            base_scores[base] += 1
+
+        if not base_scores:
+            consensus.append("N")
+            continue
+
+        max_score = max(base_scores.values())
+        top_base = [
+            base for base, score in base_scores.items() if score == max_score
+        ]
+        if len(top_base) == 1:
+            consensus.append(top_base[0])
+        else:
+            consensus.append(IUPAC_CODES.get(frozenset(top_base), "N"))
+
+    consensus = (
+        Sequence("".join(consensus), strict=False) if not as_rna
+        else Sequence("".join(consensus).replace("T", "U"), strict=False)
+    )
+
+    return consensus.sequence if as_str else consensus
 
 
 def main() -> None:
-    input_file = r"./examples/data/sim.fa"  # Path of input fasta file
-    sequence = read(input_file)  # Read fasta file
-    consensus, profile = find_profile_matrix(sequence)
-    write(consensus, profile)
-    print(f"Consesnsus: {consensus}")  # Print consensus sequence
-
-
-def find_profile_matrix(seq_dict: dict) -> tuple[str, dict]:
-    """ Build a profile matrix and find a consensus sequence.
-
-    Build a profile matrix and find a consensus sequence
-    From a dictionary of sequences with the same length.
-
-    Args: seq_dict:
-        A dictionary where keys are the names of sequence
-        and the values are the sequences.
-
-    Returns:
-    A tuple with two elements:
-        consensus: the consensus sequence.
-        profile: a dictionary of profile matrix.
-        profile example:
-
-            {
-            "A" : [4,2,3,1,1,0,2,3],
-            "C" : [1,2,0,0,1,4,5,6]
-            ...
-            }
-    """
-    sequences = list(seq_dict.values())  # Get all sequences
-    lengths = [len(seq) for seq in sequences]  # Get length list of sequences
-
-    # Check if the sequence lengths are consistent
-    if len(set(lengths)) != 1:
-        raise ValueError("The lengths of sequences are different.")
-    seq_length = lengths[0]  # Get sequence length
-
-    # Create profile dict for each nitrogen base and its list
-    # Extend the length list of each base to the sequence length
-    profile = {base: [0] * seq_length for base in "ACGT"}
-
-    # Count the frequency of base occurrence
-    for sequence in sequences:
-        for i, base in enumerate(sequence):
-            base_frequency = profile[base]
-            base_frequency[i] += 1
-
-    # Get the consensus according to the profile matrix
-    # Compare the frequency of occurrence each base appears at each position
-    # The base with the highest frequency of occurrence
-    # Will be used as the consensus base.
-    # If the frequencies of occurrence are the same,
-    # The base is selected according to the A-C-G-T priority
-    consensus = "".join(
-        max("ACGT", key=lambda b: profile[b][i]) for i in range(seq_length)
-    )
-
-    return consensus, profile
-
-
-def write(consensus: str, profile: dict) -> None:
-    """ Write consensus and profile matrix to output file.
-
-    Write the results of consensus and profile matrix
-    In a text file called "consensus_output.txt"
-
-    Args:
-    consensus: the consensus sequence
-    profile: the dictionary of profile matrix
-    profile example:
-
-        {
-        "A" : [4,2,3,1,1,0,2,3],
-        "C" : [1,2,0,0,1,4,5,6]
-        ...
-        }
-
-    Write:
-    write the consensus on the top and the profile matrix under it.
-    Example:
-
-        "
-        ACATGTC
-        A: 4 1 3 1 0 3 1
-        C: 2 3 3 2 2 1 3
-        G: 2 3 3 3 4 1 3
-        T: 2 3 1 4 4 5 3
-        "
-    """
-    # The path of output file
-    output_file_name = r"./examples/output/consensus.txt"
-
-    with open(output_file_name, "w") as f:
-        f.write(f"{consensus}\n")
-        for base in "ACGT":
-            f.write(f"{base}: {' '.join(map(str, profile[base]))}\n")
-    print(f"Output file: {output_file_name}")  # Print the path of output file
+    input_file = r"./examples/data/example.fasta"
+    sequence = list(read(input_file).values())
+    consensus = find_consensus(sequence, as_rna=False)
+    print(consensus)
 
 
 if __name__ == "__main__":

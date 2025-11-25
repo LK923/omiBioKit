@@ -7,8 +7,10 @@ from omibio.utils.complement import reverse_complement
 def main() -> None:
     input_file = r"./examples/data/sim.fa"  # Input file path
     sequences = list(read(input_file).values())
-    results = [find_palindrome(sequence) for sequence in sequences]
-    print(results)
+    results = []
+    for sequence in sequences:
+        results.extend(find_palindrome(sequence))
+    print("\n".join(map(str, results)))
 
 
 def find_palindrome(

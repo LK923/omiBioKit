@@ -142,12 +142,10 @@ def random_seq(
     alphabet: str,
     seed: int | None
 ) -> None:
-    """Generate random nucleotide sequence(s) and output in FASTA format.
-
-    LENGTH is the length of each sequence in nucleotides.
-    """
+    """Generate random nucleotide sequence(s) and output in FASTA format."""
 
     random_fasta(
         file_path=output, seq_num=number, length=length,  alphabet=alphabet,
         prefix=prefix, seed=seed
     )
+    click.echo(f"Success: file writed to {output}")

@@ -9,7 +9,11 @@ class FastaFormatError(Exception):
         super().__init__(message)
 
 
-def read(file_name: str, as_str: bool = False) -> dict:
+def read(
+    file_name: str,
+    as_str: bool = False,
+    seq_strict: bool = False
+) -> dict:
     """Read fasta file and return sequence and name mapping.
 
     Read fasta file and return sequence, name mapping in a dictionary.
@@ -56,7 +60,8 @@ def read(file_name: str, as_str: bool = False) -> dict:
         if not seq:
             raise FastaFormatError(f"Sequence Missing for {name}")
         sequences[name] = (
-            "".join(seq) if as_str else Sequence("".join(seq))
+            "".join(seq) if as_str
+            else Sequence("".join(seq), strict=seq_strict)
         )
 
     match ext:

@@ -4,8 +4,8 @@ from omibio.io.read_fasta import read
 
 
 def main() -> None:
-    input_file = "./data/sequences.fasta"
-    seq_dict = read(input_file)
+    input_file = r"./examples/data/example_long.fa"
+    seq_dict = read(input_file, as_str=True)
     print(find_shared_motif(seq_dict))
 
 
