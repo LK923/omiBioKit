@@ -41,7 +41,10 @@ def gc(fasta_file: str) -> None:
 @click.option(
     "--translate",
     is_flag=True,
-    help="Translate the nucleotide sequences to amino acid sequences."
+    help=(
+        "Whether to ranslate the nucleotide sequences to amino acid sequences."
+        " Only show amino acid sequence when --show-seq is on."
+    )
 )
 @click.option(
     "--start-codons",
@@ -50,7 +53,7 @@ def gc(fasta_file: str) -> None:
     help="Comma-separated start codons (e.g., ATG,GTG). Default: ATG."
 )
 @click.option(
-    "--show-orf-seq",
+    "--show-seq",
     is_flag=True,
     help="Whether to show orf sequence."
 )
@@ -61,7 +64,7 @@ def orf(
     no_sort: bool,
     translate: bool,
     start_codons: str,
-    show_orf_seq: bool
+    show_seq: bool
 ) -> None:
     """Find orfs of a sequence from a fasta file."""
     start_codon_set = {
@@ -96,9 +99,9 @@ def orf(
             str(frame),
             str(orf.length)
         ]
-        if show_orf_seq:
+        if show_seq:
             nt_seq = orf.nt_seq
-            aa_seq = orf.aa_seq if orf.aa_seq is not None else ""
+            aa_seq = str(orf.aa_seq) if orf.aa_seq is not None else ""
             base_fields.extend([nt_seq, aa_seq])
 
         click.echo("\t".join(base_fields))

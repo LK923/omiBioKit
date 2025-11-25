@@ -1,4 +1,5 @@
 from omibio.sequence.sequence import Sequence
+from omibio.sequence.polypeptide import Polypeptide
 
 
 DNA_CODON_TABLE = {
@@ -35,11 +36,12 @@ DNA_CODON_TABLE = {
 
 def translate_nt(
     seq: Sequence | str,
+    as_str: bool = False,
     stop_symbol: bool = True,
     to_stop: bool = False,
     frame: int = 0,
     require_start: bool = False
-) -> str:
+) -> Polypeptide | str:
     """Translate a nucleotide sequence to an amino acid sequence.
 
     Args:
@@ -99,13 +101,15 @@ def translate_nt(
 
         aa_seq.append(amino)
 
-    return "".join(aa_seq)
+    res = "".join(aa_seq)
+
+    return res if as_str else Polypeptide(res)
 
 
 def main() -> None:
     from omibio.sequence.sequence import Sequence
     aa = translate_nt(Sequence("ATGNNNACT"), stop_symbol=True)
-    print(aa)
+    print(repr(aa))
 
 
 if __name__ == "__main__":

@@ -97,7 +97,7 @@ class Polypeptide:
     def composition(self) -> dict:
         return dict(Counter(self.aa_seq))
 
-    def count_aa(self, aa) -> int:
+    def count(self, aa: str) -> int:
         return self.aa_seq.count(aa)
 
     def replace_seq(self, start: int, end: int, new_aa_seq: str) -> None:
@@ -117,11 +117,12 @@ class Polypeptide:
 
         return Polypeptide(sub, strict=self._strict)
 
-    def formula(self):
+    def formula(self) -> str:
         if not self.aa_seq:
             return ""
 
         atom_count = defaultdict(int)
+
         for aa in self.aa_seq:
             if aa not in self.RESIDUE_FORMULA:
                 raise ValueError(
@@ -129,8 +130,10 @@ class Polypeptide:
                     "Molecular formula can only be computed for "
                     "standard amino acids."
                 )
+
             for atom, num in self.RESIDUE_FORMULA[aa].items():
                 atom_count[atom] += num
+
         atom_count["H"] += 2
         atom_count["O"] += 1
 
@@ -147,13 +150,13 @@ class Polypeptide:
     def is_valid(self) -> bool:
         return not (set(self.aa_seq) - self.VALID_AA)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.aa_seq)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.aa_seq
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Polypeptide('{self.aa_seq}', strict={self.strict})"
 
     def __getitem__(self, idx) -> str:
@@ -212,8 +215,7 @@ class Polypeptide:
 
 
 def main():
-    poly1 = Polypeptide("AQQARCD", strict=False)
-    poly1[2] = 'a'
+    poly1 = Polypeptide('ADQLLKWS')
     print(poly1.formula())
 
 

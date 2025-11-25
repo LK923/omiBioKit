@@ -163,8 +163,9 @@ class Sequence:
             self.sequence[start: end], rna=self._is_rna, strict=self._strict
         )
 
-    def translate(
+    def translate_nt(
         self,
+        as_str: bool = False,
         stop_symbol: bool = True,
         to_stop: bool = False,
         frame: int = 0,
@@ -174,11 +175,15 @@ class Sequence:
 
         return translate_nt(
             self.sequence,
+            as_str=as_str,
             stop_symbol=stop_symbol,
             to_stop=to_stop,
             frame=frame,
             require_start=require_start
         )
+
+    def count(self, base: str) -> int:
+        return self.sequence.count(base)
 
     def copy(
         self,
@@ -190,6 +195,13 @@ class Sequence:
 
     def to_strict(self, as_rna: bool | None = None):
         return self.copy(self.sequence, strict=True, rna=as_rna)
+
+    def is_valid(self) -> bool:
+        valid_bases = (
+            self._VALID_RNA_BASES if self._is_rna
+            else self._VALID_DNA_BASES
+        )
+        return not (set(self.sequence) - valid_bases)
 
     def __len__(self) -> int:
         """Return the length of the sequence."""
@@ -293,8 +305,8 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("UAC")
-    print(repr(dna))
+    dna = Sequence("AAAATGCATGCTGACTGTAGCTGATTTATTGCTATC")
+    print(dna.count("A"))
 
 
 if __name__ == "__main__":
