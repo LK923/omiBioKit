@@ -27,12 +27,13 @@ def find_consensus(
         )
     seq_list = [str(s).upper() for s in seq_list]
 
-    if len(set(map(len, seq_list))) != 1:
+    lengths = set(map(len, seq_list))
+    if len(lengths) != 1:
         raise ValueError("All sequences must be of the same length")
 
     consensus = []
 
-    for i in range(len(seq_list[0])):
+    for i in range(lengths.pop()):
         base_scores = defaultdict(int)
         for seq in seq_list:
             base = seq[i].replace("U", "T")
@@ -46,7 +47,7 @@ def find_consensus(
 
         max_score = max(base_scores.values())
         top_base = [
-            base for base, score in base_scores.items() if score == max_score
+            b for b, score in base_scores.items() if score == max_score
         ]
         if len(top_base) == 1:
             consensus.append(top_base[0])

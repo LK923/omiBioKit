@@ -57,7 +57,7 @@ def random_fasta(
 
 
 def main():
-    random_fasta(r"./examples/data/random.fasta", 30, 200)
+    random_fasta(r"./examples/data/random.fasta", 30, 2000)
 
 
 if __name__ == "__main__":

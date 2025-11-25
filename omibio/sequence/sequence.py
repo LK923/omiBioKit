@@ -59,7 +59,7 @@ class Sequence:
             sequence = ""
         elif not isinstance(sequence, str):
             raise TypeError(
-                "Sequence() argument 'sequence' must be str, not "
+                "Sequence argument 'sequence' must be str, not "
                 + type(sequence).__name__
             )
 
@@ -128,12 +128,6 @@ class Sequence:
         rev_comp = self.sequence.translate(rev_comp_tb)[::-1]
         return Sequence(rev_comp, rna=self._is_rna, strict=self._strict)
 
-    def set_base(self, idx: int, new_base: str) -> None:
-        """Set a specific base in the sequence."""
-        seq_list = list(self.sequence)
-        seq_list[idx] = new_base
-        self.sequence = "".join(seq_list)
-
     def replace_seq(self, start: int, end: int, new_seq: str) -> None:
         self.sequence = (
             self.sequence[:start]
@@ -186,10 +180,16 @@ class Sequence:
             require_start=require_start
         )
 
+    def copy(
+        self,
+        as_rna: bool | None = None,
+        strict: bool | None = None
+    ) -> "Sequence":
+        new_strict = strict if strict is not None else self.strict
+        return Sequence(str(self), rna=as_rna, strict=new_strict)
+
     def to_strict(self, as_rna: bool | None = None):
-        if self._strict:
-            return self
-        return Sequence(self.sequence, strict=True, rna=as_rna)
+        return self.copy(self.sequence, strict=True, rna=as_rna)
 
     def __len__(self) -> int:
         """Return the length of the sequence."""
@@ -208,6 +208,11 @@ class Sequence:
 
     def __getitem__(self, idx) -> str:
         return self.sequence[idx]
+
+    def __setitem__(self, idx: int, new_base: str) -> None:
+        seq_list = list(self.sequence)
+        seq_list[idx] = new_base
+        self.sequence = "".join(seq_list)
 
     def __iter__(self):
         return iter(self.sequence)
@@ -288,7 +293,7 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("UAX")
+    dna = Sequence("UAC")
     print(repr(dna))
 
 
