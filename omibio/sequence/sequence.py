@@ -1,6 +1,6 @@
 class Sequence:
     """
-    A class representing a sequence with methods for analysis.
+    A class representing a DNA or RNA sequence with methods for analysis.
     """
 
     _VALID_DNA_BASES = {
@@ -127,13 +127,6 @@ class Sequence:
             rev_comp_tb = str.maketrans("ATCGRYKMBVDHSWN", "TAGCYRMKVBHDSWN")
         rev_comp = self.sequence.translate(rev_comp_tb)[::-1]
         return Sequence(rev_comp, rna=self._is_rna, strict=self._strict)
-
-    def replace_seq(self, start: int, end: int, new_seq: str) -> None:
-        self.sequence = (
-            self.sequence[:start]
-            + new_seq
-            + self.sequence[end:]
-        )
 
     def transcribe(self, strand: str = "+") -> "Sequence":
         if self._is_rna is True:
@@ -306,7 +299,8 @@ class Sequence:
 
 def main():
     dna = Sequence("AAAATGCATGCTGACTGTAGCTGATTTATTGCTATC")
-    print(dna.count("A"))
+    dna2 = dna.copy()
+    print(dna == dna2)
 
 
 if __name__ == "__main__":

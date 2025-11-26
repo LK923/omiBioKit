@@ -100,13 +100,6 @@ class Polypeptide:
     def count(self, aa: str) -> int:
         return self.aa_seq.count(aa)
 
-    def replace_seq(self, start: int, end: int, new_aa_seq: str) -> None:
-        self.aa_seq = (
-            self.aa_seq[:start]
-            + new_aa_seq
-            + self.aa_seq[end:]
-        )
-
     def subseq(self, start: int, end: int | None = None) -> "Polypeptide":
         try:
             sub = self.aa_seq[start:end]
@@ -216,7 +209,8 @@ class Polypeptide:
 
 def main():
     poly1 = Polypeptide('ADQLLKWS')
-    print(poly1.formula())
+    poly1[1: 5] = "LLLL"
+    print(poly1)
 
 
 if __name__ == "__main__":

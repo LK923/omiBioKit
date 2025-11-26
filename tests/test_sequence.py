@@ -139,7 +139,7 @@ class TestSequence:
             _ = s + [1, 2]
 
     def test_add_invalid_str(self):
-        s = Sequence("A")
+        s = Sequence("A", strict=True)
         with pytest.raises(ValueError):
             _ = s + "TU"
 
@@ -250,19 +250,6 @@ class TestSequence:
         s = Sequence("ATGC", rna=False)
         assert s.gc_content() == 0.5
         assert s.gc_content(percent=True) == "50.00%"
-
-    # --------------------------
-    # set_base & replace_seq testing
-    # --------------------------
-    def test_set_base(self):
-        s = Sequence("ATGC")
-        s.set_base(1, "C")
-        assert s.sequence == "ACGC"
-
-    def test_replace_seq(self):
-        s = Sequence("ATGC")
-        s.replace_seq(1, 3, "TT")
-        assert s.sequence == "ATTC"
 
     # --------------------------
     # __mul__ testing
