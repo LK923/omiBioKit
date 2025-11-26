@@ -1,23 +1,25 @@
-import re
-
-# TODO: Needs modifications.
+from omibio.sequence.sequence import Sequence
+from omibio.bioObjects.seq_interval import SeqInterval
 
 
 def main():
-    sequence = input("Enter sequence: ")
-    pattern = input("Enter pattern: ")
+    sequence = Sequence("AGTCAGCTATCTATTATAGCGATCATGCTGATGCTGATCTGATGC")
+    pattern = "TGC"
     print(find_motif(sequence, pattern))
 
 
-def find_motif(seq, pat):
+def find_motif(seq: Sequence | str, pattern: str):
     results = []
-    pattern = re.compile(rf"(?=({pat}))")
-    for match in re.finditer(pattern, seq):
-        start_pos = match.start()
-        end_pos = match.end()
-        results.append(f"[{start_pos + 1}:{end_pos}]")
 
-    return ", ".join(results)
+    n = len(pattern)
+    for i in range(0, len(seq) - n + 1):
+        candidate = seq[i: i+n]
+        if candidate == pattern:
+            results.append(
+                SeqInterval(start=i, end=i+n, nt_seq=pattern, type='motif')
+            )
+
+    return results
 
 
 if __name__ == "__main__":

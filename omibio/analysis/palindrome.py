@@ -1,12 +1,12 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bioObjects.palindrome import Palindrome
+from omibio.bioObjects.seq_interval import SeqInterval
 
 
 def find_palindrome(
     seq: Sequence | str,
     min_len: int = 4,
     max_len: int = 12
-) -> list[Palindrome]:
+) -> list[SeqInterval]:
     """Find palindromic sequences in a given sequence.
 
     Args:
@@ -70,9 +70,9 @@ def find_palindrome(
             candidate = seq[i: i+length]
             if candidate == rev_seq[n-i-length: n-i]:
                 results.append(
-                    Palindrome(
-                        start=i, end=i+length,
-                        length=length, seq=str(candidate)
+                    SeqInterval(
+                        start=i, end=i+length, nt_seq=str(candidate),
+                        type='palindrome'
                     )
                 )
 

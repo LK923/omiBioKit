@@ -1,5 +1,5 @@
 from omibio.io.read_fasta import read
-from omibio.bioObjects.orf import ORF
+from omibio.bioObjects.seq_interval import SeqInterval
 from omibio.sequence import Sequence
 from omibio.utils.translate import translate_nt
 
@@ -14,7 +14,7 @@ def find_orfs_in_frame(
     translate: bool,
     start_codons: set[str],
     seq_id: str | None = None
-) -> list[ORF]:
+) -> list[SeqInterval]:
     """Internal helper function. Scan a single frame and return raw ORFs."""
 
     orf_list = []
@@ -38,9 +38,9 @@ def find_orfs_in_frame(
                     else None
                 )
                 orf_list.append(
-                    ORF(
-                        start=start_idx+1, end=end_idx,
-                        nt_seq=nt_seq, length=orf_length,
+                    SeqInterval(
+                        start=start_idx, end=end_idx,
+                        nt_seq=nt_seq, type='ORF',
                         strand=strand, frame=frame+1,
                         aa_seq=aa_seq, seq_id=seq_id
                     )
@@ -61,7 +61,7 @@ def find_orfs(
     translate: bool = False,
     start_codons: set[str] | list[str] | tuple[str] = {"ATG"},
     seq_id: str | None = None
-) -> list[ORF]:
+) -> list[SeqInterval]:
     """Find ORFs in a given sequence.
 
     Args:
@@ -160,10 +160,10 @@ def find_orfs(
                 )
             for orf in rev_orfs:
                 results.append(
-                    ORF(
-                        start=seq_length - orf.end + 1,
-                        end=seq_length - orf.start + 1,
-                        nt_seq=orf.nt_seq, length=orf.length,
+                    SeqInterval(
+                        start=seq_length - orf.end,
+                        end=seq_length - orf.start,
+                        nt_seq=orf.nt_seq, type='ORF',
                         strand='-', frame=-(frame + 1),
                         aa_seq=orf.aa_seq, seq_id=seq_id
                     )
