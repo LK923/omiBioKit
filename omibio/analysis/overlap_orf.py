@@ -7,15 +7,15 @@ import re
 
 
 def main() -> None:
-    input_file = r".\data\orf_test_seqs.fasta"
-    sequences = read(input_file).values()
+    input_file = r".\examples\data\orf.fa"
+    sequences = read(input_file, as_str=True).values()
     for sequence in sequences:
         outputs = find_overlap_orf(sequence)
         [print(output) for output in outputs]
 
 
 def find_overlap_orf(sequence: str) -> list[str]:
-    inputs = [sequence] + [complement(sequence)]
+    inputs = [sequence] + [complement(sequence, as_str=True)]
     outputs = []
     pattern = re.compile(r"(?=(ATG(?:[ACTG]{3})*?(?:TAA|TGA|TAG)))")
 

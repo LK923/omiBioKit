@@ -7,6 +7,10 @@ from omibio.utils.translate import translate_nt
 
 @dataclass(frozen=True)
 class SeqInterval:
+    """
+    Stores information about the sequence range.
+    """
+
     start: int
     end: int
 
@@ -105,13 +109,14 @@ class SeqInterval:
             self.nt_seq, rna=rna, strict=strict
         )
 
-    def to_polypeptide(self, strict: bool = False):
+    def to_polypeptide(self, strict: bool = False) -> Polypeptide:
         if self.aa_seq is not None:
 
             return Polypeptide(self.aa_seq, strict=strict)
         else:
             raise ValueError(
                 "Cannot create Polypeptide: aa_seq is not set. "
+                "Use translate_nt() method instead"
             )
 
     def translate_nt(
@@ -122,7 +127,7 @@ class SeqInterval:
         to_stop: bool = False,
         frame: int = 0,
         require_start: bool = False
-    ):
+    ) -> Union[Polypeptide, str]:
 
         return translate_nt(
             self.nt_seq,
@@ -163,19 +168,20 @@ class SeqInterval:
 
         return info + ")"
 
+    def __str__(self):
+        return self.nt_seq
+
 
 def main():
     seq = SeqInterval(
-        start=1, end=10,
-        nt_seq='ACTGACGTATCGATCAGCTGATGCTGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC',
+        start=0, end=12,
+        nt_seq='ATGAAAAAATAA',
         seq_id='a',
-        aa_seq="MACAQQRMLK"
+        aa_seq="MKK",
+        type="ORF",
+        frame=1
     )
     print(repr(seq))
-    print(repr(seq.to_sequence()))
-    print(repr(seq.to_polypeptide()))
-    print(repr(seq.translate_nt()))
-    print(repr(seq.translate_nt(strict=True)))
 
 
 if __name__ == "__main__":

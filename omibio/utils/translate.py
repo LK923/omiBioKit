@@ -109,7 +109,7 @@ def translate_nt(
 
 def main() -> None:
     from omibio.sequence.sequence import Sequence
-    aa = translate_nt(Sequence("ATGNNNACT"), stop_symbol=True)
+    aa = translate_nt(Sequence("ATGAAATAA"), stop_symbol=True)
     print(repr(aa))
 
 
