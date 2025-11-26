@@ -75,7 +75,7 @@ def find_orfs(
         seq (Sequence | str):
             Input sequence.
         min_length (int, optional):
-            Minimum length of ORFs to consider. Defaults to 0.
+            Minimum length of ORFs to consider. Defaults to 100.
         max_length (int, optional):
             Maximum length of ORFs to consider. Defaults to 10000.
         overlap (bool, optional):
@@ -195,8 +195,8 @@ def find_orfs(
 
 
 def main():
-    seq_dict = read(r"./examples/data/example_long_seqs.fasta")
-    sequence = seq_dict["Example_1"]
+    seq_dict = read(r"./examples/data/example_single_long_seq.fasta")
+    sequence = seq_dict["example"]
     res = find_orfs(sequence, translate=True, seq_id='example')
     for result in res:
         print(result)
