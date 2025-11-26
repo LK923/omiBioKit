@@ -63,7 +63,7 @@ def find_consensus(
 
 
 def main() -> None:
-    input_file = r"./examples/data/example.fasta"
+    input_file = r"./examples/data/example_short_seqs.fasta"
     sequence = list(read(input_file).values())
     consensus = find_consensus(sequence, as_rna=False)
     print(consensus)

@@ -110,7 +110,7 @@ def read(
 
 
 def main():
-    input_path = r"./examples/data/example.fasta"
+    input_path = r"./examples/data/example_short_seqs.fasta"
     seq_dict = read(input_path, as_str=False)
     for seq in seq_dict.values():
         print(repr(seq))

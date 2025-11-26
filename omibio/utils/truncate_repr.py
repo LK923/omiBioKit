@@ -1,4 +1,4 @@
-def truncate_repr(seq: str, max_len: int = 40) -> str:
+def truncate_repr(seq: str, max_len: int = 30) -> str:
     if len(seq) <= max_len:
         return repr(seq)
     half = (max_len - 3) // 2

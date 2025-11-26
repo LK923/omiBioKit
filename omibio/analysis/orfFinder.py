@@ -55,7 +55,7 @@ def find_orfs_in_frame(
 
 def find_orfs(
     seq: Sequence | str,
-    min_length: int = 0,
+    min_length: int = 100,
     include_reverse: bool = True,
     sort_by_length: bool = True,
     translate: bool = False,
@@ -176,7 +176,7 @@ def find_orfs(
 
 
 def main():
-    seq_dict = read(r"./examples/data/example_long.fa")
+    seq_dict = read(r"./examples/data/example_long_seqs.fasta")
     sequence = seq_dict["Example_1"]
     res = find_orfs(sequence, translate=True, seq_id='example')
     for result in res:

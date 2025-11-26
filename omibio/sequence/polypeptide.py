@@ -138,7 +138,7 @@ class Polypeptide:
             if count > 0:
                 formula.append(element + (str(count) if count > 1 else ""))
 
-        return "".join(formula)
+        return " ".join(formula)
 
     def is_valid(self) -> bool:
         return not (set(self.aa_seq) - self.VALID_AA)

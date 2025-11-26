@@ -41,7 +41,7 @@ def write_fasta(
 def main():
     from omibio.io.read_fasta import read
 
-    input_path = r"./examples/data/example.fasta"
+    input_path = r"./examples/data/example_short_seqs.fasta"
     output_path = r"./examples/output/write_fasta_output.fasta"
 
     seq_dict = read(input_path)

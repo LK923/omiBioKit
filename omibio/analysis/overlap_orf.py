@@ -1,4 +1,4 @@
-from omibio.io.read_fasta import read
+from omibio.io.read_fasta import read  # noqa
 from omibio.utils.complement import complement
 from omibio.utils.translate import translate_nt
 import re
@@ -7,11 +7,7 @@ import re
 
 
 def main() -> None:
-    input_file = r".\examples\data\orf.fa"
-    sequences = read(input_file, as_str=True).values()
-    for sequence in sequences:
-        outputs = find_overlap_orf(sequence)
-        [print(output) for output in outputs]
+    ...
 
 
 def find_overlap_orf(sequence: str) -> list[str]:
