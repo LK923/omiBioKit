@@ -1,6 +1,6 @@
 import click
 from omibio.io.read_fasta import read
-from omibio.analysis.orfFinder import find_orfs
+from omibio.analysis.find_orfs import find_orfs
 from omibio.utils.random_seq import random_fasta
 
 
@@ -29,6 +29,17 @@ def gc(fasta_file: str) -> None:
     help="Minimum length of ORFs to consider. Defaults to 0."
 )
 @click.option(
+    "--max-length",
+    type=int,
+    default=10000,
+    help="Maximum length of ORFs to consider. Defaults to 10000."
+)
+@click.option(
+    "--overlap",
+    is_flag=True,
+    help="Whether to allow overlapping ORFs."
+)
+@click.option(
     "--no-reverse",
     is_flag=True,
     help="Whether to include reverse strand ORFs."
@@ -42,8 +53,8 @@ def gc(fasta_file: str) -> None:
     "--translate",
     is_flag=True,
     help=(
-        "Whether to ranslate the nucleotide sequences to amino acid sequences."
-        " Only show amino acid sequence when --show-seq is on."
+        "Whether to translate nucleotide sequences to amino acid sequences."
+        " (shown only if --show-seq is used)."
     )
 )
 @click.option(
@@ -60,6 +71,8 @@ def gc(fasta_file: str) -> None:
 def orf(
     fasta_file: str,
     min_length: int,
+    max_length: int,
+    overlap: bool,
     no_reverse: bool,
     no_sort: bool,
     translate: bool,
@@ -78,6 +91,8 @@ def orf(
         orfs = find_orfs(
             seq=seq_obj,
             min_length=min_length,
+            max_length=max_length,
+            overlap=overlap,
             include_reverse=not no_reverse,
             sort_by_length=not no_sort,
             translate=translate,

@@ -9,6 +9,8 @@ STOP_CODONS = {"TAA", "TAG", "TGA"}
 def find_orfs_in_frame(
     seq: str,
     min_length: int,
+    max_length: int,
+    overlap: bool,
     strand: str,
     frame: int,
     translate: bool,
@@ -18,20 +20,19 @@ def find_orfs_in_frame(
     """Internal helper function. Scan a single frame and return raw ORFs."""
 
     orf_list = []
-    curr_start = None
+    active_starts = []
 
     for i in range(frame, len(seq)-2, 3):
         codon = seq[i: i+3]
         if codon in STOP_CODONS:
-            if curr_start is not None:
-                orf_length = i + 3 - curr_start
+            end_idx = i + 3
 
-                if orf_length < min_length:
-                    curr_start = None
+            for start_idx in active_starts:
+                orf_length = i + 3 - start_idx
+
+                if not (min_length <= orf_length <= max_length):
                     continue
 
-                start_idx = curr_start
-                end_idx = i + 3
                 nt_seq = seq[start_idx: end_idx]
                 aa_seq = (
                     translate_nt(nt_seq, stop_symbol=False) if translate
@@ -45,10 +46,14 @@ def find_orfs_in_frame(
                         aa_seq=aa_seq, seq_id=seq_id
                     )
                 )
-                curr_start = None
+            active_starts = []
         else:
-            if (codon in start_codons) and (curr_start is None):
-                curr_start = i
+            if codon in start_codons:
+                if overlap:
+                    active_starts.append(i)
+                else:
+                    if not active_starts:
+                        active_starts.append(i)
 
     return orf_list
 
@@ -56,6 +61,8 @@ def find_orfs_in_frame(
 def find_orfs(
     seq: Sequence | str,
     min_length: int = 100,
+    max_length: int = 10000,
+    overlap: bool = False,
     include_reverse: bool = True,
     sort_by_length: bool = True,
     translate: bool = False,
@@ -69,6 +76,10 @@ def find_orfs(
             Input sequence.
         min_length (int, optional):
             Minimum length of ORFs to consider. Defaults to 0.
+        max_length (int, optional):
+            Maximum length of ORFs to consider. Defaults to 10000.
+        overlap (bool, optional):
+            Whether to allow overlapping ORFs. Defaults to False.
         include_reverse (bool, optional):
             Whether to include reverse strand ORFs. Defaults to True.
         sort_by_length (bool, optional):
@@ -100,7 +111,7 @@ def find_orfs(
             "find_orfs() argument 'seq' must be Sequence or str, not "
             + type(seq).__name__
         )
-    # Input: min_length
+    # Input: min_length & max_length
     if not isinstance(min_length, int):
         raise TypeError(
             "find_orfs() argument 'min_length' must be a non-negative integer"
@@ -110,6 +121,14 @@ def find_orfs(
             "find_orfs() argument 'min_length' must be non-negative, got "
             + str(min_length)
         )
+    if not isinstance(max_length, int):
+        raise TypeError(
+            "find_orfs() argument 'max_length' must be a non-negative integer"
+        )
+    if max_length < 0:
+        raise ValueError("max_length must be non-negative")
+    if max_length < min_length:
+        raise ValueError("max_length must be >= min_length")
     # Input: start_codons
     if not start_codons:
         raise ValueError("start_codons cannot be empty")
@@ -129,7 +148,7 @@ def find_orfs(
     # Input: seq_id
     if seq_id is not None and not isinstance(seq_id, str):
         raise TypeError(
-            "find_orfs() argument 'seq_id' must be Sequence or str, not "
+            "find_orfs() argument 'seq_id' must be str, not "
             + type(seq_id).__name__
         )
 
@@ -144,8 +163,8 @@ def find_orfs(
     for frame in (0, 1, 2):
         results.extend(
             find_orfs_in_frame(
-                seq.sequence, min_length=min_length,
-                strand='+', frame=frame, translate=translate,
+                seq.sequence, min_length=min_length, max_length=max_length,
+                overlap=overlap, strand='+', frame=frame, translate=translate,
                 start_codons=validated_start_codons, seq_id=seq_id
             )
         )
@@ -154,8 +173,8 @@ def find_orfs(
         rev_seq = seq.reverse_complement()
         for frame in (0, 1, 2):
             rev_orfs = find_orfs_in_frame(
-                rev_seq.sequence, min_length=min_length,
-                strand='-', frame=frame, translate=translate,
+                rev_seq.sequence, min_length=min_length, max_length=max_length,
+                overlap=overlap, strand='-', frame=frame, translate=translate,
                 start_codons=validated_start_codons, seq_id=seq_id
                 )
             for orf in rev_orfs:

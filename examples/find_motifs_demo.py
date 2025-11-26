@@ -5,7 +5,7 @@ import re
 
 def find_potential_introns_example():
     genomic = Sequence(
-        "ATGCTGCAGGTGAGTTTCCCAAATGCTNNNNNNNNNNNNNNNNNNTTTTCAGGTACTGACCGTA"
+        "ATGCTGCAGGTGAGTTTCCCAAATGCTATGCTACGTATTGTAGCTAGCTTTTTCAGGTACTGACCGTA"
     )
     pattern = re.compile(r"GT[ACGTN]{20,1000}AG")
     donor_sites = find_motif(seq=genomic, pattern=pattern)
