@@ -176,8 +176,8 @@ def find_orfs(
 
 
 def main():
-    seq_dict = read(r"./examples/data/orf.fa")
-    sequence = seq_dict["example"]
+    seq_dict = read(r"./examples/data/example_long.fa")
+    sequence = seq_dict["Example_1"]
     res = find_orfs(sequence, translate=True, seq_id='example')
     for result in res:
         print(result)

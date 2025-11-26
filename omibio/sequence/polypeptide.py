@@ -150,7 +150,9 @@ class Polypeptide:
         return self.aa_seq
 
     def __repr__(self) -> str:
-        return f"Polypeptide('{self.aa_seq}', strict={self.strict})"
+        from omibio.utils.truncate_repr import truncate_repr
+        aa_seq_repr = truncate_repr(self.aa_seq)
+        return f"Polypeptide({aa_seq_repr}, strict={self.strict})"
 
     def __getitem__(self, idx) -> str:
         return self.aa_seq[idx]
@@ -208,9 +210,9 @@ class Polypeptide:
 
 
 def main():
-    poly1 = Polypeptide('ADQLLKWS')
+    poly1 = Polypeptide('ADQLLKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWS')
     poly1[1: 5] = "LLLL"
-    print(poly1)
+    print(repr(poly1))
 
 
 if __name__ == "__main__":

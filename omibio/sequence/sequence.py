@@ -158,8 +158,9 @@ class Sequence:
 
     def translate_nt(
         self,
+        strict: bool = False,
         as_str: bool = False,
-        stop_symbol: bool = True,
+        stop_symbol: bool = False,
         to_stop: bool = False,
         frame: int = 0,
         require_start: bool = False
@@ -205,8 +206,10 @@ class Sequence:
         return self.sequence
 
     def __repr__(self) -> str:
+        from omibio.utils.truncate_repr import truncate_repr
+        seq_repr = truncate_repr(self.sequence)
         return (
-            f"Sequence('{self.sequence}', "
+            f"Sequence('{seq_repr}', "
             f"type={self.type}, "
             f"strict={self._strict})"
         )

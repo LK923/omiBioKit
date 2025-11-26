@@ -36,8 +36,9 @@ DNA_CODON_TABLE = {
 
 def translate_nt(
     seq: Sequence | str,
+    strict: bool = False,
     as_str: bool = False,
-    stop_symbol: bool = True,
+    stop_symbol: bool = False,
     to_stop: bool = False,
     frame: int = 0,
     require_start: bool = False
@@ -103,7 +104,7 @@ def translate_nt(
 
     res = "".join(aa_seq)
 
-    return res if as_str else Polypeptide(res)
+    return res if as_str else Polypeptide(res, strict=strict)
 
 
 def main() -> None:
