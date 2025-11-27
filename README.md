@@ -62,7 +62,7 @@ $ omibio orf example.fasta --min-length 100
 ```
 The above CLI will produce results like this:
 ```bash
-#Seq-name   start    end   strand   frame   length
+# Seq-name  start    end   strand   frame   length
 example_2    70      289     -       -2      219
 example_16   53      257     +       +3      204
 example_13   118     301     +       +2      183
