@@ -9,7 +9,7 @@ description = "A lightweight and easy-to-use python bioinformatics toolkit."
 readme = "README.md"
 authors = [{name = "OceanMist"}]
 license = {text = "MIT"}
-requires-python = ">=3.8"
+requires-python = ">=3."
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
