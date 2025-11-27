@@ -24,6 +24,10 @@ dna: Sequence = seq_dict["example"]
 gc_list = sliding_gc(dna, window=200, step=20)
 draw_sliding_gc(gc_list, seq=dna, window_avg=True)
 
+```
+The above code will produce the following result:
+![Example](examples/assets/demo.png)
+
 ## Installation
 
 Install from PyPI:
