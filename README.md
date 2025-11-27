@@ -8,7 +8,7 @@
 
 - Provides various commonly used bioinformatics data structures, such as Sequence and Polypeptide, as well as a variety of corresponding methods, and offers optional validity checks.
 - For users accustomed to using functional interfaces, we have also encapsulated most of the class methods into functions.
-- rovides tools for reading and writing general bioinformatics files (such as FASTA), taht is easy to use, and produces clear results.
+- Provides tools for reading and writing general bioinformatics files (such as FASTA), taht is easy to use, and produces clear results.
 - Provides a variety of commonly used analysis tool functions, with a rich set of optional parameters, making it easy to use and flexible.
 - Provide command-line interfaces for commonly used tools.
 - Provides simple visualization tools (based on matplotlib).
