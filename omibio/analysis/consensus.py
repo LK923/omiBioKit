@@ -31,10 +31,10 @@ def find_consensus(
     if len(lengths) != 1:
         raise ValueError("All sequences must be of the same length")
 
-    consensus = []
+    consensus_list = []
 
     for i in range(lengths.pop()):
-        base_scores = defaultdict(int)
+        base_scores: defaultdict[str, int] = defaultdict(int)
         for seq in seq_list:
             base = seq[i].replace("U", "T")
             if base in gap_chars:
@@ -42,7 +42,7 @@ def find_consensus(
             base_scores[base] += 1
 
         if not base_scores:
-            consensus.append("N")
+            consensus_list.append("N")
             continue
 
         max_score = max(base_scores.values())
@@ -50,16 +50,17 @@ def find_consensus(
             b for b, score in base_scores.items() if score == max_score
         ]
         if len(top_base) == 1:
-            consensus.append(top_base[0])
+            consensus_list.append(top_base[0])
         else:
-            consensus.append(IUPAC_CODES.get(frozenset(top_base), "N"))
+            consensus_list.append(IUPAC_CODES.get(frozenset(top_base), "N"))
 
+    consensus_seq = "".join(consensus_list)
     consensus = (
-        Sequence("".join(consensus), strict=False) if not as_rna
-        else Sequence("".join(consensus).replace("T", "U"), strict=False)
+        Sequence(consensus_seq, strict=False) if not as_rna
+        else Sequence(consensus_seq.replace("T", "U"), strict=False)
     )
 
-    return consensus.sequence if as_str else consensus
+    return consensus_seq if as_str else consensus
 
 
 def main() -> None:

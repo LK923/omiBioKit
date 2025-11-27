@@ -19,6 +19,7 @@ def find_shared_motif(seq_dict: dict) -> str:
             candidate = longest_seq[i: i + motif_length]
             if all(candidate in sequence for sequence in sequences[1:]):
                 return candidate
+    return ""
 
 
 if __name__ == "__main__":

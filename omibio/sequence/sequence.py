@@ -35,16 +35,11 @@ class Sequence:
         self.sequence = sequence if sequence is not None else ""
 
     @property
-    def sequence(self) -> str:
-        """Getter, returns the sequence."""
-        return self._sequence
-
-    @property
     def strict(self) -> bool:
         return self._strict
 
     @property
-    def is_rna(self) -> bool:
+    def is_rna(self) -> bool | None:
         return self._is_rna
 
     @property
@@ -52,8 +47,13 @@ class Sequence:
         """Return 'DNA' or 'RNA' indicating the sequence type."""
         return "RNA" if self._is_rna else "DNA"
 
+    @property
+    def sequence(self) -> str:
+        """Getter, returns the sequence."""
+        return self._sequence
+
     @sequence.setter
-    def sequence(self, sequence):
+    def sequence(self, sequence: str) -> None:
         """Setter, sets the sequence after validation."""
         if sequence is None:
             sequence = ""
@@ -187,8 +187,8 @@ class Sequence:
         new_strict = strict if strict is not None else self.strict
         return Sequence(str(self), rna=as_rna, strict=new_strict)
 
-    def to_strict(self, as_rna: bool | None = None):
-        return self.copy(self.sequence, strict=True, rna=as_rna)
+    def to_strict(self, as_rna: bool | None = None) -> "Sequence":
+        return self.copy(as_rna=as_rna, strict=True)
 
     def is_valid(self) -> bool:
         valid_bases = (

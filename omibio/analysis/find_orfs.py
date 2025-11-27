@@ -20,7 +20,7 @@ def find_orfs_in_frame(
     """Internal helper function. Scan a single frame and return raw ORFs."""
 
     orf_list = []
-    active_starts = []
+    active_starts: list[int] = []
 
     for i in range(frame, len(seq)-2, 3):
         codon = seq[i: i+3]
@@ -35,7 +35,7 @@ def find_orfs_in_frame(
 
                 nt_seq = seq[start_idx: end_idx]
                 aa_seq = (
-                    translate_nt(nt_seq, stop_symbol=False) if translate
+                    str(translate_nt(nt_seq, stop_symbol=False)) if translate
                     else None
                 )
                 orf_list.append(

@@ -51,18 +51,18 @@ class Polypeptide:
             )
 
         self._strict = strict
-        self.aa_seq = aa_seq if aa_seq else ""
-
-    @property
-    def aa_seq(self) -> str:
-        return self._aa_seq
+        self.aa_seq = aa_seq if aa_seq is not None else ""
 
     @property
     def strict(self) -> bool:
         return self._strict
 
+    @property
+    def aa_seq(self) -> str:
+        return self._aa_seq
+
     @aa_seq.setter
-    def aa_seq(self, aa_seq):
+    def aa_seq(self, aa_seq: str) -> None:
         if aa_seq is None:
             aa_seq = ""
         if not isinstance(aa_seq, str):
@@ -114,7 +114,7 @@ class Polypeptide:
         if not self.aa_seq:
             return ""
 
-        atom_count = defaultdict(int)
+        atom_count: defaultdict[str, int] = defaultdict(int)
 
         for aa in self.aa_seq:
             if aa not in self.RESIDUE_FORMULA:

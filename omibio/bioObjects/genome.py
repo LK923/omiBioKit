@@ -113,7 +113,7 @@ class Genome(object):
         """Return the number of genes in the genome."""
         return len(self._genes)
 
-    def average_gc_content(self, percent: bool = False) -> float | str:
+    def average_gc_content(self, percent: bool = False) -> float | str | None:
         """Calculate the average GC content across all genes in the genome.
 
         Args:
@@ -126,9 +126,9 @@ class Genome(object):
         if not self._genes:
             return None
 
-        total_gc = 0
+        total_gc = 0.0
         for gene in self._genes:
-            total_gc += gene.gc_content()  # sum GC content
+            total_gc += float(gene.gc_content())  # sum GC content
         average_gc = total_gc / len(self._genes)  # calculate average
 
         # Return as float or percentage string
@@ -143,7 +143,7 @@ class Genome(object):
             return None
         return max(self._genes, key=len)
 
-    def to_fasta(self, file_name: str = None) -> str:
+    def to_fasta(self, file_name: str | None = None) -> str:
         """Return the genome in FASTA format.
 
         Args:

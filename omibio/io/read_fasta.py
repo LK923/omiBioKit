@@ -50,7 +50,7 @@ def read(
 
     sequences = {}
     current_name = None
-    current_seq = []
+    current_seq: list[str] = []
 
     def store_sequence(name, seq):
         if not name:

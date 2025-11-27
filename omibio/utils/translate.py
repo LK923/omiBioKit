@@ -35,7 +35,7 @@ DNA_CODON_TABLE = {
 
 
 def translate_nt(
-    seq: Sequence | str,
+    seq: Sequence | str | None,
     strict: bool = False,
     as_str: bool = False,
     stop_symbol: bool = False,

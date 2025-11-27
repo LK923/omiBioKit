@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Union
 from omibio.sequence.sequence import Sequence
 from omibio.sequence.polypeptide import Polypeptide
 from omibio.utils.translate import translate_nt
@@ -14,14 +14,14 @@ class SeqInterval:
     start: int
     end: int
 
-    nt_seq: str
+    nt_seq: str | None
 
-    type: Optional[str] = None
-    seq_id: Optional[str] = None
+    type: str | None = None
+    seq_id: str | None = None
     strand: str = "+"
 
-    aa_seq: Optional[str] = None
-    frame: Optional[int] = None
+    aa_seq: str | None = None
+    frame: int = 0
 
     def __post_init__(self):
         if not isinstance(self.nt_seq, (str, Sequence)):
@@ -101,7 +101,7 @@ class SeqInterval:
 
     def to_sequence(
         self,
-        rna: Optional[bool] = None,
+        rna: bool | None = None,
         strict: bool = False
     ) -> Sequence:
 
@@ -127,7 +127,7 @@ class SeqInterval:
         to_stop: bool = False,
         frame: int = 0,
         require_start: bool = False
-    ) -> Union[Polypeptide, str]:
+    ) -> Polypeptide | str:
 
         return translate_nt(
             self.nt_seq,

@@ -1,13 +1,13 @@
 from omibio.sequence.sequence import Sequence
 from omibio.bioObjects.seq_interval import SeqInterval
-from typing import Pattern, Union, Optional
+from typing import Pattern
 import re
 
 
 def find_motif(
-    seq: Union[Sequence, str],
-    pattern: Union[str, Pattern],
-    seq_id: Optional[str] = None,
+    seq: Sequence | str,
+    pattern: str | Pattern,
+    seq_id: str | None = None,
     ignore_case: bool = True
 ) -> list[SeqInterval]:
 

@@ -1,4 +1,6 @@
-def truncate_repr(seq: str, max_len: int = 30) -> str:
+def truncate_repr(seq: str | None, max_len: int = 30) -> str | None:
+    if not seq:
+        return None
     if len(seq) <= max_len:
         return repr(seq)
     half = (max_len - 3) // 2
@@ -7,7 +9,7 @@ def truncate_repr(seq: str, max_len: int = 30) -> str:
 
 
 def main():
-    seq = "ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG"
+    seq = None
     print(truncate_repr(seq))
 
 

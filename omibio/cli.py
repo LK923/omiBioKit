@@ -119,7 +119,7 @@ def orf(
             aa_seq = str(orf.aa_seq) if orf.aa_seq is not None else ""
             base_fields.extend([nt_seq, aa_seq])
 
-        click.echo("\t".join(base_fields))
+        click.echo("\t".join(str(f) for f in base_fields))
 
 
 @cli.command()

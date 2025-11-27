@@ -90,7 +90,7 @@ def draw_sliding_gc(
             )
         if isinstance(seq, str):
             seq = Sequence(seq)
-        total_avg = seq.gc_content() * 100
+        total_avg = float(seq.gc_content()) * 100
 
     positions = [(start + end) / 2 for start, end, _ in gc_list]
     gc_vals = [gc for _, _, gc in gc_list]
