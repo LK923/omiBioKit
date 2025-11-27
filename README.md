@@ -27,11 +27,12 @@ draw_sliding_gc(gc_list, seq=dna, window_avg=True)  # Visualization
 
 ```
 The above code will produce results like this:
-___
+
 <p align="center">
   <img src="examples/assets/sliding_gc_viz_demo.png" alt="Example" width="800"/>
 </p>
 
+---
 #### Using ```omiBio```'s command-line tools:
 ```bash
 $ omibio orf example.fasta --min-length 100
