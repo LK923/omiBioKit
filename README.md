@@ -52,7 +52,7 @@ draw_sliding_gc(gc_list, seq=dna, window_avg=True)
 The above code will produce results like this:
 
 <p align="center">
-  <img src="https://github.com/LK923/omiBioKit/blob/main/examples/assets/sliding_gc_viz_demo.png?raw=true" alt="Example" width="800"/>
+  <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/sliding_gc_viz_demo.png" alt="Example" width="800"/>
 </p>
 
 ---
