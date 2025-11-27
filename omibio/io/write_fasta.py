@@ -7,6 +7,24 @@ def write_fasta(
     line_len: int = 60,
     space_between: bool = False
 ) -> None:
+    """Writes sequences to a FASTA file.
+
+    Args:
+        file_path (_type_):
+            Path to output FASTA file.
+        seq_dict (_type_):
+            Dictionary of sequence name (str) to sequence (str or Sequence).
+        line_len (int, optional):
+            Number of characters per line in the FASTA file. Defaults to 60.
+        space_between (bool, optional):
+            Whether to add a blank line between sequences. Defaults to False.
+
+    Raises:
+        TypeError:
+            if seq_dict is not a dict or if sequence names are not str.
+        OSError:
+            if unable to write to file.
+    """
 
     if not isinstance(seq_dict, dict):
         raise TypeError(
@@ -46,6 +64,7 @@ def main():
 
     seq_dict = read(input_path)
     write_fasta(output_path, seq_dict, space_between=True)
+    print(output_path)
 
 
 if __name__ == "__main__":

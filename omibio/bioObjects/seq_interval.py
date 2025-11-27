@@ -57,16 +57,21 @@ class SeqInterval:
         return self.end - self.start
 
     def same_seq_as(self, other) -> bool:
+        """Checks if two SeqInterval instances are on the same sequence."""
         if not isinstance(other, SeqInterval):
             return False
         return self.seq_id == other.seq_id
 
     def overlaps(self, other: "SeqInterval") -> bool:
+        """Checks if two SeqInterval instances overlap."""
         if not self.same_seq_as(other):
             return False
         return self.start < other.end and other.start < self.end
 
     def contains(self, other: Union[int, "SeqInterval"]) -> bool:
+        """
+        Checks if the SeqInterval contains a position or another SeqInterval.
+        """
         if isinstance(other, int):
             return self.start <= other < self.end
 
@@ -80,6 +85,7 @@ class SeqInterval:
             return False
 
     def distance_to(self, other: "SeqInterval") -> int:
+        """Calculates the distance to another SeqInterval."""
         if not isinstance(other, SeqInterval):
             raise TypeError(
                 "distance_to() argument 'other' must be SeqInterval, got "
@@ -104,12 +110,15 @@ class SeqInterval:
         rna: bool | None = None,
         strict: bool = False
     ) -> Sequence:
+        """Returns the nucleotide sequence as a Sequence object."""
 
         return Sequence(
             self.nt_seq, rna=rna, strict=strict
         )
 
     def to_polypeptide(self, strict: bool = False) -> Polypeptide:
+        """Returns the amino acid sequence as a Polypeptide object."""
+
         if self.aa_seq is not None:
 
             return Polypeptide(self.aa_seq, strict=strict)
@@ -128,6 +137,7 @@ class SeqInterval:
         frame: int = 0,
         require_start: bool = False
     ) -> Polypeptide | str:
+        """Translates the nucleotide sequence to amino acid sequence."""
 
         return translate_nt(
             self.nt_seq,

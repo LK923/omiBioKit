@@ -11,6 +11,31 @@ def random_seq(
     as_str: bool = False,
     seq_strict: bool = False
 ) -> Sequence | str:
+    """Generate a random sequence.
+
+    Args:
+        length (int):
+            Length of the sequence to generate.
+        alphabet (str, optional):
+            Alphabet to sample from. Defaults to "ATCG".
+        weights (list[float] | None, optional):
+            Weights for each character in the alphabet. Defaults to None.
+        seed (int | None, optional):
+            Random seed for reproducibility. Defaults to None.
+        as_str (bool, optional):
+            If True, return the sequence as a string. Defaults to False.
+        seq_strict (bool, optional):
+            If True and as_str is False, create a Sequence object in strict
+            mode. Defaults to False.
+
+    Raises:
+        ValueError: length must be a non-negative integer
+        ValueError: Alphabet cannot be empty
+        ValueError: Length of 'weights' must match length of 'alphabet'
+
+    Returns:
+        Sequence | str: The generated random sequence.
+    """
 
     if length < 0:
         raise ValueError(
@@ -46,6 +71,24 @@ def random_fasta(
     weights: list[float] | None = None,
     seed: int | None = None,
 ) -> None:
+    """Generate a FASTA file containing a random sequence.
+
+    Args:
+        file_path (str):
+            Path to the output FASTA file.
+        seq_num (int):
+            Number of sequences to generate.
+        length (int):
+            Length of each sequence.
+        alphabet (str, optional):
+            Alphabet to sample from. Defaults to "ATCG".
+        prefix (str, optional):
+            Prefix for sequence IDs. Defaults to "Sequence".
+        weights (list[float] | None, optional):
+            Weights for each character in the alphabet. Defaults to None.
+        seed (int | None, optional):
+            Random seed for reproducibility. Defaults to None.
+    """
 
     seq_dict = {}
     for i in range(1, seq_num+1):
@@ -57,7 +100,9 @@ def random_fasta(
 
 
 def main():
-    random_fasta(r"./examples/data/random.fasta", 30, 2000)
+    output_path = r"./examples/data/random.fasta"
+    random_fasta(output_path, 30, 2000)
+    print(output_path)
 
 
 if __name__ == "__main__":

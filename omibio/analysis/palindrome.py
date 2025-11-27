@@ -80,7 +80,7 @@ def find_palindrome(
 
 
 def main():
-    seq = Sequence("AAUU")
+    seq = Sequence("GAAUUTGG")
     print(find_palindrome(seq))
 
 

@@ -55,14 +55,17 @@ class Polypeptide:
 
     @property
     def strict(self) -> bool:
+        """Getter for strict mode."""
         return self._strict
 
     @property
     def aa_seq(self) -> str:
+        """Getter for the amino acid sequence."""
         return self._aa_seq
 
     @aa_seq.setter
     def aa_seq(self, aa_seq: str) -> None:
+        """Setter for the amino acid sequence."""
         if aa_seq is None:
             aa_seq = ""
         if not isinstance(aa_seq, str):
@@ -82,25 +85,31 @@ class Polypeptide:
         self._aa_seq = aa_seq
 
     def copy(self, strict: bool | None = None) -> "Polypeptide":
+        """Returns a copy of the Polypeptide instance."""
         new_strict = strict if strict is not None else self._strict
         return Polypeptide(self.aa_seq, strict=new_strict)
 
     def to_strict(self) -> "Polypeptide":
+        """Returns a strict copy of the Polypeptide instance."""
         return self.copy(strict=True)
 
     def mass(self, accuracy: int = 3) -> float:
+        """Calculates the molecular mass of the polypeptide."""
         if not self.aa_seq:
             return 0.0
         total = sum(self.AA_MASS.get(aa, 0) for aa in self.aa_seq) + 18.01528
         return round(total, accuracy)
 
     def composition(self) -> dict:
+        """Returns the amino acid composition as a dictionary."""
         return dict(Counter(self.aa_seq))
 
     def count(self, aa: str) -> int:
+        """Returns the count of a specific amino acid in the sequence."""
         return self.aa_seq.count(aa)
 
     def subseq(self, start: int, end: int | None = None) -> "Polypeptide":
+        """Returns a subsequence from start to end (exclusive)."""
         try:
             sub = self.aa_seq[start:end]
         except IndexError as e:
@@ -111,6 +120,7 @@ class Polypeptide:
         return Polypeptide(sub, strict=self._strict)
 
     def formula(self) -> str:
+        """Calculates the molecular formula of the polypeptide."""
         if not self.aa_seq:
             return ""
 
@@ -141,6 +151,7 @@ class Polypeptide:
         return " ".join(formula)
 
     def is_valid(self) -> bool:
+        """Checks if the polypeptide sequence is valid."""
         return not (set(self.aa_seq) - self.VALID_AA)
 
     def __len__(self) -> int:

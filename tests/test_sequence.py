@@ -116,7 +116,7 @@ class TestSequence:
         b = Sequence("GC", rna=True, strict=False)
         c = a + b
         assert c.sequence == "ATGC"
-        assert c.is_rna is False  # 自动判定
+        assert c.is_rna is False
 
     def test_add_with_str(self):
         a = Sequence("ATG", rna=False, strict=True)

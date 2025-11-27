@@ -1,3 +1,7 @@
+from omibio.sequence.polypeptide import Polypeptide
+from typing import Union
+
+
 class Sequence:
     """
     A class representing a DNA or RNA sequence with methods for analysis.
@@ -18,7 +22,21 @@ class Sequence:
         rna: bool | None = None,
         strict: bool = False
     ):
-        """Initialize with a sequence string."""
+        """Initialize a Sequence object.
+
+        Args:
+            sequence (str | None, optional):
+                The nucleotide sequence as a string. Defaults to None.
+            rna (bool | None, optional):
+                Indicates if the sequence is RNA (True), DNA (False),
+                or unknown (None). Defaults to None.
+            strict (bool, optional):
+                If True, enables strict mode for validation. Defaults to False.
+
+        Raises:
+            TypeError: If rna is not bool or None
+            TypeError: If strict is not bool
+        """
 
         if rna is not None and not isinstance(rna, bool):
             raise TypeError(
@@ -36,10 +54,14 @@ class Sequence:
 
     @property
     def strict(self) -> bool:
+        """Getter, returns whether strict mode is enabled."""
         return self._strict
 
     @property
     def is_rna(self) -> bool | None:
+        """Getter, returns whether the sequence is RNA (True), DNA (False),
+        or unknown (None).
+        """
         return self._is_rna
 
     @property
@@ -54,7 +76,20 @@ class Sequence:
 
     @sequence.setter
     def sequence(self, sequence: str) -> None:
-        """Setter, sets the sequence after validation."""
+        """Setter, based on the strict rule, performs a sequence base validity
+        check and automatically determines the DNA/RNA type.
+
+        Args:
+            sequence (str): The nucleotide sequence.
+
+        Raises:
+            TypeError:
+                if sequence is not str
+            ValueError:
+                If strict mode is enabled and invalid bases are found
+            ValueError:
+                If strict mode is enabled and both 'T' and 'U' are found
+        """
         if sequence is None:
             sequence = ""
         elif not isinstance(sequence, str):
@@ -129,6 +164,7 @@ class Sequence:
         return Sequence(rev_comp, rna=self._is_rna, strict=self._strict)
 
     def transcribe(self, strand: str = "+") -> "Sequence":
+        """Transcribe the DNA sequence to RNA."""
         if self._is_rna is True:
             return self
         if strand not in {"+", "-"}:
@@ -140,6 +176,7 @@ class Sequence:
         return Sequence(rna_seq, rna=True, strict=self._strict)
 
     def reverse_transcribe(self) -> "Sequence":
+        """Transcribe the RNA sequence to DNA."""
         if self._is_rna is False:
             return self
         return Sequence(
@@ -147,6 +184,7 @@ class Sequence:
         )
 
     def subseq(self, start: int, end: int | None = None) -> "Sequence":
+        """Return a subsequence from start to end (end exclusive)."""
         if (
             not isinstance(start, int)
             or (end is not None and not isinstance(end, int))
@@ -164,12 +202,14 @@ class Sequence:
         to_stop: bool = False,
         frame: int = 0,
         require_start: bool = False
-    ):
+    ) -> Union["Polypeptide", str]:
+        """Translate the nucleotide sequence to an amino acid sequence."""
         from omibio.utils.translate import translate_nt
 
         return translate_nt(
             self.sequence,
             as_str=as_str,
+            strict=strict,
             stop_symbol=stop_symbol,
             to_stop=to_stop,
             frame=frame,
@@ -177,6 +217,7 @@ class Sequence:
         )
 
     def count(self, base: str) -> int:
+        """Count occurrences of a base in the sequence."""
         return self.sequence.count(base)
 
     def copy(
@@ -184,13 +225,17 @@ class Sequence:
         as_rna: bool | None = None,
         strict: bool | None = None
     ) -> "Sequence":
+        """Return a copy of the Sequence object."""
+
         new_strict = strict if strict is not None else self.strict
         return Sequence(str(self), rna=as_rna, strict=new_strict)
 
     def to_strict(self, as_rna: bool | None = None) -> "Sequence":
+        """Return a copy of the Sequence object in strict mode."""
         return self.copy(as_rna=as_rna, strict=True)
 
     def is_valid(self) -> bool:
+        """Check if the sequence contains only valid bases."""
         valid_bases = (
             self._VALID_RNA_BASES if self._is_rna
             else self._VALID_DNA_BASES
@@ -209,7 +254,7 @@ class Sequence:
         from omibio.utils.truncate_repr import truncate_repr
         seq_repr = truncate_repr(self.sequence)
         return (
-            f"Sequence('{seq_repr}', "
+            f"Sequence({seq_repr}, "
             f"type={self.type}, "
             f"strict={self._strict})"
         )

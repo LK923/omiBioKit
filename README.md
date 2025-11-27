@@ -104,7 +104,7 @@ All code is automatically formatted and checked using **flake8**.
 This project is licensed under the MIT License.
 
 ## Things to note
-- Most of the code in this project uses 0-based indexes, rather than the 1-based indexes commonly used in biology.
+- Most of the code in this project uses 0-based indexes, Half-open interval, rather than the 1-based indexes commonly used in biology.
 - All code type hints in this project use PEP 585 generic syntax in Python 3.9+.
 - This project is still under development and not yet ready for production. Please use it with caution. If you have any suggestions, please contact us:
   - **gmail**: linkaiwen048@gmail.com

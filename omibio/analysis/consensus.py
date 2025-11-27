@@ -17,12 +17,33 @@ def find_consensus(
     gap_chars: str = "-?.",
     as_rna: bool = False
 ) -> str | Sequence:
+    """Finds the consensus sequence from a list of sequences.
+
+    Args:
+        seq_list (list[str  |  Sequence]):
+            list of sequences to find consensus from.
+        as_str (bool, optional):
+            whether to return the consensus as a string.
+            Defaults to False.
+        gap_chars (str, optional):
+            characters to consider as gaps. Defaults to "-?.".
+        as_rna (bool, optional):
+            whether to return the consensus as RNA sequence.
+            Defaults to False.
+
+    Raises:
+        TypeError: If seq_list is not a list.
+        ValueError: If sequences are not of the same length.
+
+    Returns:
+        str | Sequence: The consensus sequence as a string or Sequence object.
+    """
 
     if not seq_list:
         return ""
     if not isinstance(seq_list, list):
         raise TypeError(
-            "Sequence argument 'strict' must be bool or None, got "
+            "find_consensus() argument 'seq_list' must be list, got "
             + type(seq_list).__name__
         )
     seq_list = [str(s).upper() for s in seq_list]

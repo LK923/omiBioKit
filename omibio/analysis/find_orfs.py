@@ -199,7 +199,7 @@ def main():
     sequence = seq_dict["example"]
     res = find_orfs(sequence, translate=True, seq_id='example')
     for result in res:
-        print(result)
+        print(repr(result))
 
 
 if __name__ == "__main__":

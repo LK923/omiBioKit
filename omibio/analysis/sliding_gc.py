@@ -121,7 +121,11 @@ def draw_sliding_gc(
 
 
 def main():
-    ...
+    from omibio.io.read_fasta import read
+    seq = read("./examples/data/example_single_long_seq.fasta")["example"]
+    gc_list = sliding_gc(seq)
+    print(gc_list)
+    draw_sliding_gc(gc_list)
 
 
 if __name__ == "__main__":

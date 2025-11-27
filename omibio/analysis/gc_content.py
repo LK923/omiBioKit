@@ -8,9 +8,11 @@ def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
     """Calculate the GC content of a sequence.
 
     Args:
-        seq (str): input sequence
+        seq (str):
+            input sequence
         percent (bool, optional):
-        If True, return GC content as a percentage string. Defaults to False.
+            If True, return GC content as a percentage string.
+            Defaults to False.
 
     Returns:
         float | str: GC content as a float or percentage string.
@@ -32,8 +34,8 @@ def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
 
 
 def main():
-    from omibio.sequence.sequence import Sequence  # noqa
     print(gc("AC"))
+    print(gc("AC", percent=True))
 
 
 if __name__ == "__main__":

@@ -20,7 +20,8 @@ def read(
     Automatically ignore blank and comment lines. Can check file format errors.
 
     Args:
-        file_name: The name of the fasta file to read, a str ends with
+        file_name:
+        The name of the fasta file to read, a str ends with
         ".fasta", ".fa", ".fna", ".faa".
 
     Returns:
