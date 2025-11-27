@@ -26,7 +26,7 @@ draw_sliding_gc(gc_list, seq=dna, window_avg=True)
 
 ```
 The above code will produce the following result:
-![Example](examples/assets/demo.png)
+![Example](examples/assets/sliding_gc_viz_demo.png)
 
 ## Installation
 
