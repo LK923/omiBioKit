@@ -18,16 +18,18 @@ omiBio (omiBioKit) is an open-source Python 3 package that is lightweight, easy 
 from omibio.analysis import sliding_gc, draw_sliding_gc
 from omibio.io import read
 
-seq_dict = read("./example.fasta")
-dna: Sequence = seq_dict["example"]
+seq_dict = read("./example.fasta")  # Reading FASTA file
+dna: Sequence = seq_dict["example"]  # Get Sequence
 
-gc_list = sliding_gc(dna, window=200, step=20)
-draw_sliding_gc(gc_list, seq=dna, window_avg=True)
+gc_list = sliding_gc(dna, window=200, step=20)  # Get GC data from the sliding window
+draw_sliding_gc(gc_list, seq=dna, window_avg=True)  # Visualization
 
 ```
 The above code will produce the following result:
 ___
-![Example](examples/assets/sliding_gc_viz_demo.png)
+<p align="center">
+  <img src="examples/assets/sliding_gc_viz_demo.png" alt="Example" width="800"/>
+</p>
 
 ## Installation
 
