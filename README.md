@@ -1,31 +1,47 @@
-# omiBio - Python bioinformatics toolkit
+# omiBio - A Lightweight Bioinformatics Toolkit for Python
 
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit)](https://github.com/LK923/omiBioKit/releases)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 
 ## Introduction
-```omiBio``` (omiBioKit) is an open-source Python 3 package that is lightweight, easy to use, and publicly available, suitable for education, general bioinformatics, and scientific research.
+**omiBio** is a lightweight, user-friendly Python toolkit for bioinformatics — ideal for education, research, and rapid prototyping.
 
-- Provides various commonly used bioinformatics data structures, such as Sequence and Polypeptide, as well as a variety of corresponding methods, and offers optional validity checks.
-- For users accustomed to using functional interfaces, we have also encapsulated most of the class methods into functions.
-- Provides tools for reading and writing general bioinformatics files (such as FASTA), that is easy to use, and produces clear results.
-- Provides a variety of commonly used analysis tool functions, with a rich set of optional parameters, making it easy to use and flexible.
-- Provide command-line interfaces for commonly used tools.
-- Provides simple visualization tools (based on matplotlib).
+ **Key features**:
+-  **Robust data structures**: `Sequence`, `Polypeptide`, `Gene`, `Genome`, etc., with optional validation.
+-  **Simple I/O**: Read/write bioinformatics files (e.g., FASTA) with one-liners.
+-  **Analysis tools**: GC content, ORF detection, consensus sequences, sliding windows, and more.
+-  **CLI included**: Run common tasks from the terminal .
+-  **Basic visualization**: Built-in plotting (via matplotlib) for quick insights.
+-  **Functional & OOP APIs**: Use classes or convenient wrapper functions.
+
+## Modules Overview
+
+- `omibio.sequence`: Sequence-type data structures, including Sequence, Polypeptide, etc.
+- `omibio.bioObjects`: Biological objects and data containers that support structured bioinformatics workflows. e.g., SeqInterval, Gene and Genome.
+- `omibio.io`: Functions for reading and writing common bioinformatics file formats (e.g., FASTA), designed to be simple and user-friendly.
+- `omibio.analysis`: Analysis functions, e.g., GC content, consensus sequences and find ORF.
+- `omibio.utils`: General-purpose utility functions and function encapsulation for class methods.
+- `omibio.cli`: Command-line interfaces for common workflows, enabling users to run analyses directly from the terminal.
 
 ## Usage example
-#### Creating a sliding window GC chart using ```omiBio```:
+#### Creating a sliding window GC chart using **omiBio**:
 ```python
 from omibio.analysis import sliding_gc, draw_sliding_gc
+from omibio.sequence import Sequence
 from omibio.io import read
 
-seq_dict = read("./example.fasta")  # Reading FASTA file
-dna: Sequence = seq_dict["example"]  # Get Sequence
+# Load sequences from FASTA (returns dict[str, Sequence])
+seq_dict = read("examples/example.fasta")
+dna: Sequence = seq_dict["example"]
 
-gc_list = sliding_gc(dna, window=200, step=20)  # Get GC data from the sliding window
-draw_sliding_gc(gc_list, seq=dna, window_avg=True)  # Visualization
+# Compute GC content in sliding windows (window=200 bp, step=20 bp)
+
+gc_list = sliding_gc(dna, window=200, step=20)
+
+# Visualize easily
+draw_sliding_gc(gc_list, seq=dna, window_avg=True)
 
 ```
 The above code will produce results like this:
@@ -35,7 +51,7 @@ The above code will produce results like this:
 </p>
 
 ---
-#### Using ```omiBio```'s command-line tools:
+#### Using **omiBio**'s Command-line interfaces:
 ```bash
 $ omibio orf example.fasta --min-length 100
 ```
@@ -67,8 +83,22 @@ example_17   114     216     -       -3      102
 ```
 ## Installation
 
-Install from PyPI:
-
+### From PyPI (stable release):
 ```bash
 $ pip install omibio
 ```
+
+## Requirements
+
+- **Python**: >= 3.9
+- **Core dependencies**:
+  - `click` (for CLI)
+- **Optional dependencies** (install for extra features):
+  - `matplotlib` → enables visualization 
+
+>  Optional deps won't be installed by default. To get them:
+> ```bash
+> pip install omibio[plot]   # if you configure extras in pyproject.toml
+> ```
+
+For complete project build and dependency configuration, please refer to [`pyproject.toml`](pyproject.toml)
