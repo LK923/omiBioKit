@@ -2,9 +2,9 @@
 
 A lightweight and easy-to-use Python bioinformatics toolkit for sequence analysis, ORF finding, GC content calculation, and random sequence generation.
 
+[![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit)](https://github.com/LK923/omiBioKit/releases)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![License: MIT](https://img.shields.io/github/license/LK923/omiBioKit.svg)](https://github.com/LK923/omiBioKit)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
 
