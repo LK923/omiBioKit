@@ -50,7 +50,7 @@ jobs:
     # For more information, see: https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules
     environment:
       name: pypi
-      url: https://pypi.org/project/omibio/${{ substring(github.event.release.tag_name, 1) }}/
+      url: https://pypi.org/project/omibio/${{ replace(github.event.release.tag_name, 'v', '') }}/
 
     steps:
       - name: Retrieve release distributions
