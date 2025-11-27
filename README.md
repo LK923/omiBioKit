@@ -1,4 +1,5 @@
-# omiBio - A Lightweight Bioinformatics Toolkit for Python / 轻量python生信工具包
+# omiBio
+# - A Lightweight Bioinformatics Toolkit / 轻量生信工具包
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit)](https://github.com/LK923/omiBioKit/releases)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
