@@ -83,7 +83,7 @@ example_17   114     216     -       -3      102
 ```
 ## Installation
 
-### From PyPI (stable release):
+### From PyPI:
 ```bash
 $ pip install omibio
 ```
@@ -98,7 +98,7 @@ $ pip install omibio
 
 >  Optional deps won't be installed by default. To get them:
 > ```bash
-> pip install omibio[plot]   # if you configure extras in pyproject.toml
+> pip install omibio[plot]
 > ```
 
 For complete project build and dependency configuration, please refer to [`pyproject.toml`](pyproject.toml)
