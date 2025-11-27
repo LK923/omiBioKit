@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+from omibio.bioObjects.seq_interval import SeqInterval
+
+
+def plot_orfs(
+    orfs: list[SeqInterval],
+    seq_length: int,
+    ax: Axes | None = None
+) -> Axes:
+
+    if ax is None:
+        _, ax = plt.subplots(figsize=(12, 4))
+
+    frame_y = {
+        '+1': 5, '+2': 4, '+3': 3,
+        '-1': 2, '-2': 1, '-3': 0
+    }
+    bar_height = 0.8
+    positive_color = "#4C72B0"
+    negative_color = "#DD8452"
+
+    for orf in orfs:
+        frame_key = f"+{orf.frame}" if orf.frame > 0 else str(orf.frame)
+        y = frame_y[frame_key]
+        color = positive_color if orf.strand == '+' else negative_color
+
+        ax.broken_barh(
+            [(orf.start, orf.length)],
+            (y - bar_height/2, bar_height),
+            facecolors=color
+        )
+
+    ax.set_ylim(-1, 6)
+    ax.set_xlim(0, seq_length)
+    ax.set_yticks(list(frame_y.values()))
+    ax.set_yticklabels(list(frame_y.keys()))
+    ax.set_xlabel("Sequence Position")
+    ax.set_ylabel("Reading Frame")
+    ax.set_title("ORF Distribution")
+
+
+def main():
+    from omibio.analysis.find_orfs import find_orfs
+    from omibio.io.read_fasta import read
+    seq = read("./examples/data/example_single_long_seq.fasta")["example"]
+    orfs = find_orfs(seq)
+    plot_orfs(orfs, seq_length=len(seq))
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()

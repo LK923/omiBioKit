@@ -26,16 +26,17 @@ The **omiBio** toolkit is organized into the following modules:
 | `omibio.sequence` | Sequence-type data structures | `Sequence`, `Polypeptide` |
 | `omibio.bioObjects` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
 | `omibio.io` | File I/O for common bioinformatics formats | `read()`, `write()` |
-| `omibio.analysis` | Sequence analysis functions | `GC_content`, `sliding_gc`, `find_orfs` |
+| `omibio.analysis` | Sequence analysis functions | `GC_content()`, `sliding_gc()`, `find_orfs()` |
 | `omibio.utils` | General-purpose utility functions | Wrappers, helper functions |
+| `omibio.viz` | Simple and easy-to-use data visualization | `plot_orf()`, `plot_sliding_gc()` |
 | `omibio.cli` | Command-line interfaces for common workflows | `omibio orf`, other CLI commands |
 
 ## Usage example / 使用示例
 #### Creating a sliding window GC chart using **omiBio**:
 ```python
-from omibio.analysis import sliding_gc, draw_sliding_gc
-from omibio.sequence import Sequence
 from omibio.io import read
+from omibio.analysis import sliding_gc
+from omibio.viz import plot_sliding_gc, plt
 
 # Load sequences from FASTA (returns dict[str, Sequence])
 seq_dict = read("examples/example.fasta")
@@ -45,7 +46,8 @@ dna: Sequence = seq_dict["example"]
 gc_list = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
-draw_sliding_gc(gc_list, seq=dna, window_avg=True)
+plot_sliding_gc(gc_list, seq=dna, window_avg=True)
+plt.show()
 
 ```
 The above code will produce results like this:
