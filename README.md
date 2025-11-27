@@ -13,6 +13,17 @@ omiBio (omiBioKit) is an open-source Python 3 package that is lightweight, easy 
 - Provide command-line interfaces for commonly used tools.
 - Provides simple visualization tools (based on matplotlib).
 
+## Usage example
+```python
+from omibio.analysis import sliding_gc, draw_sliding_gc
+from omibio.io import read
+
+seq_dict = read("./example.fasta")
+dna: Sequence = seq_dict["example"]
+
+gc_list = sliding_gc(dna, window=200, step=20)
+draw_sliding_gc(gc_list, seq=dna, window_avg=True)
+
 ## Installation
 
 Install from PyPI:
