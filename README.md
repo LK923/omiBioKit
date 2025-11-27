@@ -1,11 +1,11 @@
-# omiBio - A Lightweight Bioinformatics Toolkit for Python
-
+# omiBio - A Lightweight Bioinformatics Toolkit for Python / 轻量python生信工具包
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit)](https://github.com/LK923/omiBioKit/releases)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![flake8](https://img.shields.io/badge/code%20style-PEP%208-blue.svg)](https://flake8.pycqa.org/)
 
 
-## Introduction
+## Introduction / 简介
 **omiBio** is a lightweight, user-friendly Python toolkit for bioinformatics — ideal for education, research, and rapid prototyping.
 
  **Key features**:
@@ -16,16 +16,20 @@
 -  **Basic visualization**: Built-in plotting (via matplotlib) for quick insights.
 -  **Functional & OOP APIs**: Use classes or convenient wrapper functions.
 
-## Modules Overview
+## Modules Overview / 模块概览
 
-- `omibio.sequence`: Sequence-type data structures, including Sequence, Polypeptide, etc.
-- `omibio.bioObjects`: Biological objects and data containers that support structured bioinformatics workflows. e.g., SeqInterval, Gene and Genome.
-- `omibio.io`: Functions for reading and writing common bioinformatics file formats (e.g., FASTA), designed to be simple and user-friendly.
-- `omibio.analysis`: Analysis functions, e.g., GC content, consensus sequences and find ORF.
-- `omibio.utils`: General-purpose utility functions and function encapsulation for class methods.
-- `omibio.cli`: Command-line interfaces for common workflows, enabling users to run analyses directly from the terminal.
+The **omiBio** toolkit is organized into the following modules:
 
-## Usage example
+| Module | Purpose | Key Classes / Functions |
+|--------|---------|------------------------|
+| `omibio.sequence` | Sequence-type data structures | `Sequence`, `Polypeptide` |
+| `omibio.bioObjects` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
+| `omibio.io` | File I/O for common bioinformatics formats | `read()`, `write()` |
+| `omibio.analysis` | Sequence analysis functions | `GC_content`, `sliding_gc`, `find_orfs` |
+| `omibio.utils` | General-purpose utility functions | Wrappers, helper functions |
+| `omibio.cli` | Command-line interfaces for common workflows | `omibio orf`, other CLI commands |
+
+## Usage example / 使用示例
 #### Creating a sliding window GC chart using **omiBio**:
 ```python
 from omibio.analysis import sliding_gc, draw_sliding_gc
@@ -64,24 +68,10 @@ example_4    92      272     -       -1      180
 example_2    157     322     +       +2      165
 example_5    17      173     -       -1      156
 example_16   176     332     -       -1      156
-example_3    177     324     -       -3      147
-example_19   172     319     -       -2      147
-example_1    44      188     +       +3      144
-example_16   120     264     +       +1      144
-example_17   164     308     -       -1      144
-example_19   180     309     -       -3      129
-example_3    68      194     -       -1      126
-example_13   188     299     -       -1      111
-example_17   93      201     +       +1      108
-example_5    80      185     +       +3      105
-example_11   214     319     +       +2      105
-example_9    35      137     -       -1      102
-example_13   134     236     +       +3      102
-example_15   226     328     +       +2      102
-example_17   114     216     -       -3      102
+...
 
 ```
-## Installation
+## Installation / 安装
 
 ### From PyPI:
 ```bash
@@ -102,3 +92,18 @@ $ pip install omibio
 > ```
 
 For complete project build and dependency configuration, please refer to [`pyproject.toml`](pyproject.toml)
+
+## Code Style
+
+**omiBio** follows [PEP 8](https://peps.python.org/pep-0008/) conventions for Python code.  
+All code is automatically formatted and checked using **flake8**.
+
+## License
+This project is licensed under the MIT License.
+
+## Things to note
+- Most of the code in this project uses 0-based indexes, rather than the 1-based indexes commonly used in biology.
+- All code type hints in this project use PEP 585 generic syntax in Python 3.9+.
+- This project is still under development and not yet ready for production. Please use it with caution. If you have any suggestions, please contact us:
+  - **gmail**: linkaiwen048@gmail.com
+  - **qq**: 2658592119
