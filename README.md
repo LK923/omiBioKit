@@ -42,7 +42,6 @@ seq_dict = read("examples/example.fasta")
 dna: Sequence = seq_dict["example"]
 
 # Compute GC content in sliding windows (window=200 bp, step=20 bp)
-
 gc_list = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
