@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 from matplotlib.axes import Axes
 from omibio.bioObjects.seq_interval import SeqInterval
 
@@ -28,7 +29,7 @@ def plot_orfs(
         ax.broken_barh(
             [(orf.start, orf.length)],
             (y - bar_height/2, bar_height),
-            facecolors=color
+            facecolors=color, zorder=3
         )
 
     ax.set_ylim(-1, 6)
@@ -38,6 +39,15 @@ def plot_orfs(
     ax.set_xlabel("Sequence Position")
     ax.set_ylabel("Reading Frame")
     ax.set_title("ORF Distribution")
+
+    legend_elements = [
+        Patch(facecolor=positive_color, label="Positive strand"),
+        Patch(facecolor=negative_color, label="Negative strand")
+    ]
+    ax.legend(handles=legend_elements, loc="upper right")
+    ax.grid(True, linestyle='--', alpha=0.5)
+
+    return ax
 
 
 def main():

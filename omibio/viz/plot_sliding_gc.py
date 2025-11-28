@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from omibio.sequence.sequence import Sequence
+from omibio.bioObjects.seq_interval import SeqInterval
 
 
 def plot_sliding_gc(
-    gc_list: list[tuple[int, int, float]],
+    gc_list: list[SeqInterval],
     seq: Sequence | str | None = None,
     window_avg: bool = True,
     ax: Axes | None = None
@@ -26,7 +27,7 @@ def plot_sliding_gc(
     """
     if not gc_list:
         if ax is None:
-            _, ax = plt.subplots(figsize=(10, 4))
+            ax = plt.subplots(figsize=(10, 4))[1]
         return ax
 
     if seq is not None:
@@ -39,12 +40,18 @@ def plot_sliding_gc(
             seq = Sequence(seq)
         total_avg = float(seq.gc_content()) * 100
 
-    positions = [(start + end) / 2 for start, end, _ in gc_list]
-    gc_vals = [gc for _, _, gc in gc_list]
+    positions = [
+        (window.start + window.end) / 2
+        for window in gc_list if window.gc is not None
+    ]
+    gc_vals = [
+        window.gc for window in gc_list
+        if window.gc is not None
+    ]
     window_average = sum(gc_vals) / len(gc_vals)
 
     if ax is None:
-        fig, ax = plt.subplots(figsize=(10, 4))
+        ax = plt.subplots(figsize=(10, 4))[1]
 
     if window_avg:
         ax.axhline(

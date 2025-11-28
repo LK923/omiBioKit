@@ -1,4 +1,5 @@
 from typing import Union, TYPE_CHECKING
+from omibio.bioObjects.seq_interval import SeqInterval
 
 if TYPE_CHECKING:
     from omibio.sequence.sequence import Sequence
@@ -7,8 +8,9 @@ if TYPE_CHECKING:
 def sliding_gc(
     seq: Union["Sequence", str],
     window: int = 100,
-    step: int = 10
-) -> list[tuple]:
+    step: int = 10,
+    seq_id: str | None = None
+) -> list[SeqInterval]:
     """Calculate GC content in a sliding window manner.
 
     Args:
@@ -42,19 +44,33 @@ def sliding_gc(
     if window >= n:
         gc_count = sum(1 for b in seq if b in 'GC')
         gc_percent = round((gc_count / n) * 100, 2)
-        return [(0, n, gc_percent)]
+        return [
+            SeqInterval(
+                start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
+            )
+        ]
 
     is_gc = [1 if b in 'GC' else 0 for b in seq]
 
     gc_count = sum(is_gc[:window])
-    gc_list = [(0, window, round((gc_count / window) * 100, 2))]
+    gc_list = [
+        SeqInterval(
+            start=0, end=window,
+            gc=round((gc_count / window) * 100, 2), type="GC", seq_id=seq_id
+        )
+    ]
 
     for i in range(step, n - window + 1, step):
         gc_count -= sum(is_gc[i-step: i])
         gc_count += sum(is_gc[i+window-step: i+window])
 
         gc_percent = round((gc_count / window) * 100, 2)
-        gc_list.append((i, i+window, gc_percent))
+        gc_list.append(
+            SeqInterval(
+                start=i, end=i+window,
+                gc=gc_percent, type="GC", seq_id=seq_id
+                )
+        )
 
     return gc_list
 
