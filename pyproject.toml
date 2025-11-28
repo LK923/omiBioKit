@@ -24,10 +24,12 @@ classifiers = [
 keywords = ["bioinformatics", "fasta", "orf", "sequence"]
 dependencies = [
     "click",
+    "numpy",
+    "pandas",
 ]
 
 [project.optional-dependencies]
-plot = ["matplotlib"]
+plot = ["matplotlib", "seaborn"]
 dev = ["pytest>=7", "black>=23", "mypy"]
 all = ["omibio[plot,dev]"] 
 

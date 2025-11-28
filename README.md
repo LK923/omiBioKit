@@ -17,7 +17,7 @@
 -  **Simple I/O**: Read/write bioinformatics files (e.g., FASTA) with one-liners.
 -  **Analysis tools**: GC content, ORF detection, consensus sequences, sliding windows, and more.
 -  **CLI included**: Run common tasks from the terminal .
--  **Basic visualization**: Built-in plotting (via matplotlib) for quick insights.
+-  **Basic visualization**: Built-in plotting (via matplotlib & seaborn) for quick insights.
 -  **Functional & OOP APIs**: Use classes or convenient wrapper functions.
 
 ## Modules Overview / 模块概览
@@ -89,8 +89,9 @@ $ pip install omibio
 - **Python**: >= 3.9
 - **Core dependencies**:
   - `click` (for CLI)
+  - `numpy` & `pandas` (analysis/plotting dependencies)
 - **Optional dependencies** (install for extra features):
-  - `matplotlib` → enables visualization 
+  - `matplotlib` & `seaborn` → enables visualization 
 
 >  Optional deps won't be installed by default. To get them:
 > ```bash

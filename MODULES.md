@@ -4,7 +4,7 @@
 ## omibio root
 
 - cli.py
-- directory.py
+- generate_directory.py
 
 ---
 
@@ -14,6 +14,7 @@
 - find_motif.py
 - find_orfs.py
 - gc_content.py
+- kmer.py
 - palindrome.py
 - sliding_gc.py
 
