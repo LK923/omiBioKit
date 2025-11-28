@@ -34,7 +34,7 @@ def plot_sliding_gc(
         if not isinstance(seq, (Sequence, str)):
             raise TypeError(
                 "plot_sliding_gc() argument 'seq' must be Sequence or str, "
-                f"not {type(seq).__name__}"
+                f"got {type(seq).__name__}"
             )
         if isinstance(seq, str):
             seq = Sequence(seq)

@@ -53,6 +53,11 @@ class SeqInterval:
             raise ValueError(
                 f"Invalid interval: start ({self.start}) > end ({self.end})"
             )
+        if self.gc is not None and not isinstance(self.gc, float):
+            raise TypeError(
+                "SeqInterval argument 'vc' must be float, "
+                f"got {type(self.gc).__name__}"
+            )
 
     @property
     def length(self) -> int:
@@ -101,7 +106,7 @@ class SeqInterval:
         if self.aa_seq is not None:
             aa_seq_repr = truncate_repr(self.aa_seq)
             extras.append(f"aa_seq={aa_seq_repr}")
-        if self.frame is not None:
+        if self.frame != 0:
             extras.append(f"frame={self.frame}")
 
         if extras:
@@ -123,6 +128,7 @@ def main():
         frame=1
     )
     print(repr(seq))
+    SeqInterval()
 
 
 if __name__ == "__main__":

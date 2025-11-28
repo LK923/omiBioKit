@@ -110,12 +110,7 @@ class Polypeptide:
 
     def subseq(self, start: int, end: int | None = None) -> "Polypeptide":
         """Returns a subsequence from start to end (exclusive)."""
-        try:
-            sub = self.aa_seq[start:end]
-        except IndexError as e:
-            raise IndexError(
-                f"subseq index out of range: [{start}:{end}]"
-            ) from e
+        sub = self.aa_seq[start:end]
 
         return Polypeptide(sub, strict=self._strict)
 

@@ -1,6 +1,8 @@
 import pytest
 from omibio.sequence import Sequence
 
+# pytest --cov=omibio.sequence.sequence tests/ --cov-report=term-missing
+
 
 class TestSequence:
 
@@ -17,6 +19,9 @@ class TestSequence:
         s2 = Sequence("AUGC", rna=True, strict=True)
         assert s2.is_rna is True
         assert s2.type == "RNA"
+
+        with pytest.raises(TypeError):
+            Sequence(["A", "T"])
 
     def test_init_auto_rna_detection(self):
         # Sequence contains 'U'
@@ -275,3 +280,53 @@ class TestSequence:
         assert s[-1] == "C"
         assert repr(s) == "Sequence('ATGC', type=DNA, strict=True)"
         assert str(s) == "ATGC"
+        s1 = Sequence("AAAAAAA")
+        s1[2] = "C"
+        assert s1 == "AACAAAA"
+        s1[2: 4] = "CC"
+        assert s1 == "AACCAAA"
+
+    # --------------------------
+    # translate_nt testing
+    # --------------------------
+    def test_translate_nt(self):
+        s = Sequence("ATGAAATAA")
+        assert str(s.translate_nt()) == "MK"
+        assert str(s.translate_nt(stop_symbol=True)) == "MK*"
+
+    # --------------------------
+    # count testing
+    # --------------------------
+    def test_count(self):
+        s = Sequence("AAATTTTGGGGGCCCCCC")
+        assert s.count("A") == 3
+        assert s.count("T") == 4
+        assert s.count("G") == 5
+        assert s.count("C") == 6
+
+    # --------------------------
+    # copy testing
+    # --------------------------
+    def test_copy(self):
+        s = Sequence("ACTG")
+        assert s.copy(as_rna=True).is_rna is True
+        assert s.copy(strict=True).strict is True
+
+    # --------------------------
+    # to strict testing
+    # --------------------------
+    def test_to_strict(self):
+        s = Sequence("ACTG")
+        assert s.to_strict().strict is True
+        assert s.to_strict() == s
+
+    # --------------------------
+    # is valid testing
+    # --------------------------
+    def test_is_valid(self):
+        s1 = Sequence("ATGC")
+        assert s1.is_valid()
+        s2 = Sequence("UT")
+        assert not s2.is_valid()
+        s3 = Sequence("[PLAWOCJOI")
+        assert not s3.is_valid()

@@ -1,10 +1,7 @@
-from typing import Union, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from omibio.sequence.sequence import Sequence
+from omibio.sequence.sequence import Sequence
 
 
-def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
+def gc(seq: Sequence | str, percent: bool = False) -> float | str:
     """Calculate the GC content of a sequence.
 
     Args:
@@ -26,16 +23,17 @@ def gc(seq: Union["Sequence", str], percent: bool = False) -> float | str:
     if isinstance(seq, Sequence):
         return seq.gc_content(percent=percent)
     elif isinstance(seq, str):
+        if not seq:
+            return 0.0 if not percent else "0.00%"
         gc_content = (seq.count("C") + seq.count("G")) / len(seq)
         return (
             round(gc_content, 4) if not percent
-            else f"{round(gc_content * 100, 2)}%"
+            else f"{gc_content * 100:.2f}%"
         )
 
 
 def main():
-    print(gc("AC"))
-    print(gc("AC", percent=True))
+    print(gc(Sequence("ACTG")))
 
 
 if __name__ == "__main__":
