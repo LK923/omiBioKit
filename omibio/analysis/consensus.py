@@ -84,7 +84,7 @@ def find_consensus(
     return consensus_seq if as_str else consensus
 
 
-def main() -> None:
+def main():
     input_file = r"./examples/data/example_short_seqs.fasta"
     sequence = list(read(input_file).values())
     consensus = find_consensus(sequence, as_rna=False)

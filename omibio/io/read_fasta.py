@@ -12,7 +12,8 @@ class FastaFormatError(Exception):
 def read(
     file_name: str,
     as_str: bool = False,
-    seq_strict: bool = False
+    strict: bool = True,
+    output_strict: bool = False
 ) -> dict:
     """Read fasta file and return sequence and name mapping.
 
@@ -62,14 +63,17 @@ def read(
             raise FastaFormatError(f"Sequence Missing for {name}")
         sequences[name] = (
             "".join(seq) if as_str
-            else Sequence("".join(seq), strict=seq_strict)
+            else Sequence("".join(seq), strict=output_strict)
         )
 
-    match ext:
-        case ".fasta" | ".fa" | ".fna":
-            pattern = re.compile(r"[ACTGUN]+", flags=re.I)
-        case ".faa":
-            pattern = re.compile(r"[ACDEFGHIKLMNPQRSTVWYX*]+", flags=re.I)
+    if strict:
+        match ext:
+            case ".fasta" | ".fa" | ".fna":
+                pattern = re.compile(r"[ACTGUN]+", flags=re.I)
+            case ".faa":
+                pattern = re.compile(r"[ACDEFGHIKLMNPQRSTVWYX*]+", flags=re.I)
+    else:
+        pattern = re.compile(r".*", flags=re.DOTALL)
 
     try:
         with open(file_name, "r") as file:

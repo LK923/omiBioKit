@@ -1,8 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
+from omibio.io.read_fasta import read
 
-xpoints = np.array([1, 8])
-ypoints = np.array([3, 10])
 
-plt.plot(xpoints, ypoints, marker='o')
-plt.show()
+read("a")

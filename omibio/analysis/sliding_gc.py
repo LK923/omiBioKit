@@ -1,12 +1,9 @@
-from typing import Union, TYPE_CHECKING
 from omibio.bioObjects.seq_interval import SeqInterval
-
-if TYPE_CHECKING:
-    from omibio.sequence.sequence import Sequence
+from omibio.sequence.sequence import Sequence
 
 
 def sliding_gc(
-    seq: Union["Sequence", str],
+    seq: Sequence | str,
     window: int = 100,
     step: int = 10,
     seq_id: str | None = None
