@@ -69,7 +69,7 @@ def read(
     if strict:
         match ext:
             case ".fasta" | ".fa" | ".fna":
-                pattern = re.compile(r"[ACTGUN]+", flags=re.I)
+                pattern = re.compile(r"[ATUCGRYKMBVDHSWN]+", flags=re.I)
             case ".faa":
                 pattern = re.compile(r"[ACDEFGHIKLMNPQRSTVWYX*]+", flags=re.I)
     else:
