@@ -5,7 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![flake8](https://img.shields.io/badge/code%20style-PEP%208-blue.svg)](https://flake8.pycqa.org/)
 
-
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/logo.png" alt="Logo" width="800"/>
+</p>
 ## Introduction / 简介
 **omiBio** is a lightweight, user-friendly Python toolkit for bioinformatics — ideal for education, research, and rapid prototyping.
 
