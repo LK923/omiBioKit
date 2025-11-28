@@ -1,0 +1,67 @@
+import pytest
+from collections import Counter
+from omibio.sequence.sequence import Sequence
+from omibio.utils.complement import reverse_complement
+from omibio.analysis import kmer
+
+
+class TestKmer:
+    def test_basic_string(self):
+        seq = "ACTACTACT"
+        result = kmer(seq, 3, canonical=False)
+        expected = Counter({"ACT": 3, "CTA": 2, "TAC": 2})
+        assert result == expected
+
+    def test_basic_sequence_obj(self):
+        seq = Sequence("ACTACTACT")
+        result = kmer(seq, 3, canonical=False)
+        expected = Counter({"ACT": 3, "CTA": 2, "TAC": 2})
+        assert result == expected
+
+    def test_min_count_filter(self):
+        seq = "ACTACTACT"
+        result = kmer(seq, 3, canonical=False, min_count=3)
+        expected = Counter({"ACT": 3})
+        assert result == expected
+
+    def test_canonical(self):
+        seq = "ACTGAC"
+        result = kmer(seq, 3, canonical=True)
+        for k in result.keys():
+            rc = reverse_complement(k, as_str=True)
+            assert k <= rc
+
+    def test_k_larger_than_seq(self):
+        seq = "ACG"
+        result = kmer(seq, 5)
+        assert result == Counter()
+
+    def test_invalid_type_seq(self):
+        with pytest.raises(TypeError):
+            kmer(123, 3)
+
+    def test_invalid_type_k(self):
+        with pytest.raises(TypeError):
+            kmer("ACTG", "3")
+
+    def test_invalid_type_min_count(self):
+        with pytest.raises(TypeError):
+            kmer("ACTG", 3, min_count="2")
+
+    def test_invalid_k_value(self):
+        with pytest.raises(ValueError):
+            kmer("ACTG", 0)
+
+    def test_invalid_min_count_value(self):
+        with pytest.raises(ValueError):
+            kmer("ACTG", 3, min_count=-1)
+
+    def test_strict_mode_valid(self):
+        seq = "ACTGNNRYK"
+        result = kmer(seq, 2, strict=True)
+        assert sum(result.values()) == len(seq)-1
+
+    def test_strict_mode_invalid(self):
+        seq = "ACTGZ"
+        with pytest.raises(ValueError):
+            kmer(seq, 2, strict=True)

@@ -1,5 +1,6 @@
 from omibio.sequence.sequence import Sequence
 from omibio.sequence.polypeptide import Polypeptide
+from omibio.bioObjects.seq_interval import SeqInterval
 
 
 DNA_CODON_TABLE = {
@@ -35,7 +36,7 @@ DNA_CODON_TABLE = {
 
 
 def translate_nt(
-    seq: Sequence | str | None,
+    seq: Sequence | str | SeqInterval | None,
     strict: bool = False,
     as_str: bool = False,
     stop_symbol: bool = False,
@@ -65,7 +66,7 @@ def translate_nt(
     Returns:
         str: Translated amino acid sequence.
     """
-    if not isinstance(seq, (Sequence, str)):
+    if not isinstance(seq, (Sequence, str, SeqInterval)):
         raise TypeError(
             "find_otranslaterfs() argument 'seq' must be Sequence or str, not "
             + type(seq).__name__
@@ -108,8 +109,8 @@ def translate_nt(
 
 
 def main() -> None:
-    from omibio.sequence.sequence import Sequence
-    aa = translate_nt(Sequence("ATGAAATAA"), stop_symbol=True)
+    seq = SeqInterval(1, 12, nt_seq="ATGAAAAAAAAATAA")
+    aa = translate_nt(seq, stop_symbol=True)
     print(repr(aa))
 
 

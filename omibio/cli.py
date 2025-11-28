@@ -4,7 +4,7 @@ from omibio.analysis.find_orfs import find_orfs
 from omibio.utils.random_seq import random_fasta
 
 
-@click.group
+@click.group()
 def cli():
     """A lightweight and easy-to-use python bioinformatics toolkit"""
     pass
@@ -139,6 +139,7 @@ def orf(
 @click.option(
     "-o", "--output",
     type=str,
+    required=True,
     help="Output FASTA file (default: stdout)."
 )
 @click.option(
@@ -167,3 +168,7 @@ def random_seq(
         prefix=prefix, seed=seed
     )
     click.echo(f"Success: file writed to {output}")
+
+
+if __name__ == "__main__":
+    cli()

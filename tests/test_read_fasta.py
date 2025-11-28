@@ -34,9 +34,9 @@ class TestReadFasta:
 
     def test_invalid_seq_strict_dna(self, tmp_path):
         p = tmp_path / "bad.fasta"
-        p.write_text(">seq\nATB")
+        p.write_text(">seq\nATL")
         with pytest.raises(FastaFormatError):
-            read(str(p))
+            read(str(p), strict=True)
 
     def test_basic_read_as_str(self, tmp_path):
         p = tmp_path / "ok.fasta"
