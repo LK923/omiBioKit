@@ -8,6 +8,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/logo.png" alt="Logo" width="800"/>
 </p>
+
 ## Introduction / 简介
 **omiBio** is a lightweight, user-friendly Python toolkit for bioinformatics — ideal for education, research, and rapid prototyping.
 
