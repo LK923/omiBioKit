@@ -56,6 +56,7 @@
 
 ## viz
 
+- plot_kmer_heatmap.py
 - plot_orfs.py
 - plot_sliding_gc.py
 

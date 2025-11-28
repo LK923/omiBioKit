@@ -59,7 +59,7 @@ The above code will produce results like this:
   <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/sliding_gc_viz_demo.png" alt="Example" width="800"/>
 </p>
 
----
+
 #### Using **omiBio**'s Command-line interfaces:
 ```bash
 $ omibio orf example.fasta --min-length 100
