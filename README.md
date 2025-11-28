@@ -6,7 +6,7 @@
 [![flake8](https://img.shields.io/badge/code%20style-PEP%208-blue.svg)](https://flake8.pycqa.org/)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/logo.png" alt="Logo" width="00"/>
+  <img src="https://raw.githubusercontent.com/LK923/omiBioKit/main/examples/assets/logo.png" alt="Logo" width="500"/>
 </p>
 
 ## Introduction / 简介
