@@ -44,6 +44,7 @@
 
 ## utils
 
+- clean.py
 - complement.py
 - protein_mass.py
 - random_seq.py

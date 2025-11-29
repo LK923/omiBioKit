@@ -55,7 +55,7 @@ def clean(
     name_policy: Literal["keep", "id_only", "underscores"] = "keep",
     gap_policy: Literal["keep", "remove", "collapse"] = "keep",
     strict: bool = False,
-    min_len: int = 30,
+    min_len: int = 10,
     max_len: int = 100000,
     normalize_case: bool = True,
     remove_illegal: bool = False,
@@ -263,11 +263,11 @@ def main():
     input_path = r"./examples/data/example_dirty.fasta"
     output_path = r"./examples/output/clean_fasta_output.fasta"
 
-    seqs = read(input_path, strict=False)
+    seqs = read(input_path, as_str=True, strict=False)
 
     cleaned_seqs, report = clean(
         seqs, name_policy="id_only", gap_policy="collapse",
-        min_len=10, max_len=50, report=True, remove_illegal=True
+        report=True, remove_illegal=True
     )
 
     write_fasta(output_path, cleaned_seqs, space_between=True)
