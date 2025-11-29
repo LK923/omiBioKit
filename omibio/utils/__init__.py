@@ -3,6 +3,10 @@ from omibio.utils.protein_mass import calc_mass
 from omibio.utils.random_seq import random_seq, random_fasta
 from omibio.utils.transcribe import transcribe, reverse_transcribe
 from omibio.utils.translate import translate_nt
+from omibio.utils.truncate_repr import truncate_repr
+from omibio.utils.clean import (
+    clean, CleanReport, CleanReportItem, write_report
+)
 
 
 __all__ = [
@@ -10,5 +14,7 @@ __all__ = [
     "calc_mass",
     "random_seq", "random_fasta",
     "transcribe", "reverse_transcribe",
-    "translate_nt"
+    "translate_nt",
+    "truncate_repr",
+    "clean", "CleanReport", "CleanReportItem", "write_report"
 ]

@@ -100,7 +100,7 @@ def read(
                 else:
                     # Store sequence.
                     if pattern.fullmatch(line):
-                        current_seq.append(line.upper())
+                        current_seq.append(line)
                     # Raise error if encountering invalid sequence.
                     else:
                         raise FastaFormatError(f"Invalid Sequence: {line}")
@@ -115,10 +115,10 @@ def read(
 
 
 def main():
-    input_path = r"./examples/data/example_short_seqs.fasta"
-    seq_dict = read(input_path, as_str=False)
+    input_path = r"./examples/data/example_single_short_seq.fasta"
+    seq_dict = read(input_path, as_str=True)
     for seq in seq_dict.values():
-        print(repr(seq))
+        print(seq)
 
 
 if __name__ == "__main__":

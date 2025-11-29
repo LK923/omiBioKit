@@ -1,0 +1,43 @@
+>seq1 good_sequence
+ATGCGTAGCTAGCTAGCTAGCTAG
+
+> seq2   spaces_and_lowercase
+ atgcgtacgtacgta   
+
+>seq 3    invalid$name#chars
+ATGCTAGCTXAGCTAGC
+
+>seq4--alignment   collapse_test
+ATG---CGT----A---TGC
+
+>seq4--alignment   collapse_test_duplicate
+ATG---CGT----A---TGC
+
+>seq5_remove_gaps
+ATG-CGTA-T---G
+
+>seq6_only_N
+NNNNNNNNNNNN
+
+>seq7_only_gaps
+-----------
+
+>seq8_short
+ATGCGTA
+
+>seq9_long
+ATGCGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACG
+
+>seq10_illegal_characters
+ATGCGA$%TGCTAG?TAG*TAG
+
+>seq11_mixed_rna_dna
+AUGCUAGCUAGCTAGCUGACUAGCUA
+
+>seq12_whitespace_lines
+ATGCTAGC
+    ATGCTAGC
+ATGC
+
+>seq13_invalid_bases
+ACTGATGCTGPPPACHYACH

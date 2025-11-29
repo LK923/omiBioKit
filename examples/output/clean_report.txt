@@ -1,0 +1,26 @@
+=== Clean Report Summary ===
+Total sequences: 14
+Kept: 10
+Removed: 4
+
+=== Cleaned Sequences ===
+orig_name                                  clean_name                orig_len  clean_len  name_changed  gap_policy  illegal_removed  illegal_replaced
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+seq1 good_sequence                         seq1                      24        24         yes           collapse    0                0               
+seq2   spaces_and_lowercase                seq2                      15        15         yes           collapse    0                0               
+seq 3    invalid$name                      seq                       17        16         yes           collapse    1                0               
+seq4--alignment   collapse_test            seq4--alignment           20        13         yes           collapse    0                0               
+seq4--alignment   collapse_test_duplicate  seq4--alignment_1         20        13         yes           collapse    0                0               
+seq5_remove_gaps                           seq5_remove_gaps          14        12         no            collapse    0                0               
+seq10_illegal_characters                   seq10_illegal_characters  22        18         no            collapse    4                0               
+seq11_mixed_rna_dna                        seq11_mixed_rna_dna       26        26         no            collapse    0                0               
+seq12_whitespace_lines                     seq12_whitespace_lines    20        20         no            collapse    0                0               
+seq13_invalid_bases                        seq13_invalid_bases       20        17         no            collapse    3                0               
+
+=== Removed Sequences ===
+orig_name          reason
+--------------------------------------------------
+seq6_only_N        empty_or_N_only
+seq7_only_gaps     empty_or_N_only
+seq8_short         length_filter
+seq9_long          length_filter
