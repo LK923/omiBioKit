@@ -1,7 +1,7 @@
 from omibio.bioObjects.gene import Gene
 from omibio.io.read_fasta import read
 
-# TODO: Needs modification
+# TODO: Needs modifications
 
 
 class Genome(object):
