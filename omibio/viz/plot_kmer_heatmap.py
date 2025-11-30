@@ -11,7 +11,7 @@ def plot_kmer(
     fmt=".2f"
 ):
     if ax is None:
-        ax = plt.subplots(figsize=(8, 4))[1]
+        ax = plt.subplots(figsize=(8, 12))[1]
 
     df = pd.DataFrame.from_dict(kmer_counts, orient='index', columns=['count'])
     df['freq'] = df['count'] / df['count'].sum()
