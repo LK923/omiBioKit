@@ -13,7 +13,8 @@ def read(
     file_name: str,
     as_str: bool = False,
     strict: bool = True,
-    output_strict: bool = False
+    output_strict: bool = False,
+    upper: bool = True
 ) -> dict:
     """Read fasta file and return sequence and name mapping.
 
@@ -100,7 +101,8 @@ def read(
                 else:
                     # Store sequence.
                     if pattern.fullmatch(line):
-                        current_seq.append(line)
+                        line = line.upper() if upper else line
+                        current_seq.append(line.upper())
                     # Raise error if encountering invalid sequence.
                     else:
                         raise FastaFormatError(f"Invalid Sequence: {line}")

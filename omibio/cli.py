@@ -1,7 +1,7 @@
 import click
 from omibio.io.read_fasta import read
 from omibio.analysis.find_orfs import find_orfs
-from omibio.utils.random_seq import random_fasta
+from omibio.utils.random_seq import random_fasta as r_f
 
 
 @click.group()
@@ -123,7 +123,7 @@ def orf(
 
 
 @cli.command()
-@click.argument("length", type=int)
+@click.argument("output", type=str)
 @click.option(
     "-n", "--number",
     type=int,
@@ -137,10 +137,10 @@ def orf(
     help="Prefix for sequence IDs (default: 'random_seq')."
 )
 @click.option(
-    "-o", "--output",
-    type=str,
-    required=True,
-    help="Output FASTA file (default: stdout)."
+    "-l", "--length",
+    type=int,
+    default=100,
+    help="Length of sequences"
 )
 @click.option(
     "--alphabet",
@@ -153,7 +153,7 @@ def orf(
     type=int,
     help="Random seed for reproducibility."
 )
-def random_seq(
+def random_fasta(
     length: int,
     number: int,
     prefix: str,
@@ -163,7 +163,7 @@ def random_seq(
 ) -> None:
     """Generate random nucleotide sequence(s) and output in FASTA format."""
 
-    random_fasta(
+    r_f(
         file_path=output, seq_num=number, length=length,  alphabet=alphabet,
         prefix=prefix, seed=seed
     )

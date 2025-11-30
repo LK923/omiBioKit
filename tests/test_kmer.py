@@ -65,3 +65,8 @@ class TestKmer:
         seq = "ACTGZ"
         with pytest.raises(ValueError):
             kmer(seq, 2, strict=True)
+
+    def test_cache(self):
+        seq = "ACGTAC"
+        result = kmer(seq, 2, canonical=True)
+        assert "AC" in result

@@ -142,3 +142,18 @@ class TestPolypeptide:
         p = Polypeptide("AC")
         with pytest.raises(ValueError):
             p * -1
+
+    def test_empty_trans(self):
+        p = Polypeptide("AC")
+        p.aa_seq = None
+        assert p.aa_seq == ""
+
+    def test_iter(self):
+        seq_str = "ACDE"
+        pp = Polypeptide(seq_str)
+        iter_list = list(pp)
+        assert iter_list == list(seq_str)
+        chars = []
+        for c in pp:
+            chars.append(c)
+        assert chars == list(seq_str)

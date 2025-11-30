@@ -103,3 +103,12 @@ def test_write_fasta_os_error(monkeypatch, tmp_path):
 
     with pytest.raises(OSError):
         write_fasta(file_path, {"s": "ATGC"})
+
+
+def test_empty_dict(tmp_path):
+    file_path = tmp_path / "out.fasta"
+    seqs = {}
+
+    write_fasta(file_path, seqs)
+
+    assert not file_path.exists()

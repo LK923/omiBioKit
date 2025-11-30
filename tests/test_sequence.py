@@ -145,6 +145,9 @@ class TestSequence:
         with pytest.raises(ValueError):
             _ = s + "TU"
 
+    def both_no_rna_mode(self):
+        assert Sequence("AC") + Sequence("AA") == Sequence("ACAA")
+
     # --------------------------
     # complement & reverse_complement testing
     # --------------------------
@@ -157,8 +160,11 @@ class TestSequence:
     def test_complement_rna(self):
         s = Sequence("AUGC", rna=True)
         comp = s.complement()
+        rev_comp = s.reverse_complement()
         assert comp.sequence == "UACG"
         assert comp.is_rna is True
+        assert rev_comp == "GCAU"
+        assert rev_comp.is_rna is True
 
     def test_reverse_complement_dna(self):
         s = Sequence("ATGC", rna=False)
@@ -330,3 +336,8 @@ class TestSequence:
         assert not s2.is_valid()
         s3 = Sequence("[PLAWOCJOI")
         assert not s3.is_valid()
+
+    def test_empty_seq_transformation(self):
+        s = Sequence("ACTG")
+        s.sequence = None
+        assert s.sequence == ""

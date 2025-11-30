@@ -5,7 +5,7 @@ from omibio.utils.transcribe import transcribe, reverse_transcribe
 from omibio.utils.translate import translate_nt
 from omibio.utils.truncate_repr import truncate_repr
 from omibio.utils.clean import (
-    clean, CleanReport, CleanReportItem, write_report
+    CleanReport, CleanReportItem, clean, write_report
 )
 
 

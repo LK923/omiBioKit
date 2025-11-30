@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch
 from omibio.io.read_fasta import read, FastaFormatError
 from omibio.sequence.sequence import Sequence
 
@@ -93,3 +94,15 @@ class TestReadFasta:
         p.write_text(">x\n>s\nACTG")
         with pytest.raises(FastaFormatError):
             read(str(p))
+
+    def test_ioerror(self, tmp_path):
+        test_file = tmp_path / "file.fasta"
+        test_file.write_text(">seq1\nATG")  # 必须存在
+
+        def mock_open(*args, **kwargs):
+            raise IOError("mocked IOError")
+
+        with patch("builtins.open", mock_open):
+            with pytest.raises(IOError) as excinfo:
+                read(str(test_file))
+            assert "mocked IOError" in str(excinfo.value)

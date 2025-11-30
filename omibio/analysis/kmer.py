@@ -16,7 +16,7 @@ def kmer(
 ) -> dict[str, int]:
 
     if canonical:
-        cache = {}
+        cache: dict[str, str] = {}
 
         def get_canonical(kmer_seq):
             if kmer_seq in cache:
@@ -65,7 +65,7 @@ def kmer(
     if k > n:
         return Counter()
 
-    kmer_counter = Counter()
+    kmer_counter: dict = Counter()
 
     for i in range(n - k + 1):
         curr_kmer = seq_str[i: i+k]

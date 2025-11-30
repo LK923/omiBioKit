@@ -1,10 +1,6 @@
 from omibio.sequence.polypeptide import Polypeptide
 
 
-def main():
-    print(calc_mass("A"))
-
-
 def calc_mass(aa_seq: Polypeptide | str, accuracy: int = 3) -> float:
     """Calculate the molecular weight of a polypeptide chain molecule.
 
@@ -30,6 +26,10 @@ def calc_mass(aa_seq: Polypeptide | str, accuracy: int = 3) -> float:
         aa_seq = Polypeptide(aa_seq)
 
     return aa_seq.mass(accuracy)
+
+
+def main():
+    print(calc_mass("A"))
 
 
 if __name__ == "__main__":

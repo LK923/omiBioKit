@@ -7,11 +7,11 @@ from dataclasses import dataclass
 @dataclass
 class CleanReportItem:
     orig_name: str
-    clean_name: str = None
+    clean_name: str | None = None
     orig_len: int = 0
     clean_len: int = 0
     removed: bool = False
-    gap_policy: str = None
+    gap_policy: str | None = None
     illegal_removed: int = 0
     illegal_replaced: int = 0
     name_changed: bool = False
@@ -71,7 +71,8 @@ def clean(
         allowed_bases = set(allowed_bases)
 
     cleaned_seqs = {}
-    clean_report = CleanReport() if report else None
+    if report:
+        clean_report = CleanReport()
 
     # ---------------- name processing ----------------
     def process_name(name) -> str:
@@ -152,9 +153,9 @@ def clean(
 
         cleaned_name = process_name(raw_name)
 
-        cleaned_seq = process_seq(str(raw_seq), item)
+        cleaned = process_seq(str(raw_seq), item)
 
-        if not cleaned_seq:
+        if not cleaned:
             item.removed = True
             item.clean_len = 0
             if report:
@@ -170,13 +171,12 @@ def clean(
             cleaned_name = new_name
 
         item.clean_name = cleaned_name
-        item.clean_len = len(cleaned_seq)
+        item.clean_len = len(cleaned)
 
         if cleaned_name != raw_name:
             item.name_changed = True
 
-        if not as_str:
-            cleaned_seq = Sequence(cleaned_seq)
+        cleaned_seq = Sequence(cleaned) if not as_str else cleaned
 
         cleaned_seqs[cleaned_name] = cleaned_seq
 

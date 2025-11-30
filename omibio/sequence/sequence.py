@@ -290,15 +290,12 @@ class Sequence:
     def __add__(self, other) -> "Sequence":
         if isinstance(other, Sequence):
             strict_mode = self._strict or other.strict
-            if self._is_rna is not None and other.is_rna is not None:
-                if strict_mode and self._is_rna != other.is_rna:
-                    raise TypeError(
-                        "(Strict Mode) "
-                        "Cannot combine RNA sequence and DNA sequence"
-                    )
-                rna_result = self._is_rna
-            else:
-                rna_result = None
+            if strict_mode and self._is_rna != other.is_rna:
+                raise TypeError(
+                    "(Strict Mode) "
+                    "Cannot combine RNA sequence and DNA sequence"
+                )
+            rna_result = self._is_rna
             return Sequence(
                 self.sequence + other.sequence,
                 rna=rna_result, strict=strict_mode
