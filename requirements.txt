@@ -1,0 +1,10 @@
+pytest
+pytest-cov
+codecov
+matplotlib
+seaborn
+numpy
+pandas
+click
+mypy
+black
