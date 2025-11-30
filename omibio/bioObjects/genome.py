@@ -155,7 +155,6 @@ class Genome(object):
             If there is an error writing to the specified file.
         """
         fasta_lines = []
-        # Construct FASTA lines
         for gene in self._genes:
             fasta_lines.append(f">{gene.name} [{gene.organism}]")
             fasta_lines.append(gene.sequence)
