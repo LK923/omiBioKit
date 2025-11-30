@@ -56,7 +56,7 @@ def clean(
     gap_policy: Literal["keep", "remove", "collapse"] = "keep",
     strict: bool = False,
     min_len: int = 10,
-    max_len: int = 100000,
+    max_len: int = 100_000,
     normalize_case: bool = True,
     remove_illegal: bool = False,
     allowed_bases: set[str] | None = None,

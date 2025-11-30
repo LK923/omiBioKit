@@ -6,7 +6,7 @@ def write_fasta(
     seq_dict,
     line_len: int = 60,
     space_between: bool = False
-) -> None:
+) -> list[str]:
     """Writes sequences to a FASTA file.
 
     Args:
@@ -35,6 +35,8 @@ def write_fasta(
     file_path = Path(file_path)
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
+    lines = []
+
     try:
         with file_path.open("w", encoding="utf-8") as f:
             for name, seq in seq_dict.items():
@@ -46,15 +48,19 @@ def write_fasta(
 
                 seq = str(seq).replace("\n", "")
                 f.write(f">{name}\n")
+                lines.append(f">{name}")
 
                 for i in range(0, len(seq), line_len):
                     f.write(seq[i:i+line_len] + "\n")
+                    lines.append(seq[i:i+line_len])
 
                 if space_between:
                     f.write("\n")
 
     except OSError as e:
         raise OSError(f"Could not write FASTA to '{file_path}': {e}") from e
+
+    return lines
 
 
 def main():
@@ -64,8 +70,10 @@ def main():
     output_path = r"./examples/output/write_fasta_output.fasta"
 
     seq_dict = read(input_path)
-    write_fasta(output_path, seq_dict, space_between=True)
+    lines = write_fasta(output_path, seq_dict, space_between=True)
     print(output_path)
+    for line in lines:
+        print(line)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 ## omibio root
 
 - cli.py
+- config.py
 - generate_directory.py
 
 ---
@@ -22,6 +23,7 @@
 
 ## bioObjects
 
+- analysis_result.py
 - gene.py
 - genome.py
 - seq_interval.py
@@ -49,6 +51,7 @@
 - protein_mass.py
 - random_seq.py
 - seq_interval_methods.py
+- shuffle_seq.py
 - transcribe.py
 - translate.py
 - truncate_repr.py

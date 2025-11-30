@@ -51,13 +51,12 @@ def random_seq(
                 "Length of 'weights' must match length of 'alphabet'"
             )
 
-    if seed is not None:
-        random.seed(seed)
+    rng = random.Random(seed)
 
     if weights is not None:
-        seq = "".join(random.choices(alphabet, weights, k=length))
+        seq = "".join(rng.choices(alphabet, weights, k=length))
     else:
-        seq = "".join(random.choices(alphabet, k=length))
+        seq = "".join(rng.choices(alphabet, k=length))
 
     return seq if as_str else Sequence(seq, strict=seq_strict)
 
@@ -90,11 +89,14 @@ def random_fasta(
             Random seed for reproducibility. Defaults to None.
     """
 
+    rng = random.Random(seed)
     seq_dict = {}
+
     for i in range(1, seq_num+1):
+        seq_seed = rng.randint(0, 2**32 - 1)
         seq_dict[f"{prefix}_{i}"] = random_seq(
             length=length, alphabet=alphabet,
-            weights=weights, seed=seed, as_str=True,
+            weights=weights, as_str=True, seed=seq_seed
         )
     write_fasta(file_path=file_path, seq_dict=seq_dict, space_between=True)
 
