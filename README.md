@@ -4,7 +4,6 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![flake8](https://img.shields.io/badge/code%20style-PEP%208-blue.svg)](https://flake8.pycqa.org/)
-[![Coverage Status](https://coveralls.io/repos/github/LK923/omiBioKit/badge.svg?branch=main)](https://coveralls.io/github/LK923/omiBioKit?branch=main)
 
 
 <p align="center">
