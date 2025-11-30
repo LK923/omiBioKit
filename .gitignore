@@ -19,3 +19,4 @@ env/
 
 .coveragerc
 .coverage
+coverage.xml
