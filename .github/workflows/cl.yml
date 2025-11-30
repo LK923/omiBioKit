@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # 保证完整 git history
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -23,12 +25,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest pytest-cov codecov
         pip install -e .
-    
+
     - name: Run tests with coverage
       run: |
         pytest --cov=omibio --cov-report=xml tests/
-    
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
-        token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }}  # 注意这里是 Codecov token
+        files: coverage.xml
+        fail_ci_if_error: true
+
