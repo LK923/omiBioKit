@@ -25,12 +25,13 @@ dependencies = [
     "click",
     "numpy",
     "pandas",
+    "tomli",
 ]
 
 [project.optional-dependencies]
 plot = ["matplotlib", "seaborn"]
 dev = ["pytest>=7", "black>=23", "mypy"]
-all = ["omibio[plot,dev]"] 
+all = ["omibio[plot,dev,config]"] 
 
 [project.scripts]
 omibio = "omibio.cli:cli"

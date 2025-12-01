@@ -4,7 +4,8 @@ from omibio.viz import plot_kmer, plt
 
 
 def kmer_example():
-    sequence = read("./examples/data/example_single_long_seq.fasta")["example"]
+    input_path = r"./examples/data/example_single_short_seq.fasta"
+    sequence = read(input_path)["example"]
     kmer_result = kmer(seq=sequence, k=2, min_count=1)
     plot_kmer(kmer_result, cmap="Blues")
     plt.show()
