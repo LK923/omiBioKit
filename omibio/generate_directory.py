@@ -19,15 +19,16 @@ def main():
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("# omibio Library Modules\n\n")
         f.write(
-            "[![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)]"  # noqa
+            "[![Latest Version]"
+            "(https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)]"  # noqa
             "(https://github.com/LK923/omiBioKit/releases)\n"
             )
         for pkg, files in sorted_packages:
             pkg_display = pkg if pkg != "." else "omibio root"
-            f.write(f"## {pkg_display}\n\n")
+            f.write(f"## {pkg_display}\n")
             for file in sorted(files):
                 f.write(f"- {file}\n")
-            f.write("\n---\n\n")
+            f.write("\n")
     print(output_file)
 
 

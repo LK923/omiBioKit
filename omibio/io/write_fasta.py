@@ -26,7 +26,7 @@ def write_fasta(
             if unable to write to file.
     """
     if not seq_dict:
-        return
+        return []
     if not isinstance(seq_dict, dict):
         raise TypeError(
             "write_fasta() argument 'seq_dict' must be dict, got "

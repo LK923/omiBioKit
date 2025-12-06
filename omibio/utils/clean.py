@@ -1,5 +1,5 @@
 from omibio.sequence.sequence import Sequence
-from typing import Literal
+from typing import Literal, Iterable
 import re
 from dataclasses import dataclass
 
@@ -59,17 +59,98 @@ def clean(
     max_len: int = 100_000,
     normalize_case: bool = True,
     remove_illegal: bool = False,
-    allowed_bases: set[str] | None = None,
+    allowed_bases: Iterable[str] | None = None,
     remove_empty: bool = True,
     as_str: bool = True,
     report: bool = False
 ) -> dict[str, str | Sequence] | tuple[dict[str, str | Sequence], CleanReport]:
+    """Clean sequences according to specified policies.
+
+    Args:
+        seqs (dict[str, str  |  Sequence]):
+            Dictionary of sequence names to sequences
+            (as strings or Sequence objects).
+        name_policy (Literal["keep", "id_onbly", "underscores"], optional):
+            Policy for cleaning sequence names. Defaults to "keep".
+        gap_policy (Literal["keep", "remove", "collapse"], optional):
+            Policy for handling gaps in sequences. Defaults to "keep".
+        strict (bool, optional):
+            If True, raises an error on illegal characters. Defaults to False.
+        min_len (int, optional):
+            Minimum length for sequences to keep. Defaults to 10.
+        max_len (int, optional):
+            Maximum length for sequences to keep. Defaults to 100,000.
+        normalize_case (bool, optional):
+            If True, converts sequences to uppercase. Defaults to True.
+        remove_illegal (bool, optional):
+            If True, removes illegal characters instead of replacing
+            them with 'N'. Defaults to False.
+        allowed_bases (set[str] | None, optional):
+            Set of allowed bases. Defaults to VALID_BASES.
+        remove_empty (bool, optional):
+            If True, removes sequences that are empty or contain only 'N's.
+            Defaults to True.
+        as_str (bool, optional):
+            If True, returns cleaned sequences as strings.
+            If False, returns them as Sequence objects. Defaults to True.
+        report (bool, optional):
+            If True, generates a cleaning report. Defaults to False.
+
+    Raises:
+        ValueError:
+            If input values are invalid.
+        TypeError:
+            If input types are incorrect.
+
+    Returns:
+        dict[str, str | Sequence] |
+        tuple[dict[str, str | Sequence], CleanReport]:
+            Cleaned sequences, optionally with a cleaning report.
+    """
 
     if allowed_bases is None:
         allowed_bases = VALID_BASES
     else:
         allowed_bases = set(allowed_bases)
-
+    for base in allowed_bases:
+        if not isinstance(base, str) or len(base) != 1:
+            raise ValueError(
+                "clean() argument 'allowed_bases' must be an iterable "
+                "of single-character strings."
+            )
+    if not isinstance(seqs, dict):
+        raise TypeError(
+            f"clean() argument 'seqs' must be dict, got {type(seqs).__name__}"
+        )
+    if name_policy not in {"keep", "id_only", "underscores"}:
+        raise ValueError(
+            "clean() argument 'name_policy' must be one of: "
+            "'keep', 'id_only', 'underscores'"
+        )
+    if gap_policy not in {"keep", "remove", "collapse"}:
+        raise ValueError(
+            "clean() argument 'gap_policy' must be one of: "
+            "'keep', 'remove', 'collapse'"
+        )
+    if not isinstance(min_len, int):
+        raise TypeError(
+            "clean() argument 'min_len' must be int, got "
+            + type(min_len).__name__
+        )
+    if not isinstance(max_len, int):
+        raise TypeError(
+            "clean() argument 'max_len' must be int, got "
+            + type(max_len).__name__
+        )
+    if min_len < 0 or max_len < 0:
+        raise ValueError(
+            "clean() argument 'min_len' and 'max_len' must be "
+            "non-negative numbers"
+        )
+    if min_len > max_len:
+        raise ValueError(
+            "clean() argument 'min_len' cannot be larger than 'max_len'"
+        )
     cleaned_seqs = {}
     if report:
         clean_report = CleanReport()
@@ -148,6 +229,16 @@ def clean(
 
     # ---------------- main loop ----------------
     for raw_name, raw_seq in seqs.items():
+        if not isinstance(raw_name, str):
+            raise TypeError(
+                "Sequence name must be a string, got "
+                + type(raw_name).__name__
+            )
+        if not isinstance(raw_seq, (str, Sequence)):
+            raise TypeError(
+                f"Sequence '{raw_name}' must be a string or Sequence, "
+                f"got {type(raw_seq).__name__}"
+            )
 
         item = CleanReportItem(orig_name=raw_name)
 
@@ -186,11 +277,28 @@ def clean(
     return cleaned_seqs if not report else (cleaned_seqs, clean_report)
 
 
-def write_report(out_path: str, report: CleanReport):
+def write_report(out_path: str, report: CleanReport) -> None:
+    """Write a cleaning report to a text file.
+
+    Args:
+        out_path (str): Path to the output report file.
+        report (CleanReport): The cleaning report to write.
+    Raises:
+        TypeError:
+            If input types are incorrect.
     """
-    Write a clean report to a file in aligned text format.
-    Works with the CleanReport / CleanReportItem classes defined.
-    """
+
+    if not isinstance(out_path, str):
+        raise TypeError(
+            "write_report() argument 'out_path' must be str, got "
+            + type(out_path).__name__
+        )
+    if not isinstance(report, CleanReport):
+        raise TypeError(
+            "write_report() argument 'report' must be CleanReport, got "
+            + type(report).__name__
+        )
+
     lines = []
 
     # --- Summary ---
@@ -260,8 +368,9 @@ def write_report(out_path: str, report: CleanReport):
 
 def main():
     from omibio.io import write_fasta, read
-    input_path = r"./examples/data/example_dirty.fasta"
-    output_path = r"./examples/output/clean_fasta_output.fasta"
+    input_path = "./examples/data/example_dirty.fasta"
+    output_path = "./examples/output/clean_fasta_output.fasta"
+    report_path = "./examples/output/clean_report.txt"
 
     seqs = read(input_path, as_str=True, strict=False)
 
@@ -271,11 +380,10 @@ def main():
     )
 
     write_fasta(output_path, cleaned_seqs, space_between=True)
-    print(output_path)
+    print(f"Cleaned: {output_path}")
 
-    write_report(r"./examples/output/clean_report.txt", report)
-    print(r"./examples/output/clean_report.txt")
-    print(report.records)
+    write_report(report_path, report)
+    print(f"Report: {report_path}")
 
 
 if __name__ == "__main__":

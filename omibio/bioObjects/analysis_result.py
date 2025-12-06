@@ -5,8 +5,8 @@ from typing import Callable
 
 @dataclass
 class AnalysisResult:
-    intervals: list[SeqInterval] = None
-    meta: dict = None
+    intervals: list[SeqInterval] | None = None
+    meta: dict | None = None
     _plot_func: Callable | None = None
 
     def plot(self, **kwargs):

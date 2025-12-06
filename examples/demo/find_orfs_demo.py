@@ -13,7 +13,7 @@ def find_orfs_and_get_molecular_formula_example():
         polypeptide = orf.to_polypeptide()
         formula = polypeptide.formula()
         print(
-            f"{orf.start}-{orf.end}({orf.strand}):\t{polypeptide!r}\t{formula}"
+            f"{orf.start}-{orf.end}({orf.strand}):\t{formula}"
         )
 
 

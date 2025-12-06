@@ -1,5 +1,4 @@
 from omibio.sequence.polypeptide import Polypeptide
-from typing import Union
 
 
 class Sequence:
@@ -202,7 +201,7 @@ class Sequence:
         to_stop: bool = False,
         frame: int = 0,
         require_start: bool = False
-    ) -> Union["Polypeptide", str]:
+    ) -> Polypeptide | str:
         """Translate the nucleotide sequence to an amino acid sequence."""
         from omibio.utils.translate import translate_nt
 

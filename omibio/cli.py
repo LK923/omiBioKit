@@ -105,7 +105,9 @@ def orf(
     if not no_sort:
         all_orfs.sort(key=lambda x: x.length, reverse=True)
 
-    res = [["sequence-name", "start", "end", "strand", "frame", "length"]]
+    res: list[list[str | None]] = [
+        ["sequence-name", "start", "end", "strand", "frame", "length"]
+    ]
 
     for orf in all_orfs:
         frame = f"{orf.frame:+}" if orf.frame > 0 else orf.frame

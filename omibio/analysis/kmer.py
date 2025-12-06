@@ -80,8 +80,8 @@ def kmer(
 
 def main():
     from omibio.io import read
-    seq = read(r"./examples/data/example_single_short_seq.fasta")["example"]  # noqa
-    print(kmer(seq, 3, min_count=2))
+    seq = read(r"./examples/data/example_single_long_seq.fasta")["example"]  # noqa
+    print(kmer(seq, 3, min_count=150))
 
 
 if __name__ == "__main__":

@@ -96,10 +96,11 @@ def translate_nt(
         amino = DNA_CODON_TABLE.get(codon, "X")
 
         if amino == "*":
+            if stop_symbol:
+                aa_seq.append("*")
             if to_stop:
                 break
-            if not stop_symbol:
-                continue
+            continue
 
         aa_seq.append(amino)
 
@@ -109,8 +110,13 @@ def translate_nt(
 
 
 def main() -> None:
-    seq = SeqInterval(1, 12, nt_seq="ATGAAAAAAAAATAA")
-    aa = translate_nt(seq, stop_symbol=True)
+    seq = Sequence(
+        "ACGAGCTATAGCATCGTATAGCATCGATCGATCGTGATATGATAGCGATTGCGAGGC"
+        "ATATTATATTATAGGTAGCATGCGATCATTACGGCGCGAGTCGATGTATCGTATCGA"
+    )
+    aa = translate_nt(
+        seq, stop_symbol=True, to_stop=True, require_start=True, frame=2
+    )
     print(repr(aa))
 
 

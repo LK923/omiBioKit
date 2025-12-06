@@ -1,11 +1,12 @@
 from omibio.bioObjects.seq_interval import SeqInterval
 from omibio.sequence.sequence import Sequence
+from omibio.config import CONFIG
 
 
 def sliding_gc(
     seq: Sequence | str,
-    window: int = 100,
-    step: int = 10,
+    window: int | None = None,
+    step: int | None = None,
     seq_id: str | None = None
 ) -> list[SeqInterval]:
     """Calculate GC content in a sliding window manner.
@@ -22,7 +23,11 @@ def sliding_gc(
     Returns:
         list[tuple]: A list of tuples, each containing (start, end, GC%).
     """
-    from omibio.sequence.sequence import Sequence
+    if window is None:
+        window = int(CONFIG.get("slidingGC", "window", 100))
+    if step is None:
+        step = int(CONFIG.get("slidingGC", "step", 10))
+
     if not seq:
         return []
     if not isinstance(seq, (Sequence, str)):

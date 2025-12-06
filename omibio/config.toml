@@ -1,3 +1,15 @@
 [clean]
 min_len = 10
 max_len = 1000000
+
+[random]
+alphabet = "ATCG"
+default_length = 100
+
+[fasta]
+uppercase = true
+space_between = true
+
+[slidingGC]
+window = 100
+step = 10
