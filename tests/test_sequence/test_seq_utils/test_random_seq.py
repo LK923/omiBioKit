@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.sequence import Sequence
-from omibio.utils.random_seq import random_seq, random_fasta
+from omibio.sequence.seq_utils.random_seq import random_seq, random_fasta
 
 
 class TestRandomSeq:

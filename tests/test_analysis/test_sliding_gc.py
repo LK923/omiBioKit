@@ -1,6 +1,6 @@
 import pytest
 from omibio.analysis.sliding_gc import sliding_gc
-from omibio.bioObjects import SeqInterval
+from omibio.bio import SeqInterval
 from omibio.sequence.sequence import Sequence
 
 # pytest --cov=omibio.analysis.sliding_gc tests/ --cov-report=term-missing

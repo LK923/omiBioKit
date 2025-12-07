@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval
+from omibio.bio.analysis_result import AnalysisResult
 
 
 def plot_sliding_gc(

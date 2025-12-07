@@ -1,5 +1,5 @@
 import pytest
-from omibio.utils.complement import complement, reverse_complement
+from omibio.sequence.seq_utils.complement import complement, reverse_complement
 from omibio.sequence.sequence import Sequence
 
 

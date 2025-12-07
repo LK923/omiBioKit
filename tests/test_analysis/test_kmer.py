@@ -1,7 +1,7 @@
 import pytest
 from collections import Counter
 from omibio.sequence.sequence import Sequence
-from omibio.utils.complement import reverse_complement
+from omibio.sequence.seq_utils.complement import reverse_complement
 from omibio.analysis import kmer
 
 

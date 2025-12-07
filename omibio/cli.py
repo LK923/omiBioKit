@@ -170,7 +170,7 @@ def random_fasta(
     seed: int | None
 ) -> None:
     """Generate random nucleotide sequence(s) and output in FASTA format."""
-    from omibio.utils.random_seq import random_fasta as r_f
+    from omibio.sequence.seq_utils.random_seq import random_fasta as r_f
 
     r_f(
         file_path=output, seq_num=number, length=length,  alphabet=alphabet,
@@ -260,7 +260,7 @@ def clean(
     Perform data cleanup on the specified FASTA file
     and output the results to the specified file.
     """
-    from omibio.utils.clean import clean as c_f
+    from omibio.sequence.seq_utils.clean import clean as c_f
 
     seqs = read(fasta_file, strict=False, as_str=True)
     cleaned = c_f(
@@ -302,7 +302,7 @@ def shuffle(
     Shuffle the sequences in the FASTA file
     and output them to the specified file.
     """
-    from omibio.utils.shuffle_seq import shuffle_seq
+    from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
     import random
 
     res = {}

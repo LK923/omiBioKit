@@ -8,11 +8,10 @@ def main():
 
     packages = defaultdict(list)
 
-    for py_file in root_dir.rglob("*.py"):
-        if py_file.name == "__init__.py":
-            continue
-        package = py_file.parent.relative_to(root_dir)
-        packages[str(package)].append(py_file.name)
+    for file in root_dir.rglob("*"):
+        if file.suffix in {".py", ".toml"} and file.name != "__init__.py":
+            package = file.parent.relative_to(root_dir)
+            packages[str(package)].append(file.name)
 
     sorted_packages = sorted(packages.items())
 

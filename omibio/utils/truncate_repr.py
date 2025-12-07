@@ -1,22 +1,22 @@
-def truncate_repr(seq: str | None, max_len: int = 30) -> str | None:
-    """Truncate a sequence representation if it exceeds max_len.
+def truncate_repr(text: str | None, max_len: int = 30) -> str | None:
+    """Truncate a string representation if it exceeds max_len.
 
     Args:
-        seq (str | None):
-            The sequence to truncate.
+        text (str | None):
+            The string to truncate.
         max_len (int, optional):
             Maximum length of the representation. Defaults to 30.
 
     Returns:
         str | None:
-            Truncated representation of the sequence or None if seq is None.
+            Truncated representation of the string or None if text is None.
     """
-    if not seq:
+    if not text:
         return None
-    if len(seq) <= max_len or max_len <= 3:
-        return repr(seq)
+    if len(text) <= max_len or max_len <= 3:
+        return repr(text)
     half = (max_len - 3) // 2
-    truncated = seq[:half] + "..." + seq[-half:]
+    truncated = text[:half] + "..." + text[-half:]
     return repr(truncated)
 
 

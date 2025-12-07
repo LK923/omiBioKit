@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.sequence import Sequence
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bio.seq_interval import SeqInterval
 from omibio.analysis.find_motif import find_motif
 import re
 

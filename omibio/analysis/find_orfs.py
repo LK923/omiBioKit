@@ -1,8 +1,7 @@
 from omibio.io.read_fasta import read
-from omibio.bioObjects.seq_interval import SeqInterval
-from omibio.bioObjects.analysis_result import AnalysisResult
+from omibio.bio import SeqInterval, AnalysisResult
 from omibio.sequence import Sequence
-from omibio.utils.translate import translate_nt
+from omibio.sequence.seq_utils.translate import translate_nt
 from omibio.viz import plot_orfs
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}

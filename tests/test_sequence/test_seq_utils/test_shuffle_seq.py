@@ -1,5 +1,5 @@
 import pytest
-from omibio.utils.shuffle_seq import shuffle_seq
+from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
 from omibio.sequence.sequence import Sequence
 
 

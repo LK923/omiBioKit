@@ -1,4 +1,4 @@
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bio.seq_interval import SeqInterval
 from dataclasses import dataclass, field
 from matplotlib.axes import Axes
 from typing import Callable, Iterator, Any

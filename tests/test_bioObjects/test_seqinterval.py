@@ -1,5 +1,5 @@
 import pytest
-from omibio.bioObjects import SeqInterval
+from omibio.bio import SeqInterval
 from omibio.sequence import Sequence, Polypeptide
 
 # pytest --cov=omibio.bioObjects.seq_interval tests/ --cov-report=term-missing

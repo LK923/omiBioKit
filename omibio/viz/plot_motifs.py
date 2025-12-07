@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, AnalysisResult
 
 
 def plot_motifs(

@@ -1,7 +1,7 @@
 import pytest
 from omibio.sequence.polypeptide import Polypeptide
-from omibio.bioObjects.seq_interval import SeqInterval
-from omibio.utils.translate import translate_nt
+from omibio.bio.seq_interval import SeqInterval
+from omibio.sequence.seq_utils.translate import translate_nt
 
 
 class TestTranslateNT:

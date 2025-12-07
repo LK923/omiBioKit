@@ -128,7 +128,6 @@ def main():
         frame=1
     )
     print(repr(seq))
-    SeqInterval()
 
 
 if __name__ == "__main__":

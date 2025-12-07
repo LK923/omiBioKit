@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.sequence import Sequence
-from omibio.utils.transcribe import transcribe, reverse_transcribe
+from omibio.sequence.seq_utils.transcribe import transcribe, reverse_transcribe
 
 
 class TestTranscribe:

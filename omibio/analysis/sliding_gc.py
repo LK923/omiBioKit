@@ -1,4 +1,4 @@
-from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, AnalysisResult
 from omibio.sequence.sequence import Sequence
 from omibio.viz.plot_sliding_gc import plot_sliding_gc
 from omibio.config import CONFIG

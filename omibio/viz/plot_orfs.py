@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.axes import Axes
-from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval
+from omibio.bio import AnalysisResult
 
 
 def plot_orfs(

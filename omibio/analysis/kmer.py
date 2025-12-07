@@ -1,6 +1,6 @@
 from omibio.sequence.sequence import Sequence
 from collections import Counter
-from omibio.utils.complement import reverse_complement
+from omibio.sequence.seq_utils.complement import reverse_complement
 
 VALID_BASES = {
     "A", "T", "C", "G", "U",

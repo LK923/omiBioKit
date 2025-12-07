@@ -1,6 +1,5 @@
 import pytest
-from omibio.bioObjects import AnalysisResult
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bio import AnalysisResult, SeqInterval
 
 
 class TestAnalysisResult:

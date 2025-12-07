@@ -1,6 +1,6 @@
 from omibio.sequence.sequence import Sequence
 from omibio.sequence.polypeptide import Polypeptide
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bio.seq_interval import SeqInterval
 
 
 DNA_CODON_TABLE = {

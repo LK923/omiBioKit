@@ -203,7 +203,7 @@ class Sequence:
         require_start: bool = False
     ) -> Polypeptide | str:
         """Translate the nucleotide sequence to an amino acid sequence."""
-        from omibio.utils.translate import translate_nt
+        from omibio.sequence.seq_utils.translate import translate_nt
 
         return translate_nt(
             self.sequence,

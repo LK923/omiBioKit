@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.polypeptide import Polypeptide
-from omibio.utils.protein_mass import calc_mass
+from omibio.analysis.protein_mass import calc_mass
 
 
 class TestCalcMass:

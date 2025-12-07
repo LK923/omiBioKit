@@ -4,7 +4,7 @@
 ## omibio root
 - cli.py
 - config.py
-- generate_directory.py
+- config.toml
 
 ## analysis
 - consensus.py
@@ -23,6 +23,7 @@
 
 ## io
 - read_fasta.py
+- read_fastq.py
 - write_fasta.py
 
 ## sequence
@@ -42,6 +43,7 @@
 
 ## viz
 - plot_kmer_heatmap.py
+- plot_motifs.py
 - plot_orfs.py
 - plot_sliding_gc.py
 

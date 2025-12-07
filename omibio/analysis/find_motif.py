@@ -1,5 +1,5 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, AnalysisResult
 from omibio.viz.plot_motifs import plot_motifs
 from typing import Pattern
 import re

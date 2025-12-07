@@ -1,5 +1,5 @@
 import pytest
-from omibio.utils.clean import (
+from omibio.sequence.seq_utils.clean import (
     clean, write_report, CleanReport, CleanReportItem
 )
 from omibio.sequence.sequence import Sequence
