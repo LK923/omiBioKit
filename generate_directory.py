@@ -1,34 +1,46 @@
 from pathlib import Path
-from collections import defaultdict
+from itertools import chain
 
 
 def main():
     root_dir = Path("omibio")
     output_file = Path("MODULES.md")
 
-    packages = defaultdict(list)
+    files = list(
+        chain(
+            (f.relative_to(root_dir) for f in root_dir.rglob("*.py") if f.name != "__init__.py"),  # noqa
+            (f.relative_to(root_dir) for f in root_dir.rglob("*.toml"))
+        )
+    )
 
-    for file in root_dir.rglob("*"):
-        if file.suffix in {".py", ".toml"} and file.name != "__init__.py":
-            package = file.parent.relative_to(root_dir)
-            packages[str(package)].append(file.name)
+    tree = {}
+    for file in files:
+        parts = file.parts
+        current = tree
+        for part in parts[:-1]:
+            current = current.setdefault(part, {})
+        current.setdefault("_files", []).append(parts[-1])
 
-    sorted_packages = sorted(packages.items())
+    def write_tree(f, subtree, indent=0):
+        for name, content in sorted(subtree.items()):
+            if name == "_files":
+                for file_name in sorted(content):
+                    f.write("  " * indent + f"- {file_name}\n")
+            else:
+                f.write("  " * indent + f"### {name}/\n")
+                write_tree(f, content, indent + 1)
+            f.write("\n")
 
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write("# omibio Library Modules\n\n")
+        f.write("# omibio Modules\n\n")
         f.write(
             "[![Latest Version]"
             "(https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)]"  # noqa
-            "(https://github.com/LK923/omiBioKit/releases)\n"
-            )
-        for pkg, files in sorted_packages:
-            pkg_display = pkg if pkg != "." else "omibio root"
-            f.write(f"## {pkg_display}\n")
-            for file in sorted(files):
-                f.write(f"- {file}\n")
-            f.write("\n")
-    print(output_file)
+            "(https://github.com/LK923/omiBioKit/releases)\n\n"
+        )
+        write_tree(f, tree)
+
+    print(f"Written to {output_file}")
 
 
 if __name__ == "__main__":
