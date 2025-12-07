@@ -10,5 +10,9 @@ def analyze_gc_example():
     result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
 
 
+def analyze_gc_example_one_liner():
+    sliding_gc(read_fasta("./examples/data/example_single_long_seq.fasta")["example"]).plot(show=True)  # noqa
+
+
 if __name__ == "__main__":
     analyze_gc_example()

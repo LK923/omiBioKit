@@ -38,9 +38,6 @@ The **omiBio** toolkit is organized into the following modules:
 ## Usage example / 使用示例
 #### Creating a sliding window GC chart using **omiBio**:
 ```python
-from omibio.io import read_fasta
-from omibio.analysis import sliding_gc
-
 # Load sequences from FASTA (returns dict[str, Sequence])
 seqs: SeqCollections = read_fasta("examples/example.fasta")
 dna: Sequence = seqs["example"]
@@ -50,8 +47,12 @@ result: AnalysisResult = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
 result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
-
 ```
+Or even one-liner:
+```python
+sliding_gc(read_fasta("examples/example.fasta")["example"]).plot(show=True)
+```
+
 The above code will produce results like this:
 
 <p align="center">
