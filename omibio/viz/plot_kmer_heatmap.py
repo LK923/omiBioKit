@@ -1,5 +1,6 @@
 import pandas as pd
 import seaborn as sns
+from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 
 
@@ -9,7 +10,7 @@ def plot_kmer(
     cmap='Reds',
     annot=True,
     fmt=".2f"
-):
+) -> Axes:
     if ax is None:
         ax = plt.subplots(figsize=(5, 5))[1]
 

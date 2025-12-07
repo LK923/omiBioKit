@@ -100,7 +100,7 @@ def orf(
             start_codons=start_codon_set,
             seq_id=seq_id
         )
-        all_orfs.extend(orfs)
+        all_orfs.extend(orfs.intervals)
 
     if not no_sort:
         all_orfs.sort(key=lambda x: x.length, reverse=True)

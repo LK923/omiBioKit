@@ -1,5 +1,5 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval, AnalysisResult
 from typing import Pattern
 import re
 
@@ -9,7 +9,7 @@ def find_motif(
     pattern: str | Pattern,
     seq_id: str | None = None,
     ignore_case: bool = True
-) -> list[SeqInterval]:
+) -> AnalysisResult:
     """Finds all occurrences of a motif in a given sequence.
 
     Args:
@@ -74,7 +74,13 @@ def find_motif(
             )
         )
 
-    return results
+    return AnalysisResult(
+        results, seq_id=seq_id, type="motif",
+        metadata={
+            "seq_length": len(seq_str),
+            "sequence": seq_str
+        }
+    )
 
 
 def main():

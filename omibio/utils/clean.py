@@ -19,23 +19,33 @@ class CleanReportItem:
 
 
 class CleanReport:
+
     def __init__(self):
-        self.records: list[CleanReportItem] = []
+        self._records: list[CleanReportItem] = []
 
     def add(self, item: CleanReportItem):
-        self.records.append(item)
+        if not isinstance(item, CleanReportItem):
+            raise TypeError(
+                "add() argument 'item' must be CleanReportItem, got "
+                + type(item).__name__
+            )
+        self._records.append(item)
+
+    @property
+    def records(self) -> list[CleanReportItem]:
+        return self._records
 
     @property
     def kept(self):
-        return [r for r in self.records if not r.removed]
+        return [r for r in self._records if not r.removed]
 
     @property
     def removed(self):
-        return [r for r in self.records if r.removed]
+        return [r for r in self._records if r.removed]
 
     def summary(self):
         return {
-            "total": len(self.records),
+            "total": len(self._records),
             "kept": len(self.kept),
             "removed": len(self.removed)
         }

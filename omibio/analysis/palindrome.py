@@ -1,12 +1,13 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval, AnalysisResult
 
 
 def find_palindrome(
     seq: Sequence | str,
     min_len: int = 4,
-    max_len: int = 12
-) -> list[SeqInterval]:
+    max_len: int = 12,
+    seq_id: str | None = None
+) -> AnalysisResult:
     """Find palindromic sequences in a given sequence.
 
     Args:
@@ -76,7 +77,13 @@ def find_palindrome(
                     )
                 )
 
-    return results
+    return AnalysisResult(
+        results, seq_id=seq_id, type="palindrome",
+        metadata={
+            "seq_length": n,
+            "sequence": str(seq)
+        }
+    )
 
 
 def main():

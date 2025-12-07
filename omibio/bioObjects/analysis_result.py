@@ -1,17 +1,76 @@
 from omibio.bioObjects.seq_interval import SeqInterval
-from dataclasses import dataclass
-from typing import Callable
+from dataclasses import dataclass, field
+from matplotlib.axes import Axes
+from typing import Callable, Iterator, Any
 
 
 @dataclass
 class AnalysisResult:
-    intervals: list[SeqInterval] | None = None
-    meta: dict | None = None
-    _plot_func: Callable | None = None
+    """Analysis result storing a list of SeqInterval objects."""
 
-    def plot(self, **kwargs):
-        if self._plot_func is None:
+    intervals: list[SeqInterval]
+
+    type: str | None = None
+    seq_id: str | None = None
+    plot_func: Callable | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        if not isinstance(self.intervals, list):
+            raise TypeError(
+                "AnalysisResult argument 'intervals' must be list, got "
+                + type(self.intervals).__name__
+            )
+        if (
+            self.plot_func is not None
+            and not isinstance(self.plot_func, Callable)
+        ):
+            raise TypeError(
+                "AnalysisResult argument 'plot_func' must be Callable, got "
+                + type(self.plot_func).__name__
+            )
+        if not isinstance(self.metadata, dict):
+            raise TypeError(
+                "AnalysisResult argument 'metadata' must be dict, got "
+                + type(self.plot_func).__name__
+            )
+
+    def plot(self, **kwargs) -> Axes:
+        if self.plot_func is None:
             raise NotImplementedError(
                 "Plotting is not supported for this analysis."
             )
-        return self._plot_func(self, **kwargs)
+
+        return self.plot_func(self, **kwargs)
+
+    def __len__(self) -> int:
+        return len(self.intervals)
+
+    def __iter__(self) -> Iterator[SeqInterval]:
+        return iter(self.intervals)
+
+    def __getitem__(self, idx: int | slice) -> SeqInterval | list[SeqInterval]:
+        return self.intervals[idx]
+
+    def __repr__(self) -> str:
+        return (
+            f"AnalysisResult(intervals={self.intervals!r}, "
+            f"seq_id={self.seq_id!r}, type={self.type!r})"
+        )
+
+    def __str__(self) -> str:
+        return str(self.intervals)
+
+
+def main():
+    from omibio.io import read
+    from omibio.analysis import sliding_gc
+
+    res = sliding_gc(
+        read("./examples/data/example_single_long_seq.fasta")["example"]
+    )
+    print(res)
+
+
+if __name__ == "__main__":
+    main()

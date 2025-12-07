@@ -1,17 +1,25 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.axes import Axes
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval, AnalysisResult
 
 
 def plot_orfs(
-    orfs: list[SeqInterval],
-    seq_length: int,
+    orfs: list[SeqInterval] | AnalysisResult,
+    seq_length: int | None = None,
     ax: Axes | None = None
 ) -> Axes:
 
     if ax is None:
         _, ax = plt.subplots(figsize=(12, 4))
+
+    if seq_length is None:
+        if isinstance(orfs, AnalysisResult):
+            seq_length = orfs.metadata["seq_length"]
+        else:
+            raise TypeError(
+                "plot_orfs() missing 1 required argument: 'seq_length'"
+            )
 
     frame_y = {
         '+1': 5, '+2': 4, '+3': 3,

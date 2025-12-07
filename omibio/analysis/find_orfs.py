@@ -1,7 +1,9 @@
 from omibio.io.read_fasta import read
 from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects.analysis_result import AnalysisResult
 from omibio.sequence import Sequence
 from omibio.utils.translate import translate_nt
+from omibio.viz import plot_orfs
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}
 
@@ -68,7 +70,7 @@ def find_orfs(
     translate: bool = False,
     start_codons: set[str] | list[str] | tuple[str] = {"ATG"},
     seq_id: str | None = None
-) -> list[SeqInterval]:
+) -> AnalysisResult:
     """Find ORFs in a given sequence.
 
     Args:
@@ -94,7 +96,8 @@ def find_orfs(
             Identifier for the sequence. Defaults to None.
 
     Returns:
-        list[ORF]: A list of ORF objects found in the sequence.
+        AnalysisResult:
+            ORF analysis result object.
 
     Raises:
         TypeError:
@@ -191,15 +194,22 @@ def find_orfs(
     if sort_by_length:
         results.sort(key=lambda orf: orf.length, reverse=True)
 
-    return results
+    return AnalysisResult(
+        intervals=results,
+        seq_id=seq_id,
+        plot_func=plot_orfs, type="ORF",
+        metadata={
+            "seq_length": seq_length,
+            "sequence": str(seq)
+        }
+    )
 
 
 def main():
     seq_dict = read(r"./examples/data/example_single_long_seq.fasta")
     sequence = seq_dict["example"]
     res = find_orfs(sequence, translate=True, seq_id='example')
-    for result in res:
-        print(repr(result))
+    print(res)
 
 
 if __name__ == "__main__":

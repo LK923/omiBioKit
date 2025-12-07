@@ -1,5 +1,7 @@
 import pytest
-from omibio.utils.clean import clean, write_report, CleanReport
+from omibio.utils.clean import (
+    clean, write_report, CleanReport, CleanReportItem
+)
 from omibio.sequence.sequence import Sequence
 import tempfile
 import os
@@ -41,9 +43,48 @@ class TestCleanFasta:
         assert cleaned["seq11_mixed_rna_dna"] == "AUGCATGCUA"
         assert cleaned["seq12_whitespace_lines"] == "ATGCATGCATGC"
 
+    def test_clean_checking(self):
+        with pytest.raises(ValueError):
+            seqs = {"seq": "ATGC"}
+            clean(seqs, allowed_bases={"Ag", "TC"})
+        with pytest.raises(TypeError):
+            clean({1, 2, 3})
+        with pytest.raises(ValueError):
+            clean(seqs, name_policy="invalid")
+        with pytest.raises(ValueError):
+            clean(seqs, gap_policy="invalid")
+        with pytest.raises(TypeError):
+            clean(seqs, min_len="invalid")
+        with pytest.raises(TypeError):
+            clean(seqs, max_len="invalid")
+        with pytest.raises(ValueError):
+            clean(seqs, min_len=-1)
+        with pytest.raises(ValueError):
+            clean(seqs, max_len=-1)
+        with pytest.raises(ValueError):
+            clean(seqs, min_len=2, max_len=1)
+        with pytest.raises(TypeError):
+            clean({(1, 2): "ACTG"})
+        with pytest.raises(TypeError):
+            clean({"seq": (1, 2)})
+
+    def test_write_report_checking(self):
+        with pytest.raises(TypeError):
+            write_report(out_path=1, report=CleanReport())
+        with pytest.raises(TypeError):
+            write_report("path", report=[])
+
+    def test_clean_report(self):
+        with pytest.raises(TypeError):
+            CleanReport().add(1)
+        report = CleanReport()
+        item = CleanReportItem(orig_name="name")
+        report.add(item)
+        assert report.records[0] is item
+
     def test_name_policy_id_only(self):
-        cleaned, report = clean(
-            self.seqs, name_policy="id_only", min_len=4, report=True)
+        cleaned = clean(
+            self.seqs, name_policy="id_only", min_len=4)
         names = list(cleaned.keys())
         assert "seq1" in names
         assert "seq2" in names
@@ -51,23 +92,21 @@ class TestCleanFasta:
         assert "seq4--alignment" in names
 
     def test_name_policy_underscores(self):
-        cleaned, report = clean(
-            self.seqs, name_policy="underscores", min_len=4, report=True)
+        cleaned = clean(
+            self.seqs, name_policy="underscores", min_len=4)
         for name in cleaned.keys():
             assert " " not in name
 
     def test_gap_policy_remove(self):
-        cleaned, report = clean(
-            self.seqs, gap_policy="remove", min_len=4,
-            report=True, name_policy="id_only"
+        cleaned = clean(
+            self.seqs, gap_policy="remove", min_len=4, name_policy="id_only"
         )
         assert "-" not in cleaned["seq4--alignment"]
         assert "-" not in cleaned["seq4--alignment_1"]
 
     def test_gap_policy_collapse(self):
-        cleaned, report = clean(
-            self.seqs, gap_policy="collapse", min_len=4,
-            report=True, name_policy="id_only"
+        cleaned = clean(
+            self.seqs, gap_policy="collapse", min_len=4, name_policy="id_only"
         )
         assert "--" not in cleaned["seq4--alignment"]
 
@@ -76,14 +115,13 @@ class TestCleanFasta:
             clean({"seq_invalid": "ATGC$"}, strict=True, min_len=4)
 
     def test_remove_illegal(self):
-        cleaned, report = clean(
-            {"seq_invalid": "ATGC$%^"},
-            min_len=4, remove_illegal=True, report=True
+        cleaned = clean(
+            {"seq_invalid": "ATGC$%^"}, min_len=4, remove_illegal=True
         )
         assert cleaned["seq_invalid"] == "ATGC"
 
     def test_remove_empty_and_length_filter(self):
-        cleaned, report = clean(
+        _, report = clean(
             self.seqs, min_len=4, max_len=100000,
             remove_empty=True, report=True
         )
@@ -94,14 +132,12 @@ class TestCleanFasta:
             assert name in removed_names
 
     def test_as_str_option(self):
-        cleaned, report = clean(
-            self.seqs, min_len=4, as_str=False, report=True
-        )
+        cleaned = clean(self.seqs, min_len=4, as_str=False)
         for seq in cleaned.values():
             assert isinstance(seq, Sequence)
 
     def test_write_report_creates_file(self):
-        cleaned, report = clean(self.seqs, min_len=4, report=True)
+        _, report = clean(self.seqs, min_len=4, report=True)
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "report.txt")
             write_report(path, report)
@@ -112,7 +148,7 @@ class TestCleanFasta:
             assert "=== Removed Sequences ===" in content
 
     def test_no_name(self):
-        cleaned, report = clean(self.seqs, min_len=4, report=True)
+        cleaned = clean(self.seqs, min_len=4)
         assert "unnamed" in cleaned
 
     def test_duplicate_name(self):

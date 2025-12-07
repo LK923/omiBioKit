@@ -1,6 +1,6 @@
 import pytest
 from omibio.analysis.sliding_gc import sliding_gc
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval
 from omibio.sequence.sequence import Sequence
 
 # pytest --cov=omibio.analysis.sliding_gc tests/ --cov-report=term-missing
@@ -8,7 +8,7 @@ from omibio.sequence.sequence import Sequence
 
 class TestSlidingGC:
     def test_empty_seq(self):
-        assert sliding_gc("") == []
+        assert sliding_gc("").intervals == []
 
     def test_invalid_seq_type(self):
         with pytest.raises(TypeError):

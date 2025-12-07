@@ -1,5 +1,6 @@
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval, AnalysisResult
 from omibio.sequence.sequence import Sequence
+from omibio.viz.plot_sliding_gc import plot_sliding_gc
 from omibio.config import CONFIG
 
 
@@ -8,7 +9,7 @@ def sliding_gc(
     window: int | None = None,
     step: int | None = None,
     seq_id: str | None = None
-) -> list[SeqInterval]:
+) -> AnalysisResult:
     """Calculate GC content in a sliding window manner.
 
     Args:
@@ -21,7 +22,8 @@ def sliding_gc(
         TypeError: if seq is not a string.
 
     Returns:
-        list[tuple]: A list of tuples, each containing (start, end, GC%).
+        AnalysisResult:
+            GC content analysis result object.
     """
     if window is None:
         window = int(CONFIG.get("slidingGC", "window", 100))
@@ -29,7 +31,13 @@ def sliding_gc(
         step = int(CONFIG.get("slidingGC", "step", 10))
 
     if not seq:
-        return []
+        return AnalysisResult(
+            intervals=[], seq_id=seq_id, type="sliding_gc",
+            metadata={
+                "seq_length": 0,
+                "sequence": ""
+            }
+        )
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
             "sliding_gc() argument 'seq' must be Sequence or str, not "
@@ -46,11 +54,18 @@ def sliding_gc(
     if window >= n:
         gc_count = sum(1 for b in seq if b in 'GC')
         gc_percent = round((gc_count / n) * 100, 2)
-        return [
-            SeqInterval(
-                start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
-            )
-        ]
+        return AnalysisResult(
+            intervals=[
+                SeqInterval(
+                    start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
+                )
+            ],
+            seq_id=seq_id, type="sliding_gc",
+            metadata={
+                "seq_length": n,
+                "sequence": str(seq)
+            }
+        )
 
     is_gc = [1 if b in 'GC' else 0 for b in seq]
 
@@ -74,7 +89,16 @@ def sliding_gc(
                 )
         )
 
-    return gc_list
+    return AnalysisResult(
+        intervals=gc_list,
+        seq_id=seq_id,
+        plot_func=plot_sliding_gc,
+        type="sliding_gc",
+        metadata={
+            "seq_length": n,
+            "sequence": str(seq)
+        }
+    )
 
 
 def main():

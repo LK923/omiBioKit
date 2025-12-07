@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from omibio.sequence.sequence import Sequence
-from omibio.bioObjects.seq_interval import SeqInterval
+from omibio.bioObjects import SeqInterval, AnalysisResult
 
 
 def plot_sliding_gc(
-    gc_list: list[SeqInterval],
-    seq: Sequence | str | None = None,
+    gc_list: list[SeqInterval] | AnalysisResult,
     window_avg: bool = True,
     ax: Axes | None = None
 ) -> Axes:
@@ -30,16 +28,6 @@ def plot_sliding_gc(
             ax = plt.subplots(figsize=(10, 4))[1]
         return ax
 
-    if seq is not None:
-        if not isinstance(seq, (Sequence, str)):
-            raise TypeError(
-                "plot_sliding_gc() argument 'seq' must be Sequence or str, "
-                f"got {type(seq).__name__}"
-            )
-        if isinstance(seq, str):
-            seq = Sequence(seq)
-        total_avg = float(seq.gc_content()) * 100
-
     positions = [
         (window.start + window.end) / 2
         for window in gc_list if window.gc is not None
@@ -56,12 +44,7 @@ def plot_sliding_gc(
     if window_avg:
         ax.axhline(
             y=window_average, color='cyan',
-            linestyle='--', label=f'Window average GC%: {window_average:.2f}%'
-        )
-    if seq is not None:
-        ax.axhline(
-            y=total_avg, color='green',
-            linestyle='dotted', label=f'Total average GC%: {total_avg:.2f}%'
+            linestyle='--', label=f'Window average GC%: {window_average:.2f}'
         )
 
     ax.plot(positions, gc_vals, color='blue', linewidth=1)
@@ -81,7 +64,7 @@ def main():
     from omibio.io.read_fasta import read
     seq = read("./examples/data/example_single_long_seq.fasta")["example"]
     gc_list = sliding_gc(seq)
-    plot_sliding_gc(gc_list, seq=seq)
+    plot_sliding_gc(gc_list)
     plt.show()
 
 
