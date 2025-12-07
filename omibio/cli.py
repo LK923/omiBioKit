@@ -1,5 +1,5 @@
 import click
-from omibio.io import read, write_fasta
+from omibio.io import read_fasta, write_fasta
 from omibio.sequence import Polypeptide
 
 
@@ -14,7 +14,7 @@ def cli():
 def gc(fasta_file: str) -> None:
     """Calculate the GC content of a sequence from a FASTA file."""
 
-    seqs = read(fasta_file, strict=False).seq_dict()
+    seqs = read_fasta(fasta_file, strict=False).seq_dict()
     for name, seq in seqs.items():
         if isinstance(seq, Polypeptide):
             raise TypeError(
@@ -90,7 +90,7 @@ def orf(
         codon.strip().upper() for codon in start_codons.split(",")
     }
 
-    seqs = read(fasta_file, strict=False).seq_dict()
+    seqs = read_fasta(fasta_file, strict=False).seq_dict()
     all_orfs = []
 
     for seq_id, seq_obj in seqs.items():
@@ -271,7 +271,7 @@ def clean(
     """
     from omibio.sequence.seq_utils.clean import clean as c_f
 
-    seqs = read(fasta_file, strict=False).seq_dict()
+    seqs = read_fasta(fasta_file, strict=False).seq_dict()
     res = c_f(
         seqs,
         name_policy=name_policy,
@@ -322,7 +322,7 @@ def shuffle(
     res = {}
     rng = random.Random(seed)
 
-    seqs = read(fasta_file, strict=False).seq_dict()
+    seqs = read_fasta(fasta_file, strict=False).seq_dict()
 
     for name, seq in seqs.items():
         seq_seed = rng.randint(0, 2**32 - 1)

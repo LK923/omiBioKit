@@ -14,7 +14,7 @@ class FastaFormatError(Exception):
         super().__init__(message)
 
 
-def read(
+def read_fasta(
     file_name: str,
     strict: bool = False,
     output_strict: bool = False,
@@ -127,7 +127,7 @@ def read(
 
 def main():
     input_path = r"./examples/data/example_amino_acids.faa"
-    seq_dict = read(input_path, as_str=True)
+    seq_dict = read_fasta(input_path, as_str=True)
     print(seq_dict)
 
 

@@ -68,8 +68,8 @@ def plot_orfs(
 
 def main():
     from omibio.analysis.find_orfs import find_orfs
-    from omibio.io.read_fasta import read
-    seq = read("./examples/data/example_single_long_seq.fasta")["example"]
+    from omibio.io.read_fasta import read_fasta
+    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
     orfs = find_orfs(seq)
     plot_orfs(orfs, seq_length=len(seq))
     plt.show()

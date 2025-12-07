@@ -79,8 +79,8 @@ def kmer(
 
 
 def main():
-    from omibio.io import read
-    seq = read(r"./examples/data/example_single_long_seq.fasta")["example"]
+    from omibio.io import read_fasta
+    seq = read_fasta(r"./examples/data/example_single_long_seq.fasta")["example"]
     print(kmer(seq, 3, min_count=150))
 
 

@@ -29,24 +29,24 @@ The **omiBio** toolkit is organized into the following modules:
 |--------|---------|------------------------|
 | `omibio.sequence` | Sequence-type data structures | `Sequence`, `Polypeptide` |
 | `omibio.bioObjects` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
-| `omibio.io` | File I/O for common bioinformatics formats | `read()`, `write()` |
+| `omibio.io` | File I/O for common bioinformatics formats | `read_fasta()`, `write_fasta()` |
 | `omibio.analysis` | Sequence analysis functions | `GC_content()`, `sliding_gc()`, `find_orfs()` |
-| `omibio.utils` | General-purpose utility functions | Wrappers, helper functions |
+| `omibio.utils` | General-purpose utility functions | `truncate_repr()` |
 | `omibio.viz` | Simple and easy-to-use data visualization | `plot_orf()`, `plot_sliding_gc()` |
-| `omibio.cli` | Command-line interfaces for common workflows | `omibio orf`, other CLI commands |
+| `omibio.cli` | Command-line interfaces for common workflows | `omibio orf`, `omibio clean` |
 
 ## Usage example / 使用示例
 #### Creating a sliding window GC chart using **omiBio**:
 ```python
-from omibio.io import read
+from omibio.io import read_fasta
 from omibio.analysis import sliding_gc
 
 # Load sequences from FASTA (returns dict[str, Sequence])
-seq_dict = read("examples/example.fasta")
-dna: Sequence = seq_dict["example"]
+seqs: SeqCollections = read_fasta("examples/example.fasta")
+dna: Sequence = seqs["example"]
 
 # Compute GC content in sliding windows (window=200 bp, step=20 bp)
-result = sliding_gc(dna, window=200, step=20)
+result: AnalysisResult = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
 result.plot(show=True)  # or: plot_sliding_gc(result, show=True)

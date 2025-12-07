@@ -396,7 +396,7 @@ def main():
     output_path = "./examples/output/clean_fasta_output.fasta"
     report_path = "./examples/output/clean_report.txt"
 
-    seqs = read(input_path, strict=False).seq_dict()
+    seqs = read_fasta(input_path, strict=False).seq_dict()
 
     cleaned_seqs, report = clean(
         seqs, name_policy="id_only", gap_policy="collapse",

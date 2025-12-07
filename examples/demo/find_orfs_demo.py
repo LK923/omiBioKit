@@ -1,9 +1,9 @@
 from omibio.analysis import find_orfs
-from omibio.io import read
+from omibio.io import read_fasta
 
 
 def find_orfs_and_get_molecular_formula_example():
-    seq_dict = read(r"./examples/data/example_single_long_seq.fasta")
+    seq_dict = read_fasta(r"./examples/data/example_single_long_seq.fasta")
     seq = seq_dict["example"]
 
     orfs = find_orfs(

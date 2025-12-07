@@ -65,12 +65,12 @@ def write_fasta(
 
 
 def main():
-    from omibio.io.read_fasta import read
+    from omibio.io.read_fasta import read_fasta
 
     input_path = r"./examples/data/example_short_seqs.fasta"
     output_path = r"./examples/output/write_fasta_output.fasta"
 
-    seq_dict = read(input_path).seq_dict()
+    seq_dict = read_fasta(input_path).seq_dict()
     lines = write_fasta(output_path, seq_dict, space_between=True)
     print(output_path)
     for line in lines:

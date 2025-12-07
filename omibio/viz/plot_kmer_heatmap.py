@@ -34,8 +34,8 @@ def plot_kmer(
 
 def main():
     from omibio.analysis.kmer import kmer
-    from omibio.io import read
-    seq = read("./examples/data/example_single_short_seq.fasta")["example"]
+    from omibio.io import read_fasta
+    seq = read_fasta("./examples/data/example_single_short_seq.fasta")["example"]
     kmer_counts = kmer(seq, k=2)
     plot_kmer(kmer_counts)
     plt.show()

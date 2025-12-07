@@ -1,5 +1,5 @@
 from omibio.bio.gene import Gene
-from omibio.io.read_fasta import read
+from omibio.io.read_fasta import read_fasta
 
 # TODO: Needs modifications
 
@@ -172,7 +172,7 @@ class Genome(object):
 
     def read_fasta(self, file_name):
         """Read genes from a FASTA file and add them to the genome."""
-        gene_dict = read(file_name, as_str=True)
+        gene_dict = read_fasta(file_name, as_str=True)
         for name in gene_dict.keys():
             self.add_gene(Gene(gene_dict[name], name, self.organism))
 

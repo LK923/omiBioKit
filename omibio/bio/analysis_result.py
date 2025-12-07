@@ -63,11 +63,11 @@ class AnalysisResult:
 
 
 def main():
-    from omibio.io import read
+    from omibio.io import read_fasta
     from omibio.analysis import sliding_gc
 
     res = sliding_gc(
-        read("./examples/data/example_single_long_seq.fasta")["example"]
+        read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
     )
     print(res)
 

@@ -102,8 +102,8 @@ def sliding_gc(
 
 
 def main():
-    from omibio.io.read_fasta import read
-    seq = read("./examples/data/example_single_long_seq.fasta")["example"]
+    from omibio.io.read_fasta import read_fasta
+    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
     gc_list = sliding_gc(seq)
     print(gc_list)
 

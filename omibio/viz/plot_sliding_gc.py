@@ -65,8 +65,8 @@ def plot_sliding_gc(
 
 def main():
     from omibio.analysis.sliding_gc import sliding_gc
-    from omibio.io.read_fasta import read
-    seq = read("./examples/data/example_single_long_seq.fasta")["example"]
+    from omibio.io.read_fasta import read_fasta
+    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
     gc_list = sliding_gc(seq)
     plot_sliding_gc(gc_list)
     plt.show()
