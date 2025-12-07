@@ -1,5 +1,6 @@
 from omibio.sequence.sequence import Sequence
 from omibio.bioObjects import SeqInterval, AnalysisResult
+from omibio.viz.plot_motifs import plot_motifs
 from typing import Pattern
 import re
 
@@ -7,6 +8,7 @@ import re
 def find_motif(
     seq: Sequence | str,
     pattern: str | Pattern,
+    include_reverse: bool = False,
     seq_id: str | None = None,
     ignore_case: bool = True
 ) -> AnalysisResult:
@@ -38,8 +40,6 @@ def find_motif(
             f"got {type(seq).__name__}"
         )
 
-    seq_str = str(seq)
-
     if isinstance(pattern, str):
         if not pattern:
             raise ValueError(
@@ -63,30 +63,41 @@ def find_motif(
         )
 
     results = []
+    n = len(seq)
 
-    for match in compiled_pat.finditer(seq_str):
-        start, end = match.span()
-        nt_seq = seq[start: end]
-        results.append(
-            SeqInterval(
-                start=start, end=end, nt_seq=nt_seq,
-                type='motif', seq_id=seq_id
+    def find_motifs_in_strand(seq_str: str, strand):
+        for match in compiled_pat.finditer(seq_str):
+            start, end = match.span()
+            nt_seq = seq[start: end]
+            if strand == "-":
+                start, end = n - end, n - start
+            results.append(
+                SeqInterval(
+                    start=start, end=end, nt_seq=nt_seq,
+                    type='motif', seq_id=seq_id, strand=strand
+                )
             )
-        )
+
+    find_motifs_in_strand(str(seq), strand="+")
+    if include_reverse:
+        if isinstance(seq, str):
+            seq = Sequence(seq)
+        find_motifs_in_strand(str(seq.reverse_complement()), strand="-")
 
     return AnalysisResult(
-        results, seq_id=seq_id, type="motif",
+        results, seq_id=seq_id, type="motif", plot_func=plot_motifs,
         metadata={
-            "seq_length": len(seq_str),
-            "sequence": seq_str
+            "seq_length": n,
+            "sequence": str(seq)
         }
     )
 
 
 def main():
-    sequence = Sequence("AGTCAGCTATCTATTATAGCGATCATGCTGATGCTGATCTGATGC")
-    pattern = re.compile(r"AT[ACTG]")
-    print(find_motif(sequence, pattern))
+    sequence = Sequence("ACTAAAGT")
+    res = find_motif(sequence, "ACT", include_reverse=True)
+    print(len(res))
+    res.plot(show=True)
 
 
 if __name__ == "__main__":

@@ -19,14 +19,15 @@ def plot_orfs(
             seq_length = orfs.metadata["seq_length"]
         else:
             raise TypeError(
-                "plot_orfs() missing 1 required argument: 'seq_length'"
+                "plot_orfs() argument: 'seq_length' must be provided if"
+                "'orfs' is a list"
             )
 
     frame_y = {
         '+1': 5, '+2': 4, '+3': 3,
         '-1': 2, '-2': 1, '-3': 0
     }
-    bar_height = 0.8
+    bar_height = 0.4
     positive_color = "#4D84DC"
     negative_color = "#E14040"
 
@@ -53,8 +54,8 @@ def plot_orfs(
     ax.set_title("ORF Distribution")
 
     legend_elements = [
-        Patch(facecolor=positive_color, label="Positive strand"),
-        Patch(facecolor=negative_color, label="Negative strand")
+        Patch(facecolor=positive_color, label="Positive strand (+)"),
+        Patch(facecolor=negative_color, label="Negative strand (-)")
     ]
     ax.legend(handles=legend_elements, loc="upper right")
     ax.grid(True, linestyle='--', alpha=0.5)

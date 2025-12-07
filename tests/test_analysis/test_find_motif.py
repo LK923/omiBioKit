@@ -81,3 +81,14 @@ class TestFindMotif:
         pat = re.compile("a", re.IGNORECASE)
         res = find_motif("A", pat, ignore_case=False)
         assert len(res) == 0
+
+    def test_include_inverse(self):
+        seq = "ACTAGT"
+        res = find_motif(seq, "ACT", include_reverse=True)
+        assert len(res) == 2
+
+        motif1, motif2 = res
+        assert motif1.start == 0
+        assert motif1.end == 3
+        assert motif2.start == 3
+        assert motif2.end == 6

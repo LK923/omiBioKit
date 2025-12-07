@@ -33,7 +33,13 @@ def find_palindrome(
     """
 
     if not seq:
-        return []
+        return AnalysisResult(
+            intervals=[], seq_id=seq_id, type="palindrome",
+            metadata={
+                "seq_length": 0,
+                "sequence": ""
+            }
+        )
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
             "find_palindrome() argument 'seq' must be Sequence or str, got "
@@ -88,7 +94,8 @@ def find_palindrome(
 
 def main():
     seq = Sequence("GAAUUTGG")
-    print(find_palindrome(seq))
+    res = find_palindrome(seq)
+    print(list(res))
 
 
 if __name__ == "__main__":
