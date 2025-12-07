@@ -9,7 +9,8 @@ def plot_kmer(
     ax=None,
     cmap='Reds',
     annot=True,
-    fmt=".2f"
+    fmt=".2f",
+    show: bool = False
 ) -> Axes:
     if ax is None:
         ax = plt.subplots(figsize=(5, 5))[1]
@@ -26,6 +27,8 @@ def plot_kmer(
     ax.set_title('k-mer Frequency Heatmap')
     ax.yaxis.set_tick_params(rotation=0)
 
+    if show:
+        plt.show()
     return ax
 
 

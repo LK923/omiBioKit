@@ -6,7 +6,8 @@ from omibio.bioObjects import SeqInterval, AnalysisResult
 def plot_sliding_gc(
     gc_list: list[SeqInterval] | AnalysisResult,
     window_avg: bool = True,
-    ax: Axes | None = None
+    ax: Axes | None = None,
+    show: bool = False
 ) -> Axes:
     """Visualize GC content from sliding window analysis.
 
@@ -43,11 +44,11 @@ def plot_sliding_gc(
 
     if window_avg:
         ax.axhline(
-            y=window_average, color='cyan',
+            y=window_average, color="#F10909",
             linestyle='--', label=f'Window average GC%: {window_average:.2f}'
         )
 
-    ax.plot(positions, gc_vals, color='blue', linewidth=1)
+    ax.plot(positions, gc_vals, color="#4E07E8", linewidth=1)
 
     ax.set_title("Sliding Window GC%")
     ax.set_xlabel("Position in Sequence")
@@ -56,6 +57,8 @@ def plot_sliding_gc(
     ax.grid(True, linestyle='--', alpha=0.5)
     ax.legend()
 
+    if show:
+        plt.show()
     return ax
 
 

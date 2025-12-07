@@ -7,7 +7,8 @@ from omibio.bioObjects import SeqInterval, AnalysisResult
 def plot_orfs(
     orfs: list[SeqInterval] | AnalysisResult,
     seq_length: int | None = None,
-    ax: Axes | None = None
+    ax: Axes | None = None,
+    show: bool = False
 ) -> Axes:
 
     if ax is None:
@@ -26,8 +27,11 @@ def plot_orfs(
         '-1': 2, '-2': 1, '-3': 0
     }
     bar_height = 0.8
-    positive_color = "#4C72B0"
-    negative_color = "#DD8452"
+    positive_color = "#4D84DC"
+    negative_color = "#E14040"
+
+    for i in frame_y.values():
+        ax.axhline(y=i, color="#C8C7CE", linestyle="--")
 
     for orf in orfs:
         frame_key = f"+{orf.frame}" if orf.frame > 0 else str(orf.frame)
@@ -55,6 +59,8 @@ def plot_orfs(
     ax.legend(handles=legend_elements, loc="upper right")
     ax.grid(True, linestyle='--', alpha=0.5)
 
+    if show:
+        plt.show()
     return ax
 
 
