@@ -40,18 +40,16 @@ The **omiBio** toolkit is organized into the following modules:
 ```python
 from omibio.io import read
 from omibio.analysis import sliding_gc
-from omibio.viz import plot_sliding_gc, plt
 
 # Load sequences from FASTA (returns dict[str, Sequence])
 seq_dict = read("examples/example.fasta")
 dna: Sequence = seq_dict["example"]
 
 # Compute GC content in sliding windows (window=200 bp, step=20 bp)
-gc_list = sliding_gc(dna, window=200, step=20)
+result = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
-plot_sliding_gc(gc_list, seq=dna, window_avg=True)
-plt.show()
+result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
 
 ```
 The above code will produce results like this:
