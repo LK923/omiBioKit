@@ -1,5 +1,10 @@
 import re
 from pathlib import Path
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from omibio.bio import SeqCollections
+
+# TODO Modify return value to dict[str, SeqEntry]
 
 
 class FastaFormatError(Exception):
@@ -11,11 +16,10 @@ class FastaFormatError(Exception):
 
 def read(
     file_name: str,
-    as_str: bool = False,
-    strict: bool = True,
+    strict: bool = False,
     output_strict: bool = False,
-    upper: bool = True
-) -> dict:
+    upper: bool = True,
+) -> "SeqCollections":
     """Read fasta file and return sequence and name mapping.
 
     Read fasta file and return sequence, name mapping in a dictionary.
@@ -39,7 +43,8 @@ def read(
     Raises:
         FastaFormatError: Errors in the file content format.
     """
-    from omibio.sequence.sequence import Sequence
+    from omibio.sequence import Sequence, Polypeptide
+    from omibio.bio import SeqEntry, SeqCollections
     # Check for file format
     file_path = Path(file_name)
     if not file_path.exists():
@@ -51,7 +56,9 @@ def read(
     if ext not in valid_exts:
         raise FastaFormatError("Needs a fasta file. ")
 
-    sequences = {}
+    faa = ext == ".faa"
+
+    sequences = SeqCollections(source=file_name)
     current_name = None
     current_seq: list[str] = []
 
@@ -62,10 +69,12 @@ def read(
             raise FastaFormatError(f"Sequence Name '{name}' Already Exists")
         if not seq:
             raise FastaFormatError(f"Sequence Missing for {name}")
-        sequences[name] = (
-            "".join(seq) if as_str
-            else Sequence("".join(seq), strict=output_strict)
-        )
+
+        if faa:
+            seq = Polypeptide("".join(seq), strict=output_strict)
+        else:
+            seq = Sequence("".join(seq), strict=output_strict)
+        sequences.add_entry(SeqEntry(seq, seq_id=name, source=file_name))
 
     if strict:
         match ext:
@@ -117,10 +126,9 @@ def read(
 
 
 def main():
-    input_path = r"./examples/data/example_single_short_seq.fasta"
+    input_path = r"./examples/data/example_amino_acids.faa"
     seq_dict = read(input_path, as_str=True)
-    for seq in seq_dict.values():
-        print(seq)
+    print(seq_dict)
 
 
 if __name__ == "__main__":

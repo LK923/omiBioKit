@@ -21,6 +21,8 @@
   - analysis_result.py
   - gene.py
   - genome.py
+  - seq_collections.py
+  - seq_entry.py
   - seq_interval.py
 
 

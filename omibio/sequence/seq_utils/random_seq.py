@@ -1,5 +1,5 @@
 import random
-from omibio.sequence.sequence import Sequence
+from omibio.sequence import Sequence, Polypeptide
 from omibio.io.write_fasta import write_fasta
 
 
@@ -9,8 +9,9 @@ def random_seq(
     weights: list[float] | None = None,
     seed: int | None = None,
     as_str: bool = False,
+    as_polypeptide: bool = False,
     seq_strict: bool = False
-) -> Sequence | str:
+) -> Sequence | str | Polypeptide:
     """Generate a random sequence.
 
     Args:
@@ -58,6 +59,9 @@ def random_seq(
     else:
         seq = "".join(rng.choices(alphabet, k=length))
 
+    if as_polypeptide:
+        return Polypeptide(seq, strict=seq_strict)
+
     return seq if as_str else Sequence(seq, strict=seq_strict)
 
 
@@ -98,7 +102,7 @@ def random_fasta(
             length=length, alphabet=alphabet,
             weights=weights, as_str=True, seed=seq_seed
         )
-    write_fasta(file_path=file_path, seq_dict=seq_dict, space_between=True)
+    write_fasta(file_name=file_path, seq_dict=seq_dict, space_between=True)
 
 
 def main():

@@ -60,7 +60,9 @@ def main():
     from omibio.analysis import find_motif
     from omibio.io import read
 
-    seq = read(r"./examples/data/example_single_short_seq.fasta")["example"]
+    seq = read(
+        r"./examples/data/example_single_short_seq.fasta"
+    )["example"]
     res = find_motif(seq, "ACT", include_reverse=True)
     plot_motifs(res, show=True)
 

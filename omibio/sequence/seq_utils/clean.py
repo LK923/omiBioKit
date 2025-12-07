@@ -1,5 +1,5 @@
-from omibio.sequence.sequence import Sequence
-from typing import Literal, Iterable
+from omibio.sequence.sequence import Sequence, Polypeptide
+from typing import Literal, Iterable, Mapping
 import re
 from dataclasses import dataclass
 
@@ -61,7 +61,7 @@ ALIG_SYMBOL_RE = re.compile(r"-+")
 
 
 def clean(
-    seqs: dict[str, str | Sequence],
+    seqs: Mapping[str, str | Sequence | Polypeptide],
     name_policy: Literal["keep", "id_only", "underscores"] = "keep",
     gap_policy: Literal["keep", "remove", "collapse"] = "keep",
     strict: bool = False,
@@ -72,8 +72,12 @@ def clean(
     allowed_bases: Iterable[str] | None = None,
     remove_empty: bool = True,
     as_str: bool = True,
+    as_polypeptide: bool = False,
     report: bool = False
-) -> dict[str, str | Sequence] | tuple[dict[str, str | Sequence], CleanReport]:
+) -> (
+    dict[str, str | Sequence | Polypeptide]
+    | tuple[dict[str, str | Sequence | Polypeptide], CleanReport]
+):
     """Clean sequences according to specified policies.
 
     Args:
@@ -277,14 +281,24 @@ def clean(
         if cleaned_name != raw_name:
             item.name_changed = True
 
-        cleaned_seq = Sequence(cleaned) if not as_str else cleaned
+        cleaned_seq: str | Sequence | Polypeptide
+        if not as_str:
+            if as_polypeptide:
+                cleaned_seq = Polypeptide(cleaned)
+            else:
+                cleaned_seq = Sequence(cleaned)
+        else:
+            cleaned_seq = cleaned
 
         cleaned_seqs[cleaned_name] = cleaned_seq
 
         if report:
             clean_report.add(item)
 
-    return cleaned_seqs if not report else (cleaned_seqs, clean_report)
+    if not report:
+        return cleaned_seqs
+    else:
+        return cleaned_seqs, clean_report
 
 
 def write_report(out_path: str, report: CleanReport) -> None:
@@ -382,7 +396,7 @@ def main():
     output_path = "./examples/output/clean_fasta_output.fasta"
     report_path = "./examples/output/clean_report.txt"
 
-    seqs = read(input_path, as_str=True, strict=False)
+    seqs = read(input_path, strict=False).seq_dict()
 
     cleaned_seqs, report = clean(
         seqs, name_policy="id_only", gap_policy="collapse",

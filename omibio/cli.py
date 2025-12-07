@@ -1,5 +1,6 @@
 import click
 from omibio.io import read, write_fasta
+from omibio.sequence import Polypeptide
 
 
 @click.group()
@@ -13,8 +14,12 @@ def cli():
 def gc(fasta_file: str) -> None:
     """Calculate the GC content of a sequence from a FASTA file."""
 
-    seqs = read(fasta_file, strict=False)
+    seqs = read(fasta_file, strict=False).seq_dict()
     for name, seq in seqs.items():
+        if isinstance(seq, Polypeptide):
+            raise TypeError(
+                "Cannot calculate gc for amino acid sequences"
+            )
         gc_val = seq.gc_content(percent=True)
         click.echo(f"{name}\t{gc_val}")
 
@@ -85,10 +90,14 @@ def orf(
         codon.strip().upper() for codon in start_codons.split(",")
     }
 
-    seqs = read(fasta_file, strict=False)
+    seqs = read(fasta_file, strict=False).seq_dict()
     all_orfs = []
 
     for seq_id, seq_obj in seqs.items():
+        if isinstance(seq_obj, Polypeptide):
+            raise TypeError(
+                "Cannot find ORFs in amino acid sequences"
+            )
         orfs = find_orfs(
             seq=seq_obj,
             min_length=min_length,
@@ -262,8 +271,8 @@ def clean(
     """
     from omibio.sequence.seq_utils.clean import clean as c_f
 
-    seqs = read(fasta_file, strict=False, as_str=True)
-    cleaned = c_f(
+    seqs = read(fasta_file, strict=False).seq_dict()
+    res = c_f(
         seqs,
         name_policy=name_policy,
         gap_policy=gap_policy,
@@ -273,8 +282,13 @@ def clean(
         normalize_case=not preserve_cases,
         remove_empty=remove_empty,
         remove_illegal=remove_illegal,
-        allowed_bases=set(allowed_bases)
+        allowed_bases=set(allowed_bases),
+        report=False
     )
+    if isinstance(res, tuple):
+        cleaned, _ = res
+    else:
+        cleaned = res
     write_fasta(output, cleaned, space_between=True)
     click.echo(f"Success: file writed to {output}")
 
@@ -308,7 +322,7 @@ def shuffle(
     res = {}
     rng = random.Random(seed)
 
-    seqs = read(fasta_file, as_str=True, strict=False)
+    seqs = read(fasta_file, strict=False).seq_dict()
 
     for name, seq in seqs.items():
         seq_seed = rng.randint(0, 2**32 - 1)

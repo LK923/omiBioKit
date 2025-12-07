@@ -1,16 +1,17 @@
 from pathlib import Path
+from omibio.sequence import Sequence, Polypeptide
 
 
 def write_fasta(
-    file_path,
-    seq_dict,
+    file_name: str,
+    seq_dict: dict[str, Sequence | Polypeptide | str],
     line_len: int = 60,
     space_between: bool = False
 ) -> list[str]:
     """Writes sequences to a FASTA file.
 
     Args:
-        file_path (_type_):
+        file_name (_type_):
             Path to output FASTA file.
         seq_dict (_type_):
             Dictionary of sequence name (str) to sequence (str or Sequence).
@@ -32,7 +33,7 @@ def write_fasta(
             "write_fasta() argument 'seq_dict' must be dict, got "
             + type(seq_dict).__name__
         )
-    file_path = Path(file_path)
+    file_path = Path(file_name)
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
     lines = []
@@ -58,7 +59,7 @@ def write_fasta(
                     f.write("\n")
 
     except OSError as e:
-        raise OSError(f"Could not write FASTA to '{file_path}': {e}") from e
+        raise OSError(f"Could not write FASTA to '{file_name}': {e}") from e
 
     return lines
 
@@ -69,7 +70,7 @@ def main():
     input_path = r"./examples/data/example_short_seqs.fasta"
     output_path = r"./examples/output/write_fasta_output.fasta"
 
-    seq_dict = read(input_path)
+    seq_dict = read(input_path).seq_dict()
     lines = write_fasta(output_path, seq_dict, space_between=True)
     print(output_path)
     for line in lines:

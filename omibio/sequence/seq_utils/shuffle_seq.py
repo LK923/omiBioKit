@@ -1,12 +1,13 @@
 import random
-from omibio.sequence.sequence import Sequence
+from omibio.sequence import Sequence, Polypeptide
 
 
 def shuffle_seq(
-    seq: Sequence | str,
+    seq: Sequence | Polypeptide | str,
     seed: int | None = None,
-    as_str: bool = False
-) -> Sequence | str:
+    as_str: bool = False,
+    as_polypeptide: bool = False
+) -> Sequence | str | Polypeptide:
 
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
@@ -20,7 +21,12 @@ def shuffle_seq(
     rng.shuffle(chars)
     shuffled = "".join(chars)
 
-    return shuffled if as_str else Sequence(shuffled)
+    if not as_str:
+        if as_polypeptide:
+            return Polypeptide(shuffled)
+        else:
+            return Sequence(shuffled)
+    return shuffled
 
 
 def main():

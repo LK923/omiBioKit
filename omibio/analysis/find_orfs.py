@@ -205,8 +205,8 @@ def find_orfs(
 
 
 def main():
-    seq_dict = read(r"./examples/data/example_single_long_seq.fasta")
-    sequence = seq_dict["example"]
+    seqs = read(r"./examples/data/example_single_long_seq.fasta")
+    sequence = seqs["example"]
     res = find_orfs(sequence, translate=True, seq_id='example')
     print(res)
 

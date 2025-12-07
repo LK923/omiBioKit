@@ -42,7 +42,7 @@ class TestReadFasta:
     def test_basic_read_as_str(self, tmp_path):
         p = tmp_path / "ok.fasta"
         p.write_text(">seq\nATGC")
-        r = read(str(p), as_str=True)
+        r = read(str(p))
         assert r["seq"] == "ATGC"
 
     def test_basic_read_sequence_obj(self, tmp_path):
@@ -55,31 +55,31 @@ class TestReadFasta:
     def test_multiline(self, tmp_path):
         p = tmp_path / "ok.fasta"
         p.write_text(">s\nAT\nGC")
-        r = read(str(p), as_str=True)
+        r = read(str(p))
         assert r["s"] == "ATGC"
 
     def test_comment_and_blank_lines(self, tmp_path):
         p = tmp_path / "ok.fasta"
         p.write_text(">s\nAT#x\n\nGC")
-        r = read(str(p), as_str=True)
+        r = read(str(p))
         assert r["s"] == "ATGC"
 
     def test_protein_faa_strict(self, tmp_path):
         p = tmp_path / "ok.faa"
         p.write_text(">p\nACDE")
-        r = read(str(p), as_str=True)
+        r = read(str(p))
         assert r["p"] == "ACDE"
 
     def test_protein_faa_invalid(self, tmp_path):
         p = tmp_path / "bad.faa"
         p.write_text(">p\nACDEZ")
         with pytest.raises(FastaFormatError):
-            read(str(p))
+            read(str(p), strict=True)
 
     def test_strict_false_accept_any(self, tmp_path):
         p = tmp_path / "any.fasta"
         p.write_text(">x\nA*.-xyz")
-        r = read(str(p), as_str=True, strict=False)
+        r = read(str(p), strict=False)
         assert r["x"] == "A*.-XYZ"
 
     def test_output_strict_true(self, tmp_path):
