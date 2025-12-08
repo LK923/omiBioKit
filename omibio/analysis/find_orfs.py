@@ -208,7 +208,8 @@ def main():
     seqs = read_fasta(r"./examples/data/example_single_long_seq.fasta")
     sequence = seqs["example"]
     res = find_orfs(sequence, translate=True, seq_id='example')
-    print(res)
+    ax = plot_orfs(res)
+    ax.figure.show()
 
 
 if __name__ == "__main__":

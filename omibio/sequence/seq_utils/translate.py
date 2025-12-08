@@ -110,14 +110,12 @@ def translate_nt(
 
 
 def main() -> None:
-    seq = Sequence(
-        "ACGAGCTATAGCATCGTATAGCATCGATCGATCGTGATATGATAGCGATTGCGAGGC"
-        "ATATTATATTATAGGTAGCATGCGATCATTACGGCGCGAGTCGATGTATCGTATCGA"
-    )
+    from omibio.io import read_fasta
+    seq = read_fasta("./examples/data/e_coil_gene_sequence.fasta").seqs()[0]
     aa = translate_nt(
         seq, stop_symbol=True, to_stop=True, require_start=True, frame=2
     )
-    print(repr(aa))
+    print(str(aa))
 
 
 if __name__ == "__main__":

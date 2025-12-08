@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def plot_kmer(
     kmer_counts: dict[str, int],
     ax=None,
-    cmap='Reds',
+    cmap='Blues',
     annot=True,
     fmt=".2f",
     show: bool = False
@@ -35,7 +35,9 @@ def plot_kmer(
 def main():
     from omibio.analysis.kmer import kmer
     from omibio.io import read_fasta
-    seq = read_fasta("./examples/data/example_single_short_seq.fasta")["example"]
+    seq = read_fasta(
+        "./examples/data/example_single_short_seq.fasta"
+    )["example"]
     kmer_counts = kmer(seq, k=2)
     plot_kmer(kmer_counts)
     plt.show()

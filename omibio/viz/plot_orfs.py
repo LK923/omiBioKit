@@ -13,7 +13,7 @@ def plot_orfs(
 ) -> Axes:
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(12, 4))
+        _, ax = plt.subplots(figsize=(9, 3))
 
     if seq_length is None:
         if isinstance(orfs, AnalysisResult):
@@ -46,7 +46,7 @@ def plot_orfs(
             facecolors=color, zorder=3
         )
 
-    ax.set_ylim(-1, 6)
+    ax.set_ylim(-1, 7)
     ax.set_xlim(0, seq_length)
     ax.set_yticks(list(frame_y.values()))
     ax.set_yticklabels(list(frame_y.keys()))
@@ -69,7 +69,9 @@ def plot_orfs(
 def main():
     from omibio.analysis.find_orfs import find_orfs
     from omibio.io.read_fasta import read_fasta
-    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
+    seq = read_fasta(
+        "./examples/data/example_single_long_seq.fasta"
+    )["example"]
     orfs = find_orfs(seq)
     plot_orfs(orfs, seq_length=len(seq))
     plt.show()

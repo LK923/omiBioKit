@@ -43,6 +43,20 @@ class AnalysisResult:
 
         return self.plot_func(self, **kwargs)
 
+    def to_dict(self, prefix: str = "Analysis Result"):
+        if not isinstance(prefix, str):
+            raise TypeError(
+                "to_dict argument 'prefix' must be dict, got "
+                + type(self.plot_func).__name__
+            )
+        interval_dict = {}
+        for i, interval in enumerate(self.intervals):
+            if not interval.nt_seq:
+                continue
+            interval_dict[f"{prefix}_{i+1}"] = interval.nt_seq
+
+        return interval_dict
+
     def __len__(self) -> int:
         return len(self.intervals)
 
@@ -64,12 +78,12 @@ class AnalysisResult:
 
 def main():
     from omibio.io import read_fasta
-    from omibio.analysis import sliding_gc
+    from omibio.analysis import find_orfs
 
-    res = sliding_gc(
+    res = find_orfs(
         read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
     )
-    print(res)
+    print(res.to_dict())
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ def plot_sliding_gc(
     """
     if not gc_list:
         if ax is None:
-            ax = plt.subplots(figsize=(10, 4))[1]
+            ax = plt.subplots(figsize=(9, 3))[1]
         return ax
 
     positions = [
@@ -41,15 +41,15 @@ def plot_sliding_gc(
     window_average = sum(gc_vals) / len(gc_vals)
 
     if ax is None:
-        ax = plt.subplots(figsize=(10, 4))[1]
+        ax = plt.subplots(figsize=(9, 3))[1]
 
     if window_avg:
         ax.axhline(
-            y=window_average, color="#F10909",
+            y=window_average, color="#E14040",
             linestyle='--', label=f'Window average GC%: {window_average:.2f}'
         )
 
-    ax.plot(positions, gc_vals, color="#4E07E8", linewidth=1)
+    ax.plot(positions, gc_vals, color="#4D84DC", linewidth=1)
 
     ax.set_title("Sliding Window GC%")
     ax.set_xlabel("Position in Sequence")
@@ -66,7 +66,9 @@ def plot_sliding_gc(
 def main():
     from omibio.analysis.sliding_gc import sliding_gc
     from omibio.io.read_fasta import read_fasta
-    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
+    seq = read_fasta(
+        "./examples/data/example_single_long_seq.fasta"
+    )["example"]
     gc_list = sliding_gc(seq)
     plot_sliding_gc(gc_list)
     plt.show()

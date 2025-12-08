@@ -5,7 +5,7 @@ from typing import Pattern
 import re
 
 
-def find_motif(
+def find_motifs(
     seq: Sequence | str,
     pattern: str | Pattern,
     include_reverse: bool = False,
@@ -36,14 +36,14 @@ def find_motif(
 
     if not isinstance(seq, (str, Sequence)):
         raise TypeError(
-            "find_motif() argument 'seq' must be str or Sequence, "
+            "find_motifs() argument 'seq' must be str or Sequence, "
             f"got {type(seq).__name__}"
         )
 
     if isinstance(pattern, str):
         if not pattern:
             raise ValueError(
-                "find_motif() argument 'pattern' cannot be an empty string"
+                "find_motifs() argument 'pattern' cannot be an empty string"
             )
         compiled_pat = (
             re.compile(re.escape(pattern), flags=re.IGNORECASE) if ignore_case
@@ -58,8 +58,8 @@ def find_motif(
         compiled_pat = re.compile(pattern.pattern, flags=flags)
     else:
         raise TypeError(
-            "find_motif() argument 'pattern' must be str or compiled Pattern, "
-            f"got {type(pattern).__name__}"
+            "find_motifs() argument 'pattern' must be str or compiled Pattern,"
+            f" got {type(pattern).__name__}"
         )
 
     results = []
@@ -95,7 +95,7 @@ def find_motif(
 
 def main():
     sequence = Sequence("ACTAAAGT")
-    res = find_motif(sequence, "ACT", include_reverse=True)
+    res = find_motifs(sequence, "ACT", include_reverse=True)
     print(len(res))
     res.plot(show=True)
 

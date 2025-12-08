@@ -11,7 +11,7 @@ def plot_motifs(
 ) -> Axes:
 
     if ax is None:
-        ax = plt.subplots(figsize=(12, 4))[1]
+        ax = plt.subplots(figsize=(9, 3))[1]
     if seq_length is None:
         if isinstance(motifs, AnalysisResult):
             seq_length = motifs.metadata["seq_length"]
@@ -57,13 +57,13 @@ def plot_motifs(
 
 
 def main():
-    from omibio.analysis import find_motif
+    from omibio.analysis import find_motifs
     from omibio.io import read_fasta
 
     seq = read_fasta(
         r"./examples/data/example_single_short_seq.fasta"
     )["example"]
-    res = find_motif(seq, "ACT", include_reverse=True)
+    res = find_motifs(seq, "ACT", include_reverse=True)
     plot_motifs(res, show=True)
 
 

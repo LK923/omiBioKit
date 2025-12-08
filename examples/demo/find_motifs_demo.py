@@ -8,7 +8,7 @@ def find_potential_introns_example():
         "ATGCTGCAGGTGAGTTTCCCAAATGCTATGCTACGTATTGTAGCTAGCTTTTTCAGGTACTGACCGTA"
     )
     pattern = re.compile(r"GT[ACGTN]{20,1000}AG")
-    donor_sites = find_motif(seq=genomic, pattern=pattern)
+    donor_sites = find_motifs(seq=genomic, pattern=pattern)
 
     for site in donor_sites:
         print(
