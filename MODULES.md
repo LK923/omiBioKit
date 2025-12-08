@@ -3,8 +3,6 @@
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)](https://github.com/LK923/omiBioKit/releases)
 
 - cli.py
-- config.py
-- config.toml
 
 ### analysis/
   - consensus.py

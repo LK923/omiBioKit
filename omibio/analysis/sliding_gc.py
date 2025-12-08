@@ -1,13 +1,12 @@
 from omibio.bio import SeqInterval, AnalysisResult
 from omibio.sequence.sequence import Sequence
 from omibio.viz.plot_sliding_gc import plot_sliding_gc
-from omibio.config import CONFIG
 
 
 def sliding_gc(
     seq: Sequence | str,
-    window: int | None = None,
-    step: int | None = None,
+    window: int = 100,
+    step: int = 10,
     seq_id: str | None = None
 ) -> AnalysisResult:
     """Calculate GC content in a sliding window manner.
@@ -25,10 +24,6 @@ def sliding_gc(
         AnalysisResult:
             GC content analysis result object.
     """
-    if window is None:
-        window = int(CONFIG.get("slidingGC", "window", 100))
-    if step is None:
-        step = int(CONFIG.get("slidingGC", "step", 10))
 
     if not seq:
         return AnalysisResult(
@@ -103,7 +98,9 @@ def sliding_gc(
 
 def main():
     from omibio.io.read_fasta import read_fasta
-    seq = read_fasta("./examples/data/example_single_long_seq.fasta")["example"]
+    seq = read_fasta(
+        "./examples/data/example_single_long_seq.fasta"
+    )["example"]
     gc_list = sliding_gc(seq)
     print(gc_list)
 
