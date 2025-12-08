@@ -72,7 +72,7 @@ def main():
     seq = read_fasta(
         "./examples/data/e_coli_c600_fragment.fasta"
     )["CP167195.1 Escherichia coli strain C600 chromosome"]
-    orfs = find_orfs(seq)
+    orfs = find_orfs(seq, min_length=500)
     plot_orfs(orfs, seq_length=len(seq))
     plt.show()
 
