@@ -70,8 +70,8 @@ def main():
     from omibio.analysis.find_orfs import find_orfs
     from omibio.io.read_fasta import read_fasta
     seq = read_fasta(
-        "./examples/data/example_single_long_seq.fasta"
-    )["example"]
+        "./examples/data/e_coli_c600_fragment.fasta"
+    )["CP167195.1 Escherichia coli strain C600 chromosome"]
     orfs = find_orfs(seq)
     plot_orfs(orfs, seq_length=len(seq))
     plt.show()
