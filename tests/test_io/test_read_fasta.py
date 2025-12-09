@@ -6,7 +6,7 @@ from omibio.sequence.sequence import Sequence
 
 class TestReadFasta:
     def test_file_not_found(self):
-        with pytest.raises(FastaFormatError):
+        with pytest.raises(FileNotFoundError):
             read_fasta("no_such_file.fasta")
 
     def test_invalid_extension(self, tmp_path):
@@ -30,7 +30,7 @@ class TestReadFasta:
     def test_duplicate_name(self, tmp_path):
         p = tmp_path / "dup.fasta"
         p.write_text(">a\nAT\n>a\nGC")
-        with pytest.raises(FastaFormatError):
+        with pytest.raises(ValueError):
             read_fasta(str(p))
 
     def test_invalid_seq_strict_dna(self, tmp_path):

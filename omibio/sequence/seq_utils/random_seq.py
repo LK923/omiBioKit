@@ -102,7 +102,7 @@ def random_fasta(
             length=length, alphabet=alphabet,
             weights=weights, as_str=True, seed=seq_seed
         )
-    write_fasta(file_name=file_path, seq_dict=seq_dict, space_between=True)
+    write_fasta(file_name=file_path, seqs=seq_dict)
 
 
 def main():

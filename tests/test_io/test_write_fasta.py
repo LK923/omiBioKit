@@ -37,16 +37,14 @@ def test_write_fasta_with_blank_lines(tmp_path):
     file_path = tmp_path / "out.fasta"
     seqs = {"s1": "ATGC", "s2": "GGGG"}
 
-    write_fasta(file_path, seqs, space_between=True)
+    write_fasta(file_path, seqs)
 
     content = file_path.read_text().splitlines()
     assert content == [
         ">s1",
         "ATGC",
-        "",
         ">s2",
         "GGGG",
-        "",
     ]
 
 

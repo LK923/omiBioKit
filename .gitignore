@@ -20,3 +20,5 @@ env/
 .coveragerc
 .coverage
 coverage.xml
+
+example_lots_of_seqs.fasta

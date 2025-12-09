@@ -10,6 +10,7 @@ class SeqEntry:
     seq_id: str
 
     source: str | None = None
+    qual: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -29,14 +30,19 @@ class SeqEntry:
 
     def __repr__(self) -> str:
         repr_seq = truncate_repr(str(self.seq))
-        return f"SeqEntry({repr_seq}, seq_id={self.seq_id!r})"
+        text = f"SeqEntry({repr_seq}, seq_id={self.seq_id!r}"
+        if self.qual is not None:
+            repr_qual = truncate_repr(self.qual)
+            text += f", qual={repr_qual}"
+        text += ")"
+        return text
 
 
 def main():
     seq = Sequence("ACTG")
     seq_entry = SeqEntry(seq, seq_id="test")
     print(repr(seq_entry))
-    print(seq_entry.to_seq())
+    print(seq_entry.seq)
 
 
 if __name__ == "__main__":

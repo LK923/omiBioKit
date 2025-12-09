@@ -289,7 +289,7 @@ def clean(
         cleaned, _ = res
     else:
         cleaned = res
-    write_fasta(output, cleaned, space_between=True)
+    write_fasta(output, cleaned)
     click.echo(f"Success: file writed to {output}")
 
 
@@ -329,7 +329,7 @@ def shuffle(
         shuffled = shuffle_seq(seq, seed=seq_seed, as_str=True)
         res[name] = shuffled
 
-    write_fasta(output, res, space_between=True)
+    write_fasta(output, res)
     click.echo(f"Success: file writed to {output}")
 
 

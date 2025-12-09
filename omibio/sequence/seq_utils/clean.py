@@ -391,7 +391,7 @@ def write_report(out_path: str, report: CleanReport) -> None:
 
 
 def main():
-    from omibio.io import write_fasta, read
+    from omibio.io import write_fasta, read_fasta
     input_path = "./examples/data/example_dirty.fasta"
     output_path = "./examples/output/clean_fasta_output.fasta"
     report_path = "./examples/output/clean_report.txt"
@@ -403,7 +403,7 @@ def main():
         report=True, remove_illegal=True
     )
 
-    write_fasta(output_path, cleaned_seqs, space_between=True)
+    write_fasta(output_path, cleaned_seqs)
     print(f"Cleaned: {output_path}")
 
     write_report(report_path, report)
