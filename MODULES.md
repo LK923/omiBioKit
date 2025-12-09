@@ -28,6 +28,7 @@
   - read_fasta.py
   - read_fastq.py
   - write_fasta.py
+  - write_fastq.py
 
 
 ### sequence/
