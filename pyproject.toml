@@ -20,18 +20,18 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-keywords = ["bioinformatics", "fasta", "orf", "sequence"]
+keywords = ["bioinformatics", "analysis", "omics"]
 dependencies = [
     "click",
     "numpy",
     "pandas",
-    "tomli",
+    "matplotlib",
+    "seaborn"
 ]
 
 [project.optional-dependencies]
-plot = ["matplotlib", "seaborn"]
 dev = ["pytest>=7", "black>=23", "mypy"]
-all = ["omibio[plot,dev,config]"] 
+all = ["omibio[dev]"] 
 
 [project.scripts]
 omibio = "omibio.cli:cli"

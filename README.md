@@ -28,27 +28,27 @@ The **omiBio** toolkit is organized into the following modules:
 | Module | Purpose | Key Classes / Functions |
 |--------|---------|------------------------|
 | `omibio.sequence` | Sequence-type data structures | `Sequence`, `Polypeptide` |
-| `omibio.bioObjects` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
-| `omibio.io` | File I/O for common bioinformatics formats | `read_fasta()`, `write_fasta()` |
-| `omibio.analysis` | Sequence analysis functions | `GC_content()`, `sliding_gc()`, `find_orfs()` |
+| `omibio.bio` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
+| `omibio.io` | File I/O for common bioinformatics formats | `read_fasta()`, `read_fastq()` |
+| `omibio.analysis` | Sequence analysis functions | `gc()`, `sliding_gc()`, `find_orfs()` |
 | `omibio.utils` | General-purpose utility functions | `truncate_repr()` |
 | `omibio.viz` | Simple and easy-to-use data visualization | `plot_orf()`, `plot_sliding_gc()` |
-| `omibio.cli` | Command-line interfaces for common workflows | `omibio orf`, `omibio clean` |
+| `omibio.cli` | Command-line interfaces for common workflows | `omibio random-fasta`, `omibio clean` |
 
 ## Usage example / 使用示例
 #### Creating a sliding window GC chart using **omiBio**:
 ```python
 # Load sequences from FASTA (returns dict[str, Sequence])
-seqs: SeqCollections = read_fasta("examples/example.fasta")
+seqs: SeqCollections[SeqEntry] = read_fasta("examples/example.fasta")
 dna: Sequence = seqs["example"]
 
 # Compute GC content in sliding windows (window=200 bp, step=20 bp)
-result: AnalysisResult = sliding_gc(dna, window=200, step=20)
+result: AnalysisResult[SeqInterval] = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
 result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
 ```
-Or even one-liner:
+Or even an one-liner:
 ```python
 sliding_gc(read_fasta("examples/example.fasta")["example"]).plot(show=True)
 ```
@@ -89,14 +89,8 @@ $ pip install omibio
 - **Python**: >= 3.9
 - **Core dependencies**:
   - `click` (for CLI)
-  - `numpy` & `pandas` (analysis/plotting dependencies)
-- **Optional dependencies** (install for extra features):
+  - `numpy` & `pandas` → analysis/plotting dependencies
   - `matplotlib` & `seaborn` → enables visualization 
-
->  Optional deps won't be installed by default. To get them:
-> ```bash
-> pip install omibio[plot]
-> ```
 
 For complete project build and dependency configuration, please refer to [`pyproject.toml`](pyproject.toml)
 
