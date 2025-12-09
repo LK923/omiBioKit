@@ -1,4 +1,4 @@
-# omiBio change log
+# omiBio Change Log
 
 ## [v0.1.3] 12/08/2025
   - Add `read_fastq()`, `write_fastq()`
