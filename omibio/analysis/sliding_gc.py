@@ -101,8 +101,8 @@ def main():
     seq = read_fasta(
         "./examples/data/example_single_long_seq.fasta"
     )["example"]
-    gc_list = sliding_gc(seq)
-    print(gc_list)
+    gc_res = sliding_gc(seq)
+    print(gc_res)
 
 
 if __name__ == "__main__":

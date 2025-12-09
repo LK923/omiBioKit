@@ -64,6 +64,9 @@ class SeqCollections:
     def seq_dict(self) -> dict[str, Sequence | Polypeptide]:
         return {e.seq_id: e.seq for e in self._entries.values()}
 
+    def items(self):
+        return self._entries.items()
+
     def __iter__(self):
         return iter(self._entries.values())
 
@@ -93,7 +96,7 @@ def main():
             SeqEntry(Sequence("ACTG"), seq_id="5"),
         ]
     )
-    print(seqs)
+    print(seqs.items())
 
 
 if __name__ == "__main__":

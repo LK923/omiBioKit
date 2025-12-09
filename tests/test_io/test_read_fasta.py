@@ -15,17 +15,11 @@ class TestReadFasta:
         with pytest.raises(FastaFormatError):
             read_fasta(str(p))
 
-    def test_missing_header(self, tmp_path):
-        p = tmp_path / "bad.fasta"
-        p.write_text("ATGC")
-        with pytest.raises(FastaFormatError):
-            read_fasta(str(p))
-
     def test_missing_seq_name(self, tmp_path):
         p = tmp_path / "bad.fasta"
         p.write_text(">\nATGC")
         with pytest.raises(FastaFormatError):
-            read_fasta(str(p))
+            read_fasta(str(p), strict=True)
 
     def test_duplicate_name(self, tmp_path):
         p = tmp_path / "dup.fasta"
@@ -79,7 +73,7 @@ class TestReadFasta:
     def test_strict_false_accept_any(self, tmp_path):
         p = tmp_path / "any.fasta"
         p.write_text(">x\nA*.-xyz")
-        r = read_fasta(str(p), strict=False)
+        r = read_fasta(str(p), strict=False, warn=False)
         assert r["x"] == "A*.-XYZ"
 
     def test_output_strict_true(self, tmp_path):
@@ -93,11 +87,11 @@ class TestReadFasta:
         p = tmp_path / "ms.fasta"
         p.write_text(">x\n>s\nACTG")
         with pytest.raises(FastaFormatError):
-            read_fasta(str(p))
+            read_fasta(str(p), strict=True, warn=False)
 
     def test_ioerror(self, tmp_path):
         test_file = tmp_path / "file.fasta"
-        test_file.write_text(">seq1\nATG")  # 必须存在
+        test_file.write_text(">seq1\nATG")
 
         def mock_open(*args, **kwargs):
             raise IOError("mocked IOError")

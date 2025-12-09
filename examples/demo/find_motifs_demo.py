@@ -1,4 +1,4 @@
-from omibio.analysis import find_motif
+from omibio.analysis import find_motifs
 from omibio.sequence import Sequence
 import re
 

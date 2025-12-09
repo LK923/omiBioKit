@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Generator
+import warnings
 if TYPE_CHECKING:
     from omibio.bio import SeqCollections, SeqEntry
 
@@ -16,8 +17,10 @@ class FastaFormatError(Exception):
 def read_fasta_iter(
     file_name: str,
     strict: bool = False,
+    warn: bool = True,
     output_strict: bool = False,
     upper: bool = True,
+    skip_invalid_seq: bool = False,
 ) -> Generator["SeqEntry"]:
     from omibio.sequence import Sequence, Polypeptide
     from omibio.bio import SeqEntry
@@ -41,9 +44,13 @@ def read_fasta_iter(
         if current_name is None:
             return
         if not current_seq:
-            raise FastaFormatError(
-                f"Sequence missing for {current_name}"
-            )
+            msg = f"Sequence missing for {current_name}"
+            if strict:
+                raise FastaFormatError(msg)
+            elif warn:
+                warnings.warn(msg + ", skip record")
+            return
+
         seq_str = "".join(current_seq)
         current_seq.clear()
         if faa:
@@ -54,44 +61,60 @@ def read_fasta_iter(
         return SeqEntry(seq=seq_obj, seq_id=current_name, source=file_name)
 
     with open(file_name, "r") as file:
-        for i, line in enumerate(file):
+
+        for i, line in enumerate(file, start=1):
             line = line.split("#", 1)[0].strip()
             if not line:
-                continue  # Skip blank line.
+                continue
 
             if line.startswith(">"):
-                # Store the previous sequence when
-                # encountering new sequence name.
                 entry = push_entry()
                 if entry:
                     yield entry
 
-                # Store sequence name when encounter new sequence name.
                 current_name = line[1:].strip()
 
-                # Check for missing sequence name or
-                # duplicate sequence name.
                 if not current_name:
-                    raise FastaFormatError(
-                        f"Sequence Name Missing, last line: {i}"
-                    )
+                    if strict:
+                        raise FastaFormatError(
+                            f"Sequence Name Missing in line {i}"
+                        )
+                    elif warn:
+                        warnings.warn(
+                            f"Sequence Name Missing in line {i}, "
+                            "skip record"
+                        )
+                    current_name = None
+                    current_seq.clear()
+                    continue
 
             else:
                 if current_name is None:
-                    raise FastaFormatError(
-                        "Fasta file must begin with '>'"
-                    )
+                    continue
                 # Store sequence.
-                if strict:
-                    line_up = line.upper()
-                    for char in line_up:
-                        if char not in allowed_set:
+                line_up = line.upper()
+                skip_record = False
+                for char in line_up:
+                    if char not in allowed_set:
+                        if strict:
                             raise FastaFormatError(
                                 f"Invalid Sequence in line {i}: {line}"
                             )
-                    current_seq.append(line_up if upper else line)
-                else:
-                    current_seq.append(line.upper() if upper else line)
+                        elif warn:
+                            warnings.warn(
+                                f"Invalid Sequence in line {i}: {line}, "
+                                f"{'skip' if skip_invalid_seq else 'invalid'} "
+                                "record"
+                            )
+                        if skip_invalid_seq:
+                            skip_record = True
+                        break
+                if skip_record:
+                    current_name = None
+                    current_seq.clear()
+                    continue
+
+                current_seq.append(line_up if upper else line)
 
         # Store the last sequence when the file ends
         entry = push_entry()
@@ -104,6 +127,8 @@ def read_fasta(
     strict: bool = False,
     output_strict: bool = False,
     upper: bool = True,
+    warn: bool = True,
+    skip_invalid_seq: bool = False
 ) -> "SeqCollections":
     from omibio.bio import SeqCollections
 
@@ -113,6 +138,8 @@ def read_fasta(
         strict=strict,
         output_strict=output_strict,
         upper=upper,
+        warn=warn,
+        skip_invalid_seq=skip_invalid_seq
     ):
         entries.append(entry)
 
@@ -120,8 +147,10 @@ def read_fasta(
 
 
 def main():
-    input_path = r"./examples/data/example_lots_of_seqs.fasta"
-    for entry in read_fasta_iter(input_path):
+    input_path = r"./examples/data/read_fasta_test.fasta"
+    for entry in read_fasta(
+        input_path, strict=False, skip_invalid_seq=True, warn=True
+    ):
         print(repr(entry))
 
 
