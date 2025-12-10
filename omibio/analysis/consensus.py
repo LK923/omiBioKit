@@ -1,4 +1,3 @@
-from omibio.io.read_fasta import read_fasta
 from omibio.sequence.sequence import Sequence
 from collections import defaultdict
 
@@ -85,6 +84,7 @@ def find_consensus(
 
 
 def main():
+    from omibio.io.read_fasta import read_fasta
     input_file = r"./examples/data/example_short_seqs.fasta"
     sequences = read_fasta(input_file).seqs()
     consensus = find_consensus(sequences, as_rna=False)
