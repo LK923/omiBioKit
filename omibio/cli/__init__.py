@@ -9,6 +9,7 @@ def cli():
 
 @cli.command()
 def version():
+    """Show the version of omibio."""
     from omibio import __version__
     click.echo(f"Version: {__version__}")
 

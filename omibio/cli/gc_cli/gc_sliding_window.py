@@ -24,18 +24,18 @@ import warnings
     help="step size. Defaults to 10."
 )
 @click.option(
+    "--output", "-o",
+    type=click.Path(),
+    default=None,
+    help="Write details to a file in csv format"
+)
+@click.option(
     "--save-image-to",
     type=str,
     default=None,
     help=(
         "Wether to save images to a directory. "
     )
-)
-@click.option(
-    "--output", "-o",
-    type=click.Path(),
-    default=None,
-    help="Write details to a file in csv format"
 )
 @click.option(
     "--per-page",
@@ -48,6 +48,11 @@ import warnings
     is_flag=True,
     help="Whether to show the plots."
 )
+@click.option(
+    "--no-warn",
+    is_flag=True,
+    help="Suppress warnings about large memory usage."
+)
 def sliding_window(
     fasta_file: str,
     window: int,
@@ -55,7 +60,8 @@ def sliding_window(
     save_image_to: str,
     output: str,
     show: bool,
-    per_page: int
+    per_page: int,
+    no_warn: bool,
 ):
     """
     Calculate and plot sliding window GC content for sequences in a FASTA file.
@@ -72,7 +78,7 @@ def sliding_window(
         )
 
     entries = read_fasta(fasta_file)
-    if (len(entries) > 100) and (save_image_to or show):
+    if (len(entries) > 100) and (save_image_to or show) and (not no_warn):
         warnings.warn(
             f"\033[33mCreating sliding window gc image for {len(entries)} "
             "sequences will consume a large amout of memory\033[0m"
