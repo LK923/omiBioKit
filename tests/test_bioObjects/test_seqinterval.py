@@ -81,7 +81,7 @@ class TestSeqInterval:
         )
         assert repr(s) == (
             "SeqInterval('ATGAAATAA', 0-9(-), length=9, type='ORF', "
-            "seq_id='test', aa_seq='MK', frame=-1)"
+            "seq_id='test', aa_seq='MK', frame=-1, gc=0.22)"
         )
         s = SeqInterval(
             0, 67,

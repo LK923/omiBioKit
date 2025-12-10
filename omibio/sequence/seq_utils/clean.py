@@ -20,7 +20,7 @@ class CleanReportItem:
 
 class CleanReport:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._records: list[CleanReportItem] = []
 
     def add(self, item: CleanReportItem):

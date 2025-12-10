@@ -102,7 +102,7 @@ def orf(
     if not no_sort:
         all_orfs.sort(key=lambda x: x.length, reverse=True)
 
-    res: list[list[str]] = []
+    res: list[list[str | None]] = []
 
     for orf in all_orfs:
         frame = f"{orf.frame:+}" if orf.frame > 0 else orf.frame
@@ -115,7 +115,7 @@ def orf(
             str(orf.length)
         ]
         if show_seq:
-            nt_seq = orf.nt_seq
+            nt_seq = str(orf.nt_seq) if orf.nt_seq is not None else "None"
             aa_seq = str(orf.aa_seq) if orf.aa_seq is not None else "None"
             base_fields.extend([nt_seq, aa_seq])
         res.append(base_fields)

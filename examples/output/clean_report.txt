@@ -12,7 +12,7 @@ seq 3    invalid$name                      seq                       17        1
 seq4--alignment   collapse_test            seq4--alignment           20        13         yes           collapse    0                0               
 seq4--alignment   collapse_test_duplicate  seq4--alignment_1         20        13         yes           collapse    0                0               
 seq5_remove_gaps                           seq5_remove_gaps          14        12         no            collapse    0                0               
-seq9_long                                  seq9_long                 69        69         no            collapse    0                0               
+seq9_good_sequence                         seq9_good_sequence        69        69         no            collapse    0                0               
 seq10_illegal_characters                   seq10_illegal_characters  22        18         no            collapse    4                0               
 seq11_mixed_rna_dna                        seq11_mixed_rna_dna       26        26         no            collapse    0                0               
 seq12_whitespace_lines                     seq12_whitespace_lines    20        20         no            collapse    0                0               
