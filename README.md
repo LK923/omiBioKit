@@ -48,7 +48,7 @@ result: AnalysisResult[SeqInterval] = sliding_gc(dna, window=200, step=20)
 # Visualize easily
 result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
 ```
-Or even an one-liner:
+Or even a one-liner:
 ```python
 sliding_gc(read_fasta("examples/example.fasta")["example"]).plot(show=True)
 ```
