@@ -8,7 +8,9 @@ def plot_sliding_gc(
     gc_list: list[SeqInterval] | AnalysisResult,
     window_avg: bool = True,
     ax: Axes | None = None,
-    show: bool = False
+    show: bool = False,
+    seq_id: str | None = None,
+    figsize: tuple = (9, 3)
 ) -> Axes:
     """Visualize GC content from sliding window analysis.
 
@@ -27,8 +29,11 @@ def plot_sliding_gc(
     """
     if not gc_list:
         if ax is None:
-            ax = plt.subplots(figsize=(9, 3))[1]
+            ax = plt.subplots(figsize=figsize)[1]
         return ax
+
+    if isinstance(gc_list, AnalysisResult):
+        seq_id = seq_id or gc_list.seq_id
 
     positions = [
         (window.start + window.end) / 2
@@ -49,14 +54,17 @@ def plot_sliding_gc(
             linestyle='--', label=f'Window average GC%: {window_average:.2f}'
         )
 
-    ax.plot(positions, gc_vals, color="#4D84DC", linewidth=1)
+        ax.plot(positions, gc_vals, color="#005AEB", linewidth=1)
 
-    ax.set_title("Sliding Window GC%")
+    if seq_id is not None:
+        ax.set_title(f"Sliding Window GC% of {seq_id}")
+    else:
+        ax.set_title("Sliding Window GC%")
     ax.set_xlabel("Position in Sequence")
     ax.set_ylabel("GC%")
     ax.set_ylim(0, 100)
     ax.grid(True, linestyle='--', alpha=0.5)
-    ax.legend()
+    ax.legend(loc='upper right')
 
     if show:
         plt.show()
@@ -69,8 +77,9 @@ def main():
     seq = read_fasta(
         "./examples/data/example_single_long_seq.fasta"
     )["example"]
-    gc_list = sliding_gc(seq)
+    gc_list = sliding_gc(seq, seq_id="test")
     plot_sliding_gc(gc_list)
+    plt.tight_layout()
     plt.show()
 
 

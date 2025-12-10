@@ -1,40 +1,27 @@
 >seq1 good_sequence
 ATGCGTAGCTAGCTAGCTAGCTAG
-
 >seq2 spaces_and_lowercase
 ATGCGTACGTACGTA
-
 >seq 3 invalid_name
 ATGCTAGCTNAGCTAGC
-
 >seq4--alignment collapse_test
 ATG---CGT----A---TGC
-
 >seq4--alignment collapse_test_duplicate
 ATG---CGT----A---TGC
-
 >seq5_remove_gaps
 ATG-CGTA-T---G
-
 >seq6_only_N
 NNNNNNNNNNNN
-
 >seq7_only_gaps
 -----------
-
->seq9_long
+>seq9_good_sequence
 ATGCGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC
 GTACGTACG
-
 >seq10_illegal_characters
 ATGCGANNTGCTAGNTAGNTAG
-
 >seq11_mixed_rna_dna
 AUGCUAGCUAGCTAGCUGACUAGCUA
-
 >seq12_whitespace_lines
 ATGCTAGCATGCTAGCATGC
-
 >seq13_invalid_bases
 ACTGATGCTGNNNACHYACH
-

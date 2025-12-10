@@ -1,10 +1,5 @@
-pytest
-pytest-cov
-codecov
+click
 matplotlib
 seaborn
 numpy
 pandas
-click
-mypy
-black

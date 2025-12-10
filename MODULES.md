@@ -2,8 +2,6 @@
 
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)](https://github.com/LK923/omiBioKit/releases)
 
-- cli.py
-
 ### analysis/
   - consensus.py
   - find_motif.py
@@ -22,6 +20,18 @@
   - seq_collections.py
   - seq_entry.py
   - seq_interval.py
+
+
+### cli/
+  - clean_cli.py
+  - orf_cli.py
+  - random_fasta_cli.py
+  - shuffle_cli.py
+
+  ### gc_cli/
+    - gc_compute.py
+    - gc_sliding_window.py
+
 
 
 ### io/

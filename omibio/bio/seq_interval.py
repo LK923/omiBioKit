@@ -108,6 +108,8 @@ class SeqInterval:
             extras.append(f"aa_seq={aa_seq_repr}")
         if self.frame != 0:
             extras.append(f"frame={self.frame}")
+        if self.gc is not None:
+            extras.append(f"gc={self.gc!r}")
 
         if extras:
             info += ", " + ", ".join(extras)
