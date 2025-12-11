@@ -13,5 +13,5 @@
 ## [v0.1.3] 12/10/2025
   - Add `fasta_view_cli.py`
   - Remove the `__setitem__` method from the `Sequence` class and `Polypeptide`.
-  - Add `slots=True` to SeqInterval class
+  - Add `slots=True` to SeqInterval class and SeqEntry class
   - Change requirement to python >= 3.12 (former 3.9)

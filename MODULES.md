@@ -23,10 +23,14 @@
 
 
 ### cli/
-  - clean_cli.py
   - orf_cli.py
   - random_fasta_cli.py
-  - shuffle_cli.py
+
+  ### fasta_cli/
+    - fasta_clean.py
+    - fasta_shuffle.py
+    - fasta_view.py
+
 
   ### gc_cli/
     - gc_compute.py
