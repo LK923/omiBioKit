@@ -19,7 +19,6 @@ def read_fasta_iter(
     strict: bool = False,
     warn: bool = True,
     output_strict: bool = False,
-    upper: bool = True,
     skip_invalid_seq: bool = False,
 ) -> Generator["SeqEntry"]:
     from omibio.sequence import Sequence, Polypeptide
@@ -92,9 +91,9 @@ def read_fasta_iter(
                 if current_name is None:
                     continue
                 # Store sequence.
-                line_up = line.upper()
+                line = line.upper()
                 skip_record = False
-                for char in line_up:
+                for char in line:
                     if char not in allowed_set:
                         if strict:
                             raise FastaFormatError(
@@ -108,13 +107,13 @@ def read_fasta_iter(
                             )
                         if skip_invalid_seq:
                             skip_record = True
-                        break
+                            break
                 if skip_record:
                     current_name = None
                     current_seq.clear()
                     continue
 
-                current_seq.append(line_up if upper else line)
+                current_seq.append(line)
 
         # Store the last sequence when the file ends
         entry = push_entry()
@@ -126,7 +125,6 @@ def read_fasta(
     file_name: str,
     strict: bool = False,
     output_strict: bool = False,
-    upper: bool = True,
     warn: bool = True,
     skip_invalid_seq: bool = False
 ) -> "SeqCollections":
@@ -137,7 +135,6 @@ def read_fasta(
         file_name,
         strict=strict,
         output_strict=output_strict,
-        upper=upper,
         warn=warn,
         skip_invalid_seq=skip_invalid_seq
     ):

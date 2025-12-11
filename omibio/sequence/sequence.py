@@ -21,32 +21,13 @@ class Sequence:
         rna: bool | None = None,
         strict: bool = False
     ):
-        """Initialize a Sequence object.
-
-        Args:
-            sequence (str | None, optional):
-                The nucleotide sequence as a string. Defaults to None.
-            rna (bool | None, optional):
-                Indicates if the sequence is RNA (True), DNA (False),
-                or unknown (None). Defaults to None.
-            strict (bool, optional):
-                If True, enables strict mode for validation. Defaults to False.
-
-        Raises:
-            TypeError: If rna is not bool or None
-            TypeError: If strict is not bool
-        """
 
         if rna is not None and not isinstance(rna, bool):
             raise TypeError(
                 "Sequence argument 'rna' must be bool or None, got "
                 + type(rna).__name__
             )
-        if not isinstance(strict, bool):
-            raise TypeError(
-                "Sequence argument 'strict' must be bool or None, got "
-                + type(strict).__name__
-            )
+
         self._is_rna = rna
         self._strict = strict
         self.sequence = sequence if sequence is not None else ""
@@ -261,11 +242,6 @@ class Sequence:
     def __getitem__(self, idx) -> str:
         return self.sequence[idx]
 
-    def __setitem__(self, idx: int, new_base: str) -> None:
-        seq_list = list(self.sequence)
-        seq_list[idx] = new_base
-        self.sequence = "".join(seq_list)
-
     def __iter__(self):
         return iter(self.sequence)
 
@@ -343,8 +319,7 @@ class Sequence:
 
 def main():
     dna = Sequence("AAAATGCATGCTGACTGTAGCTGATTTATTGCTATC")
-    dna2 = dna.copy()
-    print(dna == dna2)
+    dna[1] = "G"
 
 
 if __name__ == "__main__":

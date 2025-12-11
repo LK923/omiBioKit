@@ -1,12 +1,18 @@
 import click
-from omibio.cli import cli
+from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
 
 
-@cli.command()
+@fasta_group.command()
 @click.argument("fasta_file", type=click.Path(exists=True))
 @click.option(
-    "--name-policy",
+    "-o", "--output",
+    type=click.Path(),
+    required=True,
+    help="Output file path."
+)
+@click.option(
+    "--name-policy", "-np",
     type=str,
     default="keep",
     help=(
@@ -15,13 +21,7 @@ from omibio.io import read_fasta, write_fasta
     )
 )
 @click.option(
-    "-o", "--output",
-    type=click.Path(),
-    required=True,
-    help="Output file path."
-)
-@click.option(
-    "--gap-policy",
+    "--gap-policy", "-gp",
     type=str,
     default="keep",
     help=(
@@ -30,13 +30,13 @@ from omibio.io import read_fasta, write_fasta
     )
 )
 @click.option(
-    "--min-len",
+    "--min-len", "-min",
     type=int,
     default=10,
     help="The shortest length of the sequence to be retained"
 )
 @click.option(
-    "--max-len",
+    "--max-len", "-max",
     type=int,
     default=100_000,
     help="The longest length of the sequence to be retained"

@@ -3,7 +3,7 @@ from omibio.sequence.sequence import Sequence
 from omibio.sequence.polypeptide import Polypeptide
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SeqInterval:
     """
     Stores information about the sequence range.

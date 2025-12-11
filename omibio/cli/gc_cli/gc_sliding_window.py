@@ -53,7 +53,7 @@ import warnings
     is_flag=True,
     help="Suppress warnings about large memory usage."
 )
-def sliding_window(
+def sliding(
     fasta_file: str,
     window: int,
     step: int,
@@ -78,7 +78,7 @@ def sliding_window(
         )
 
     entries = read_fasta(fasta_file)
-    if (len(entries) > 100) and (save_image_to or show) and (not no_warn):
+    if (len(entries) > 30) and (save_image_to or show) and (not no_warn):
         warnings.warn(
             f"\033[33mCreating sliding window gc image for {len(entries)} "
             "sequences will consume a large amout of memory\033[0m"

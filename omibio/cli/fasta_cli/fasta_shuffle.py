@@ -1,9 +1,9 @@
 import click
-from omibio.cli import cli
+from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
 
 
-@cli.command()
+@fasta_group.command()
 @click.argument("fasta_file", type=click.Path(exists=True))
 @click.option(
     "-o", "--output",

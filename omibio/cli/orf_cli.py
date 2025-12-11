@@ -1,6 +1,7 @@
 import click
 from omibio.cli import cli
 from omibio.io import read_fasta
+from omibio.analysis.find_orfs import find_orfs
 from omibio.sequence import Polypeptide
 import csv
 
@@ -71,8 +72,7 @@ def orf(
     show_seq: bool,
     output: str
 ) -> None:
-    """Find orfs of a sequence from a FASTA file."""
-    from omibio.analysis.find_orfs import find_orfs
+    """Find orfs of sequences from a FASTA file."""
 
     start_codon_set = {
         codon.strip().upper() for codon in start_codons.split(",")

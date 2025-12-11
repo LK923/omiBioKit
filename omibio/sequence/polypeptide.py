@@ -163,11 +163,6 @@ class Polypeptide:
     def __getitem__(self, idx) -> str:
         return self.aa_seq[idx]
 
-    def __setitem__(self, idx: int, new_aa: str) -> None:
-        aa_seq_list = list(self.aa_seq)
-        aa_seq_list[idx] = new_aa
-        self.aa_seq = "".join(aa_seq_list)
-
     def __iter__(self):
         return iter(self.aa_seq)
 

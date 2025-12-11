@@ -1,5 +1,6 @@
 import click
 from omibio.cli import cli
+from omibio.sequence.seq_utils.random_seq import random_fasta as rf
 
 
 @cli.command()
@@ -42,9 +43,8 @@ def random_fasta(
     seed: int | None
 ) -> None:
     """Generate random nucleotide sequence(s) and output in FASTA format."""
-    from omibio.sequence.seq_utils.random_seq import random_fasta as r_f
 
-    r_f(
+    rf(
         file_path=output, seq_num=number, length=length,  alphabet=alphabet,
         prefix=prefix, seed=seed
     )
