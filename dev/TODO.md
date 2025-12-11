@@ -13,4 +13,4 @@
 
 ## Not important and not urgent
   - Create a python program that (semi-) automatically run pytest --cov & mypy & generate_directory.py, etc. to make development more convenient.  12/08/25
-  - Modify gene.py & Genome.py. Nov. 2025
+  - ~~Modify gene.py & Genome.py. Nov. 2025~~ (Deleted -- since they're outdated and their positioning overlaps with SeqEntry & SeqCollections. )
