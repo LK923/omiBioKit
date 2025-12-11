@@ -9,3 +9,9 @@
   - Improve structure of CLI
   - Enhence `omibio gc compute` (previous `omibio gc`), `omibio gc compute`, etc.
   - Add `omibio gc sliding-window` for sliding window GC CLI.
+
+## [v0.1.3] 12/10/2025
+  - Add `fasta_view_cli.py`
+  - Remove the `__setitem__` method from the `Sequence` class and `Polypeptide`.
+  - Add `slots=True` to SeqInterval class
+  - Change requirement to python >= 3.12 (former 3.9)
