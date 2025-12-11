@@ -15,3 +15,9 @@
   - Remove the `__setitem__` method from the `Sequence` class and `Polypeptide`.
   - Add `slots=True` to SeqInterval class and SeqEntry class
   - Change requirement to python >= 3.12 (former 3.9)
+
+## [v0.1.3] 12/11/2025
+  - Deleted Gene & Genome since they're outdated and their positioning overlaps with SeqEntry & SeqCollections.
+  - Add new CLI: `omibio fastq to-fasta`, `omibio fastq view`, `omibio fasta info`.
+  - Add at_content() method to Sequence class.
+  - Motify write_fasta() & write_fastq(): now support only return list of lines without writing to a specific file.

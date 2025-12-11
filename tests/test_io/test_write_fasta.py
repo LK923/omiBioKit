@@ -1,5 +1,4 @@
 import pytest
-from pathlib import Path
 from omibio.io.write_fasta import write_fasta
 
 
