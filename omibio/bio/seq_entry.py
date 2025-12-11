@@ -4,7 +4,7 @@ from omibio.utils.truncate_repr import truncate_repr
 from typing import Any
 
 
-@dataclass
+@dataclass(slots=True)
 class SeqEntry:
     seq: Sequence | Polypeptide
     seq_id: str

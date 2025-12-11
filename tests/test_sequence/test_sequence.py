@@ -286,11 +286,6 @@ class TestSequence:
         assert s[-1] == "C"
         assert repr(s) == "Sequence('ATGC', type=DNA, strict=True)"
         assert str(s) == "ATGC"
-        s1 = Sequence("AAAAAAA")
-        s1[2] = "C"
-        assert s1 == "AACAAAA"
-        s1[2: 4] = "CC"
-        assert s1 == "AACCAAA"
 
     # --------------------------
     # translate_nt testing

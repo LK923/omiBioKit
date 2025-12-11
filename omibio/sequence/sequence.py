@@ -27,6 +27,11 @@ class Sequence:
                 "Sequence argument 'rna' must be bool or None, got "
                 + type(rna).__name__
             )
+        if not isinstance(strict, bool):
+            raise TypeError(
+                "Sequence argument 'strict' must be bool, got "
+                + type(strict).__name__
+            )
 
         self._is_rna = rna
         self._strict = strict

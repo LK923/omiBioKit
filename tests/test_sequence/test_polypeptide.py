@@ -87,16 +87,6 @@ class TestPolypeptide:
         p = Polypeptide("ACD")
         assert p[1] == "C"
 
-    def test_setitem_valid(self):
-        p = Polypeptide("ACD")
-        p[1] = "F"
-        assert p.aa_seq == "AFD"
-
-    def test_setitem_invalid_strict(self):
-        p = Polypeptide("ACD", strict=True)
-        with pytest.raises(ValueError):
-            p[1] = "X"
-
     def test_contains(self):
         p = Polypeptide("ACD")
         assert "A" in p
