@@ -403,7 +403,7 @@ def main():
         report=True, remove_illegal=True
     )
 
-    write_fasta(output_path, cleaned_seqs)
+    write_fasta(file_name=output_path, seqs=cleaned_seqs)
     print(f"Cleaned: {output_path}")
 
     write_report(report_path, report)

@@ -17,7 +17,7 @@ def read_fastq_iter(
     file_name: str,
     strict: bool = False,
     warn: bool = True,
-    skip_invalid_seq: bool = True
+    skip_invalid_seq: bool = False
 ) -> Generator["SeqEntry"]:
     from omibio.bio import SeqEntry
     from omibio.sequence import Sequence
@@ -124,7 +124,7 @@ def read_fastq(
     file_name: str,
     strict: bool = False,
     warn: bool = True,
-    skip_invalid_seq: bool = True
+    skip_invalid_seq: bool = False
 ) -> "SeqCollections":
     from omibio.bio import SeqCollections
 

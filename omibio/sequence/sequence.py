@@ -130,6 +130,17 @@ class Sequence:
         return (round(gc / seq_length, 4) if not percent
                 else f"{(gc / seq_length) * 100:.2f}%")
 
+    def at_content(self, percent: bool = False) -> float | str:
+        """Calculate and return the AT content of the sequence."""
+        seq_length = len(self.sequence)
+        if seq_length == 0:
+            return 0.0 if not percent else "0.00%"
+
+        at = self.sequence.count("A") + self.sequence.count("T")
+
+        return (round(at / seq_length, 4) if not percent
+                else f"{(at / seq_length) * 100:.2f}%")
+
     def complement(self) -> "Sequence":
         """Return the complement of the sequence."""
         if self._is_rna is True:

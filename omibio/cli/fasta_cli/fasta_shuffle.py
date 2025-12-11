@@ -8,7 +8,6 @@ from omibio.io import read_fasta, write_fasta
 @click.option(
     "-o", "--output",
     type=click.Path(),
-    required=True,
     help="Output file path."
 )
 @click.option(
@@ -39,5 +38,5 @@ def shuffle(
         shuffled = shuffle_seq(seq, seed=seq_seed, as_str=True)
         res[name] = shuffled
 
-    write_fasta(output, res)
+    write_fasta(file_name=output, seqs=res)
     click.echo(f"Success: file writed to {output}")

@@ -15,8 +15,6 @@
 
 ### bio/
   - analysis_result.py
-  - gene.py
-  - genome.py
   - seq_collections.py
   - seq_entry.py
   - seq_interval.py
@@ -28,8 +26,14 @@
 
   ### fasta_cli/
     - fasta_clean.py
+    - fasta_info.py
     - fasta_shuffle.py
     - fasta_view.py
+
+
+  ### fastq_cli/
+    - fastq_to_fasta.py
+    - fastq_view.py
 
 
   ### gc_cli/

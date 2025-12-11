@@ -3,8 +3,8 @@ from omibio.bio import SeqCollections
 
 
 def write_fastq(
-    file_name: str,
-    seqs:  SeqCollections
+    seqs:  SeqCollections,
+    file_name: str | None = None,
 ) -> list[str]:
     if not seqs:
         return []
@@ -13,28 +13,25 @@ def write_fastq(
             "write_fastq() argument 'seqs' must be SeqCollections, "
             f"got {type(seqs).__name__}"
         )
-    file_path = Path(file_name)
-    file_path.parent.mkdir(parents=True, exist_ok=True)
 
     lines = []
 
-    try:
-        with file_path.open("w", encoding="utf-8") as f:
-            for entry in seqs.entry_list():
-                f.write(f"@{entry.seq_id}\n")
-                lines.append(f"@{entry.seq_id}\n")
+    for entry in seqs.entry_list():
+        lines.append(f"@{entry.seq_id}")
+        lines.append(str(entry.seq))
+        lines.append("+")
+        lines.append(entry.qual)
 
-                f.write(str(entry.seq) + "\n")
-                lines.append(str(entry.seq) + "\n")
-
-                f.write("+\n")
-                lines.append("+\n")
-
-                f.write(entry.qual + "\n")
-                lines.append(entry.qual + "\n")
-
-    except OSError as e:
-        raise OSError(f"Could not write fastq to '{file_name}': {e}") from e
+    if file_name is not None:
+        try:
+            file_path = Path(file_name)
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            with file_path.open("w", encoding="utf-8") as f:
+                f.writelines(line + "\n" for line in lines)
+        except OSError as e:
+            raise OSError(
+                f"Could not write fastq to '{file_name}': {e}"
+            ) from e
 
     return lines
 
@@ -46,9 +43,9 @@ def main():
     output_path = r"./examples/output/write_fastq_output.fastq"
 
     seqs = read_fastq(input_path)
-    lines = write_fastq(output_path, seqs)
+    lines = write_fastq(seqs, output_path)
     print(output_path)
-    print("".join(lines))
+    print("\n".join(lines))
 
 
 if __name__ == "__main__":

@@ -15,13 +15,15 @@ def version():
 
 
 def register_commands():
-    from .fasta_cli import fasta_group
-    from .gc_cli import gc_group
-    from .orf_cli import orf
-    from .random_fasta_cli import random_fasta
+    from omibio.cli.fasta_cli import fasta_group
+    from omibio.cli.fastq_cli import fastq_group
+    from omibio.cli.gc_cli import gc_group
+    from omibio.cli.orf_cli import orf
+    from omibio.cli.random_fasta_cli import random_fasta
 
     cli.add_command(gc_group, name="gc")
     cli.add_command(fasta_group, name="fasta")
+    cli.add_command(fastq_group, name="fastq")
     cli.add_command(orf)
     cli.add_command(random_fasta)
 

@@ -104,5 +104,5 @@ def clean(
         cleaned = res[0]
     else:
         cleaned = res
-    write_fasta(output, cleaned)
+    write_fasta(file_name=output, seqs=cleaned)
     click.echo(f"Success: file writed to {output}")

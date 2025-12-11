@@ -14,7 +14,7 @@
 **omiBio** is a lightweight, user-friendly Python toolkit for bioinformatics — ideal for education, research, and rapid prototyping.
 
  **Key features**:
--  **Robust data structures**: `Sequence`, `Polypeptide`, `Gene`, `Genome`, etc., with optional validation.
+-  **Robust data structures**: `Sequence`, `Polypeptide`, etc., with optional validation.
 -  **Simple I/O**: Read/write bioinformatics files (e.g., FASTA) with one-liners.
 -  **Analysis tools**: GC content, ORF detection, consensus sequences, sliding windows, and more.
 -  **CLI included**: Run common tasks from the terminal .
@@ -28,7 +28,7 @@ The **omiBio** toolkit is organized into the following modules:
 | Module | Purpose | Key Classes / Functions |
 |--------|---------|------------------------|
 | `omibio.sequence` | Sequence-type data structures | `Sequence`, `Polypeptide` |
-| `omibio.bio` | Biological objects and data containers | `SeqInterval`, `Gene`, `Genome` |
+| `omibio.bio` | Biological objects and data containers | `SeqInterval`, `AnalysisResult` |
 | `omibio.io` | File I/O for common bioinformatics formats | `read_fasta()`, `read_fastq()` |
 | `omibio.analysis` | Sequence analysis functions | `gc()`, `sliding_gc()`, `find_orfs()` |
 | `omibio.utils` | General-purpose utility functions | `truncate_repr()` |
