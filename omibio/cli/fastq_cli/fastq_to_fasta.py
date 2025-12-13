@@ -1,10 +1,15 @@
 import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter, write_fasta
+import sys
 
 
 @fastq_group.command()
-@click.argument("fastq_file", type=click.Path(exists=True))
+@click.argument(
+    "fastq_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "--output", "-o",
     type=click.Path(),
@@ -26,7 +31,8 @@ def to_fasta(
     line_len: int,
     prefix: str
 ):
-    result = read_fastq_iter(fastq_file)
+    fh = fastq_file or sys.stdin
+    result = read_fastq_iter(fh)
 
     if prefix is not None:
         count = 1
@@ -41,6 +47,5 @@ def to_fasta(
         write_fasta(seqs=seqs, file_name=output, line_len=int(line_len))
         click.echo(f"Written to {output}")
     else:
-        lines = write_fasta(seqs=seqs, line_len=int(line_len))
-        for line in lines:
+        for line in write_fasta(seqs=seqs, line_len=int(line_len)):
             click.echo(line)

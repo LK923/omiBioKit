@@ -1,10 +1,15 @@
 import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter
+import sys
 
 
 @fastq_group.command()
-@click.argument("fastq_file", type=click.Path(exists=True))
+@click.argument(
+    "fastq_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "--head", "-h",
     type=int,
@@ -29,6 +34,10 @@ from omibio.io import read_fastq_iter
     "--max-length", "-max",
     type=int,
 )
+@click.option(
+    "--verbose", "-v",
+    is_flag=True
+)
 def view(
     fastq_file: str,
     head: int,
@@ -36,11 +45,15 @@ def view(
     lengths: bool,
     id_only: bool,
     min_length: int,
-    max_length: int
+    max_length: int,
+    verbose: bool
 ):
     """View FASTQ file."""
+
+    fh = fastq_file or sys.stdin
+
     count = 0
-    result = read_fastq_iter(fastq_file)
+    result = read_fastq_iter(fh)
 
     if min_length and max_length:
         if min_length > max_length:
@@ -58,14 +71,19 @@ def view(
             return f"{entry.seq_id}\t{len(entry.seq)}"
         return f"@{entry.seq_id}\n{entry.seq}\n+\n{entry.qual}"
 
-    def check_length(entry) -> bool:
-        length = len(entry.seq)
-        return not (
-            (min_length and length < min_length)
-            or (max_length and length > max_length)
-        )
+    if min_length or max_length:
+        def check_length(entry) -> bool:
+            length = len(entry.seq)
+            return not (
+                (min_length and length < min_length)
+                or (max_length and length > max_length)
+            )
+    else:
+        def check_length(entry) -> bool:
+            return True
 
-    click.echo(f"File: {fastq_file}")
+    if verbose:
+        click.echo(f"File: {fastq_file}")
 
     if head is not None:
         for entry in result:
@@ -88,4 +106,5 @@ def view(
             if check_length(entry):
                 click.echo(message(entry))
 
-    click.echo(f"All {count} sequence(s) showed")
+    if verbose:
+        click.echo(f"All {count} sequence(s) showed")

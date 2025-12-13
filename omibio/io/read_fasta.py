@@ -1,11 +1,18 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING, Generator, TextIO, cast
+from os import PathLike
 import warnings
 if TYPE_CHECKING:
     from omibio.bio import SeqCollections, SeqEntry
 
-VALID_NT = set("ATUCGRYKMBVDHSWN")
-VALID_AA = set("ACDEFGHIKLMNPQRSTVWYX*")
+VALID_NT = {
+    "A", "T", "U", "C", "G", "R", "Y", "K",
+    "M", "B", "V", "D", "H", "S", "W", "N", "-"
+}
+VALID_AA = {
+    "A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M",
+    "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "X", "*"
+}
 
 
 class FastaFormatError(Exception):
@@ -15,7 +22,7 @@ class FastaFormatError(Exception):
 
 
 def read_fasta_iter(
-    file_name: str,
+    source: str | TextIO | PathLike,
     strict: bool = False,
     warn: bool = True,
     output_strict: bool = False,
@@ -24,16 +31,23 @@ def read_fasta_iter(
     from omibio.sequence import Sequence, Polypeptide
     from omibio.bio import SeqEntry
 
-    file_path = Path(file_name)
-    if not file_path.exists():
-        raise FileNotFoundError(f"File '{file_name}' not found.")
+    if hasattr(source, "read"):
+        fh = cast(TextIO, source)
+        file_name = "<stdin>"
+        faa = False
+    else:
+        file_path = Path(source)
+        if not file_path.exists():
+            raise FileNotFoundError(f"File '{source}' not found.")
 
-    suffix = file_path.suffix.lower()
-    if suffix not in {".faa", ".fa", ".fasta", ".fna"}:
-        raise FastaFormatError(
-            f"Invalid format to read: {suffix}"
-        )
-    faa = (suffix == ".faa")
+        suffix = file_path.suffix.lower()
+        if suffix not in {".faa", ".fa", ".fasta", ".fna"}:
+            raise FastaFormatError(
+                f"Invalid format to read: {suffix}"
+            )
+        faa = (suffix == ".faa")
+        file_name = str(file_path)
+        fh = open(file_path, "r")
 
     current_name = None
     current_seq: list[str] = []
@@ -59,9 +73,8 @@ def read_fasta_iter(
 
         return SeqEntry(seq=seq_obj, seq_id=current_name, source=file_name)
 
-    with open(file_name, "r") as file:
-
-        for i, line in enumerate(file, start=1):
+    try:
+        for i, line in enumerate(fh, start=1):
             line = line.split("#", 1)[0].strip()
             if not line:
                 continue
@@ -93,8 +106,8 @@ def read_fasta_iter(
                 # Store sequence.
                 line = line.upper()
                 skip_record = False
-                for char in line:
-                    if char not in allowed_set:
+                if strict or warn or skip_invalid_seq:
+                    if any(c not in allowed_set for c in line):
                         if strict:
                             raise FastaFormatError(
                                 f"Invalid sequence in line {i}: {line}"
@@ -107,7 +120,6 @@ def read_fasta_iter(
                             )
                         if skip_invalid_seq:
                             skip_record = True
-                            break
                 if skip_record:
                     current_name = None
                     current_seq.clear()
@@ -119,10 +131,13 @@ def read_fasta_iter(
         entry = push_entry()
         if entry:
             yield entry
+    finally:
+        if not hasattr(source, "read"):
+            fh.close()
 
 
 def read_fasta(
-    file_name: str,
+    source: str | TextIO | PathLike,
     strict: bool = False,
     output_strict: bool = False,
     warn: bool = True,
@@ -132,13 +147,18 @@ def read_fasta(
 
     entries = []
     for entry in read_fasta_iter(
-        file_name,
+        source,
         strict=strict,
         output_strict=output_strict,
         warn=warn,
         skip_invalid_seq=skip_invalid_seq
     ):
         entries.append(entry)
+
+    if hasattr(source, "read"):
+        file_name = "<stdin>"
+    else:
+        file_name = str(source)
 
     return SeqCollections(entries=entries, source=file_name)
 

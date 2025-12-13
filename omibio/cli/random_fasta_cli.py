@@ -4,7 +4,7 @@ from omibio.sequence.seq_utils.random_seq import random_fasta as rf
 
 
 @cli.command()
-@click.argument("output", type=str)
+@click.argument("output", type=str, required=False)
 @click.option(
     "-n", "--number",
     type=int,
@@ -44,8 +44,12 @@ def random_fasta(
 ) -> None:
     """Generate random nucleotide sequence(s) and output in FASTA format."""
 
-    rf(
+    res = rf(
         file_path=output, seq_num=number, length=length,  alphabet=alphabet,
         prefix=prefix, seed=seed
     )
-    click.echo(f"Success: file writed to {output}")
+    if output is not None:
+        click.echo(f"Success: file writed to {output}")
+    else:
+        for line in res:
+            click.echo(line)

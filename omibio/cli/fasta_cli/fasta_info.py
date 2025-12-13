@@ -1,12 +1,18 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter
+import sys
 
 
 @fasta_group.command()
-@click.argument("fasta_file", type=click.Path(exists=True))
+@click.argument(
+    "fasta_file",
+    type=click.File("r"),
+    required=False
+)
 def info(fasta_file):
-    result = [e.seq for e in read_fasta_iter(fasta_file)]
+    fh = fasta_file or sys.stdin
+    result = [e.seq for e in read_fasta_iter(fh)]
 
     seq_num = len(result)
     total_len = sum(len(seq) for seq in result)

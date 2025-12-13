@@ -1,10 +1,15 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter
+import sys
 
 
 @fasta_group.command()
-@click.argument("fasta_file", type=click.Path(exists=True))
+@click.argument(
+    "fasta_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "--head", "-h",
     type=int,
@@ -22,6 +27,10 @@ from omibio.io import read_fasta_iter
     is_flag=True
 )
 @click.option(
+    "--verbose", "-v",
+    is_flag=True
+)
+@click.option(
     "--min-length", "-min",
     type=int,
 )
@@ -35,12 +44,15 @@ def view(
     tail: int,
     id_only: bool,
     lengths: bool,
+    verbose: bool,
     min_length: int,
     max_length: int
 ):
     """View FASTA file."""
+    fh = fasta_file or sys.stdin
+
     count = 0
-    result = read_fasta_iter(fasta_file)
+    result = read_fasta_iter(fh)
 
     if min_length and max_length:
         if min_length > max_length:
@@ -58,14 +70,19 @@ def view(
             return (f"{entry.seq_id}\t{len(entry.seq)}")
         return f">{entry.seq_id}\n{entry.seq}"
 
-    def check_length(entry) -> bool:
-        length = len(entry.seq)
-        return not (
-            (min_length and length < min_length)
-            or (max_length and length > max_length)
-        )
+    if min_length or max_length:
+        def check_length(entry) -> bool:
+            length = len(entry.seq)
+            return not (
+                (min_length and length < min_length)
+                or (max_length and length > max_length)
+            )
+    else:
+        def check_length(entry) -> bool:
+            return True
 
-    click.echo(f"File: {fasta_file}")
+    if verbose:
+        click.echo(f"File: {fasta_file}")
 
     if head is not None:
         for entry in result:
@@ -88,4 +105,5 @@ def view(
             if check_length(entry):
                 click.echo(message(entry))
 
-    click.echo(f"All {count} sequence(s) showed")
+    if verbose:
+        click.echo(f"All {count} sequence(s) showed")

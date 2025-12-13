@@ -55,7 +55,7 @@ def sliding_gc(
                     start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
                 )
             ],
-            seq_id=seq_id, type="sliding_gc",
+            seq_id=seq_id, type="sliding_gc", plot_func=plot_sliding_gc,
             metadata={
                 "seq_length": n,
                 "sequence": str(seq)

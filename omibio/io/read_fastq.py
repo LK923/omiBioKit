@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING, Generator, TextIO, cast
+from os import PathLike
 import warnings
 if TYPE_CHECKING:
     from omibio.bio import SeqCollections, SeqEntry
@@ -14,7 +15,7 @@ class FastqFormatError(Exception):
 
 
 def read_fastq_iter(
-    file_name: str,
+    source: str | TextIO | PathLike,
     strict: bool = False,
     warn: bool = True,
     skip_invalid_seq: bool = False
@@ -22,21 +23,27 @@ def read_fastq_iter(
     from omibio.bio import SeqEntry
     from omibio.sequence import Sequence
 
-    file_path = Path(file_name)
-    if not file_path.exists():
-        raise FileNotFoundError(f"File '{file_name}' not found.")
+    if hasattr(source, "read"):
+        fh = cast(TextIO, source)
+        file_name = "<stdin>"
+    else:
+        file_path = Path(source)
+        if not file_path.exists():
+            raise FileNotFoundError(f"File '{source}' not found.")
 
-    suffix = file_path.suffix.lower()
-    if suffix not in {".fastq", ".fq"}:
-        raise FastqFormatError(
-            f"Invalid format to read: {suffix}"
-        )
+        suffix = file_path.suffix.lower()
+        if suffix not in {".fastq", ".fq"}:
+            raise FastqFormatError(
+                f"Invalid format to read: {suffix}"
+            )
+        file_name = str(file_path)
+        fh = open(file_path, "r")
 
-    with open(file_name, "r") as file:
+    try:
         line_num = 0
 
         while True:
-            header = file.readline()
+            header = fh.readline()
             line_num += 1
             if not header:
                 break
@@ -50,9 +57,9 @@ def read_fastq_iter(
                     f"Line {line_num}: FASTQ header must start with '@', "
                     f"got: {header}"
                 )
-            seq = file.readline()
-            plus = file.readline()
-            qual = file.readline()
+            seq = fh.readline()
+            plus = fh.readline()
+            qual = fh.readline()
             line_num += 3
 
             seq, plus, qual = seq.rstrip(), plus.rstrip(), qual.rstrip()
@@ -111,10 +118,13 @@ def read_fastq_iter(
                     seq=Sequence(seq), seq_id=header[1:],
                     qual=qual, source=file_name
                 )
+    finally:
+        if not hasattr(source, "read"):
+            fh.close()
 
 
 def read_fastq(
-    file_name: str,
+    source: str | TextIO | PathLike,
     strict: bool = False,
     warn: bool = True,
     skip_invalid_seq: bool = False
@@ -123,12 +133,17 @@ def read_fastq(
 
     entries = []
     for entry in read_fastq_iter(
-        file_name,
+        source,
         strict=strict,
         warn=warn,
         skip_invalid_seq=skip_invalid_seq
     ):
         entries.append(entry)
+
+    if hasattr(source, "read"):
+        file_name = "<stdin>"
+    else:
+        file_name = str(source)
 
     return SeqCollections(entries=entries, source=file_name)
 

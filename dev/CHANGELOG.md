@@ -23,4 +23,4 @@
   - Motify write_fasta() & write_fastq(): now support only return list of lines without writing to a specific file.
 
 ## [v0.1.3] 12/12/2025
-  - Add tests, coverage > 95%
+  - Add tests, coverage >= 95%

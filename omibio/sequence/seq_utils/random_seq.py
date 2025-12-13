@@ -66,14 +66,14 @@ def random_seq(
 
 
 def random_fasta(
-    file_path: str,
     seq_num: int,
     length: int,
+    file_path: str | None = None,
     alphabet: str = "ATCG",
     prefix: str = "Sequence",
     weights: list[float] | None = None,
     seed: int | None = None,
-) -> None:
+) -> list[str]:
     """Generate a FASTA file containing a random sequence.
 
     Args:
@@ -102,7 +102,11 @@ def random_fasta(
             length=length, alphabet=alphabet,
             weights=weights, as_str=True, seed=seq_seed
         )
-    write_fasta(file_name=file_path, seqs=seq_dict)
+    if file_path is not None:
+        res = write_fasta(file_name=file_path, seqs=seq_dict)
+    else:
+        res = write_fasta(seqs=seq_dict)
+    return res
 
 
 def main():

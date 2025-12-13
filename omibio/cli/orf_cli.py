@@ -4,10 +4,15 @@ from omibio.io import read_fasta
 from omibio.analysis.find_orfs import find_orfs
 from omibio.sequence import Polypeptide
 import csv
+import sys
 
 
 @cli.command()
-@click.argument("fasta_file", type=click.Path(exists=True))
+@click.argument(
+    "fasta_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "--min-length",
     type=int,
@@ -78,7 +83,9 @@ def orf(
         codon.strip().upper() for codon in start_codons.split(",")
     }
 
-    seqs = read_fasta(fasta_file, strict=False).seq_dict()
+    fh = fasta_file or sys.stdin
+
+    seqs = read_fasta(fh).seq_dict()
     all_orfs = []
 
     for seq_id, seq_obj in seqs.items():
@@ -123,7 +130,7 @@ def orf(
     if output is None:
         for base_fields in res:
             click.echo("\t".join(str(f) for f in base_fields))
-        click.echo(f"Total: {len(res) - 1} ORFs found")
+        click.echo(f"Total: {len(res)} ORFs found")
     else:
         with open(output, "w", newline="", encoding="utf-8") as f:
             header = ["seq_id", "start", "end", "strand", "frame", "length"]

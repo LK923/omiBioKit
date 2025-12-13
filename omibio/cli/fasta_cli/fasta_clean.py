@@ -1,14 +1,18 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
+import sys
 
 
 @fasta_group.command()
-@click.argument("fasta_file", type=click.Path(exists=True))
+@click.argument(
+    "fasta_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "-o", "--output",
     type=click.Path(),
-    required=True,
     help="Output file path."
 )
 @click.option(
@@ -86,7 +90,9 @@ def clean(
     """
     from omibio.sequence.seq_utils.clean import clean as c_f
 
-    seqs = read_fasta(fasta_file, strict=False).seq_dict()
+    fh = fasta_file or sys.stdin
+
+    seqs = read_fasta(fh, strict=False).seq_dict()
     res = c_f(
         seqs,
         name_policy=name_policy,
@@ -104,5 +110,8 @@ def clean(
         cleaned = res[0]
     else:
         cleaned = res
-    write_fasta(file_name=output, seqs=cleaned)
-    click.echo(f"Success: file writed to {output}")
+    if output is not None:
+        write_fasta(file_name=output, seqs=cleaned)
+    else:
+        for line in write_fasta(seqs=cleaned):
+            click.echo(line)

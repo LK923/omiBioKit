@@ -7,10 +7,15 @@ import matplotlib.pyplot as plt
 import os
 import csv
 import warnings
+import sys
 
 
 @gc_group.command()
-@click.argument("fasta_file", type=click.Path(exists=True))
+@click.argument(
+    "fasta_file",
+    type=click.File("r"),
+    required=False
+)
 @click.option(
     "--window", "-w",
     type=int,
@@ -67,6 +72,8 @@ def sliding(
     Calculate and plot sliding window GC content for sequences in a FASTA file.
     """
 
+    fh = fasta_file or sys.stdin
+
     if save_image_to is not None:
         os.makedirs(save_image_to, exist_ok=True)
 
@@ -77,7 +84,7 @@ def sliding(
             f"non-negative number, got {per_page}"
         )
 
-    entries = read_fasta(fasta_file)
+    entries = read_fasta(fh)
     if (len(entries) > 30) and (save_image_to or show) and (not no_warn):
         warnings.warn(
             f"\033[33mCreating sliding window gc image for {len(entries)} "
