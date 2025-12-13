@@ -21,3 +21,6 @@
   - Add new CLI: `omibio fastq to-fasta`, `omibio fastq view`, `omibio fasta info`.
   - Add at_content() method to Sequence class.
   - Motify write_fasta() & write_fastq(): now support only return list of lines without writing to a specific file.
+
+## [v0.1.3] 12/12/2025
+  - Add tests, coverage > 95%
