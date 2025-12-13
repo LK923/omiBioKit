@@ -40,10 +40,6 @@ class SeqCollections:
             raise ValueError(
                 f"Duplicate seq_id '{seq_id}'"
             )
-        if self._source != entry.source:
-            raise ValueError(
-                f"unmatch sources: {self._source} and {entry.source}"
-            )
         self._entries[seq_id] = entry
 
     def get_entry(self, seq_id: str) -> SeqEntry:

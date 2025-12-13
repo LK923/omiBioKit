@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 VALID_NT = {
     "A", "T", "U", "C", "G", "R", "Y", "K",
-    "M", "B", "V", "D", "H", "S", "W", "N", "-"
+    "M", "B", "V", "D", "H", "S", "W", "N"
 }
 VALID_AA = {
     "A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M",
@@ -164,11 +164,11 @@ def read_fasta(
 
 
 def main():
-    input_path = r"./examples/data/read_fasta_test.fasta"
+    input_path = r"./examples/data/example_lots_of_seqs.fasta"
     for entry in read_fasta(
         input_path, strict=False, skip_invalid_seq=True, warn=True
     ):
-        print(repr(entry))
+        print(entry.source)
 
 
 if __name__ == "__main__":

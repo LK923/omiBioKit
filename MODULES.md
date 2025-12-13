@@ -21,7 +21,6 @@
 
 
 ### cli/
-  - orf_cli.py
   - random_fasta_cli.py
 
   ### fasta_cli/
@@ -32,6 +31,7 @@
 
 
   ### fastq_cli/
+    - fastq_info.py
     - fastq_to_fasta.py
     - fastq_view.py
 
@@ -39,6 +39,18 @@
   ### gc_cli/
     - gc_compute.py
     - gc_sliding_window.py
+
+
+  ### kmer_cli/
+    - kmer_count.py
+
+
+  ### orf_cli/
+    - orf_find.py
+
+
+  ### plot_cli/
+    - plot_window_gc_cli.py
 
 
 

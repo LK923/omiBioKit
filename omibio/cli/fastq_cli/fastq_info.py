@@ -1,19 +1,37 @@
 import click
-from omibio.cli.fasta_cli import fasta_group
-from omibio.io import read_fasta_iter
+from omibio.cli.fastq_cli import fastq_group
+from omibio.io import read_fastq_iter
 import sys
 
 
-@fasta_group.command()
+@fastq_group.command()
 @click.argument(
-    "fasta_file",
+    "fastq_file",
     type=click.File("r"),
     required=False
 )
-def info(fasta_file):
-    """Display information about a FASTA file."""
-    fh = fasta_file or sys.stdin
-    result = [e.seq for e in read_fasta_iter(fh)]
+def info(fastq_file):
+    """Display information about a FASTQ file."""
+    fh = fastq_file or sys.stdin
+    entries = read_fastq_iter(fh)
+    result = []
+    sum_q = 0
+    min_q = 100
+    max_q = 0
+    q_20 = 0
+    q_30 = 0
+
+    for entry in entries:
+        result.append(entry.seq)
+        for c in entry.qual:
+            q = ord(c) - 33
+            sum_q += q
+            min_q = min(min_q, q)
+            max_q = max(max_q, q)
+            if q >= 20:
+                q_20 += 1
+            if q >= 30:
+                q_30 += 1
 
     seq_num = len(result)
     total_len = sum(len(seq) for seq in result)
@@ -39,4 +57,10 @@ def info(fasta_file):
         f"AT content:\t{at}%\n"
         f"N content:\t{round((ns / total_len) * 100, 2)}% ({ns} Ns)\n"
         f"Ambiguous:\t{round((ambiguous / total_len) * 100, 2)}% ({ambiguous} Ambiguous)\n"  # noqa
+        "\n"
+        f"Average qual:\t{(sum_q / total_len):.2f}\n"
+        f"Min qual:\t{min_q}\n"
+        f"Max qual:\t{max_q}\n"
+        f"q20 bases:\t{round((q_20 / total_len) * 100, 2)}% ({q_20} q20 bases)\n"  # noqa
+        f"q30 bases:\t{round((q_30 / total_len) * 100, 2)}% ({q_30} q30 bases)\n"  # noqa
     )

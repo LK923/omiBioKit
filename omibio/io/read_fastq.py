@@ -149,10 +149,10 @@ def read_fastq(
 
 
 def main():
-    input_path = r"./examples/data/read_fastq_test.fastq"
+    input_path = r"./examples/data/example_fastq.fastq"
     result = read_fastq_iter(input_path, warn=True)
     for entry in result:
-        print(repr(entry))
+        print(entry.qual)
 
 
 if __name__ == "__main__":

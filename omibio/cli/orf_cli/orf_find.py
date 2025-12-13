@@ -1,5 +1,5 @@
 import click
-from omibio.cli import cli
+from omibio.cli.orf_cli import orf_group
 from omibio.io import read_fasta
 from omibio.analysis.find_orfs import find_orfs
 from omibio.sequence import Polypeptide
@@ -7,7 +7,7 @@ import csv
 import sys
 
 
-@cli.command()
+@orf_group.command()
 @click.argument(
     "fasta_file",
     type=click.File("r"),
@@ -65,7 +65,7 @@ import sys
     is_flag=True,
     help="Whether to show orf sequence."
 )
-def orf(
+def find(
     fasta_file: str,
     min_length: int,
     max_length: int,

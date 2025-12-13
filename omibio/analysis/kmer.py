@@ -1,4 +1,4 @@
-from omibio.sequence.sequence import Sequence
+from omibio.sequence.sequence import Sequence, Polypeptide
 from collections import Counter
 from omibio.sequence.seq_utils.complement import reverse_complement
 
@@ -9,8 +9,9 @@ VALID_BASES = {
 
 
 def kmer(
-    seq: Sequence | str,
-    k: int, canonical: bool = False,
+    seq: Sequence | str | Polypeptide,
+    k: int,
+    canonical: bool = False,
     min_count: int = 1,
     strict: bool = False
 ) -> dict[str, int]:

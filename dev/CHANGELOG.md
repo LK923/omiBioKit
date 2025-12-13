@@ -24,3 +24,6 @@
 
 ## [v0.1.3] 12/12/2025
   - Add tests, coverage >= 95%
+
+## [v0.1.3] 12/13/2025
+  - Enhence CLI: support sdtin & stdout

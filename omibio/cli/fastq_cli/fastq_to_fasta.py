@@ -31,6 +31,7 @@ def to_fasta(
     line_len: int,
     prefix: str
 ):
+    """Convert FASTQ to FASTA format."""
     fh = fastq_file or sys.stdin
     result = read_fastq_iter(fh)
 

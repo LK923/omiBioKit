@@ -48,7 +48,7 @@ def sliding_gc(
 
     if window >= n:
         gc_count = sum(1 for b in seq if b in 'GC')
-        gc_percent = round((gc_count / n) * 100, 2)
+        gc_percent = round((gc_count / n), 3)
         return AnalysisResult(
             intervals=[
                 SeqInterval(
@@ -68,7 +68,7 @@ def sliding_gc(
     gc_list = [
         SeqInterval(
             start=0, end=window,
-            gc=round((gc_count / window) * 100, 2), type="GC", seq_id=seq_id
+            gc=round((gc_count / window), 3), type="GC", seq_id=seq_id
         )
     ]
 
@@ -76,7 +76,7 @@ def sliding_gc(
         gc_count -= sum(is_gc[i-step: i])
         gc_count += sum(is_gc[i+window-step: i+window])
 
-        gc_percent = round((gc_count / window) * 100, 2)
+        gc_percent = round((gc_count / window), 3)
         gc_list.append(
             SeqInterval(
                 start=i, end=i+window,

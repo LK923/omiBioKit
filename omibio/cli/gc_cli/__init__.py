@@ -9,10 +9,10 @@ def gc_group():
 
 def register_commands():
     from .gc_compute import compute
-    from .gc_sliding_window import sliding
+    from .gc_sliding_window import window
 
     gc_group.add_command(compute)
-    gc_group.add_command(sliding)
+    gc_group.add_command(window)
 
 
 register_commands()

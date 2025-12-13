@@ -40,7 +40,7 @@ def plot_sliding_gc(
         for window in gc_list if window.gc is not None
     ]
     gc_vals = [
-        window.gc for window in gc_list
+        window.gc * 100 for window in gc_list
         if window.gc is not None
     ]
     window_average = sum(gc_vals) / len(gc_vals)

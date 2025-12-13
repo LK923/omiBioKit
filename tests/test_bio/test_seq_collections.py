@@ -58,12 +58,6 @@ class TestSeqCollections:
         with pytest.raises(ValueError):
             sc.add_entry(self.make_entry("dup"))
 
-    def test_add_entry_source_mismatch(self):
-        e = self.make_entry("a", source="src1")
-        sc = SeqCollections(entries=[e], source="src1")
-        with pytest.raises(ValueError):
-            sc.add_entry(self.make_entry("b", source="src2"))
-
     def test_get_entry(self):
         e = self.make_entry("g")
         sc = SeqCollections(entries=[e], source="test")
