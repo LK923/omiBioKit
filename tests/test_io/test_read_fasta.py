@@ -1,102 +1,156 @@
 import pytest
-from unittest.mock import patch
-from omibio.io.read_fasta import read_fasta, FastaFormatError
-from omibio.sequence.sequence import Sequence
+from omibio.bio import SeqEntry, SeqCollections
+from omibio.io.read_fasta import (
+    read_fasta_iter,
+    read_fasta,
+    FastaFormatError,
+)
 
 
 class TestReadFasta:
+    def write(self, tmp_path, name, text):
+        p = tmp_path / name
+        p.write_text(text)
+        return p
+
     def test_file_not_found(self):
         with pytest.raises(FileNotFoundError):
-            read_fasta("no_such_file.fasta")
+            list(read_fasta_iter("no_such_file.fa"))
 
-    def test_invalid_extension(self, tmp_path):
-        p = tmp_path / "abc.txt"
-        p.write_text(">seq1\nATGC")
+    def test_invalid_suffix(self, tmp_path):
+        p = self.write(tmp_path, "a.txt", ">a\nATGC\n")
         with pytest.raises(FastaFormatError):
-            read_fasta(str(p))
+            list(read_fasta_iter(str(p)))
 
-    def test_missing_seq_name(self, tmp_path):
-        p = tmp_path / "bad.fasta"
-        p.write_text(">\nATGC")
+    def test_read_single_record(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\nATGC\n")
+        res = list(read_fasta_iter(str(p)))
+        assert len(res) == 1
+        assert isinstance(res[0], SeqEntry)
+        assert res[0].seq_id == "a"
+        assert str(res[0].seq) == "ATGC"
+
+    def test_read_multiple_records(self, tmp_path):
+        p = self.write(
+            tmp_path,
+            "a.fa",
+            ">a\nATGC\n>b\nGG\n",
+        )
+        res = list(read_fasta_iter(str(p)))
+        assert [e.seq_id for e in res] == ["a", "b"]
+
+    def test_missing_seq_non_strict(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\n>b\nAT\n")
+        res = list(read_fasta_iter(str(p), strict=False, warn=False))
+        assert len(res) == 1
+        assert res[0].seq_id == "b"
+
+    def test_missing_seq_strict(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\n>b\nAT\n")
         with pytest.raises(FastaFormatError):
-            read_fasta(str(p), strict=True)
+            list(read_fasta_iter(str(p), strict=True))
 
-    def test_duplicate_name(self, tmp_path):
-        p = tmp_path / "dup.fasta"
-        p.write_text(">a\nAT\n>a\nGC")
-        with pytest.raises(ValueError):
-            read_fasta(str(p))
+    def test_missing_name_non_strict(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">\nATGC\n>a\nAT\n")
+        res = list(read_fasta_iter(str(p), strict=False, warn=False))
+        assert len(res) == 1
+        assert res[0].seq_id == "a"
 
-    def test_invalid_seq_strict_dna(self, tmp_path):
-        p = tmp_path / "bad.fasta"
-        p.write_text(">seq\nATL")
+    def test_missing_name_strict(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">\nATGC\n")
         with pytest.raises(FastaFormatError):
-            read_fasta(str(p), strict=True)
+            list(read_fasta_iter(str(p), strict=True))
 
-    def test_basic_read_as_str(self, tmp_path):
-        p = tmp_path / "ok.fasta"
-        p.write_text(">seq\nATGC")
-        r = read_fasta(str(p))
-        assert r["seq"] == "ATGC"
+    def test_invalid_char_non_strict_keep(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\nATXG\n")
+        res = list(
+            read_fasta_iter(
+                str(p),
+                strict=False,
+                warn=False,
+                skip_invalid_seq=False,
+            )
+        )
+        assert len(res) == 1
+        assert "X" in str(res[0].seq)
 
-    def test_basic_read_sequence_obj(self, tmp_path):
-        p = tmp_path / "ok.fasta"
-        p.write_text(">seq\nATGC")
-        r = read_fasta(str(p))
-        assert isinstance(r["seq"], Sequence)
-        assert str(r["seq"]) == "ATGC"
+    def test_invalid_char_skip_record(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\nATXG\n>b\nAT\n")
+        res = list(
+            read_fasta_iter(
+                str(p),
+                strict=False,
+                warn=False,
+                skip_invalid_seq=True,
+            )
+        )
+        assert len(res) == 1
+        assert res[0].seq_id == "b"
 
-    def test_multiline(self, tmp_path):
-        p = tmp_path / "ok.fasta"
-        p.write_text(">s\nAT\nGC")
-        r = read_fasta(str(p))
-        assert r["s"] == "ATGC"
+    def test_invalid_char_strict(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\nATXG\n")
+        with pytest.raises(FastaFormatError):
+            list(read_fasta_iter(str(p), strict=True))
+
+    def test_faa_protein(self, tmp_path):
+        p = self.write(tmp_path, "a.faa", ">p\nACDE\n")
+        res = list(read_fasta_iter(str(p)))
+        assert len(res) == 1
+        assert res[0].seq_id == "p"
+        assert str(res[0].seq) == "ACDE"
 
     def test_comment_and_blank_lines(self, tmp_path):
-        p = tmp_path / "ok.fasta"
-        p.write_text(">s\nAT#x\n\nGC")
-        r = read_fasta(str(p))
-        assert r["s"] == "ATGC"
+        p = self.write(
+            tmp_path,
+            "a.fa",
+            "# comment\n>a\nAT\n#x\nGC\n",
+        )
+        res = list(read_fasta_iter(str(p)))
+        assert str(res[0].seq) == "ATGC"
 
-    def test_protein_faa_strict(self, tmp_path):
-        p = tmp_path / "ok.faa"
-        p.write_text(">p\nACDE")
-        r = read_fasta(str(p))
-        assert r["p"] == "ACDE"
+    def test_read_fasta_collection(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\nAT\n>b\nGC\n")
+        col = read_fasta(str(p))
+        assert isinstance(col, SeqCollections)
+        assert len(col) == 2
+        assert "a" in col
+        assert "b" in col
 
-    def test_protein_faa_invalid(self, tmp_path):
-        p = tmp_path / "bad.faa"
-        p.write_text(">p\nACDEZ")
-        with pytest.raises(FastaFormatError):
-            read_fasta(str(p), strict=True)
+    def test_read_fasta_empty(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", "")
+        col = read_fasta(str(p))
+        assert len(col) == 0
 
-    def test_strict_false_accept_any(self, tmp_path):
-        p = tmp_path / "any.fasta"
-        p.write_text(">x\nA*.-xyz")
-        r = read_fasta(str(p), strict=False, warn=False)
-        assert r["x"] == "A*.-XYZ"
+    def test_warn(self, tmp_path):
+        p = self.write(tmp_path, "a.fa", ">a\n>b\nAT\n")
 
-    def test_output_strict_true(self, tmp_path):
-        p = tmp_path / "ok.fasta"
-        p.write_text(">x\nATGC")
-        r = read_fasta(str(p), output_strict=True)
-        assert isinstance(r["x"], Sequence)
-        assert str(r["x"]) == "ATGC"
+        with pytest.warns(UserWarning, match="Sequence missing"):
+            res = list(
+                read_fasta_iter(
+                    str(p),
+                    strict=False,
+                    warn=True,
+                )
+            )
 
-    def test_missing_Seq(self, tmp_path):
-        p = tmp_path / "ms.fasta"
-        p.write_text(">x\n>s\nACTG")
-        with pytest.raises(FastaFormatError):
-            read_fasta(str(p), strict=True, warn=False)
+        assert len(res) == 1
+        assert res[0].seq_id == "b"
 
-    def test_ioerror(self, tmp_path):
-        test_file = tmp_path / "file.fasta"
-        test_file.write_text(">seq1\nATG")
-
-        def mock_open(*args, **kwargs):
-            raise IOError("mocked IOError")
-
-        with patch("builtins.open", mock_open):
-            with pytest.raises(IOError) as excinfo:
-                read_fasta(str(test_file))
-            assert "mocked IOError" in str(excinfo.value)
+        p = self.write(tmp_path, "a.fa", ">\nACTG")
+        with pytest.warns(UserWarning, match="name missing"):
+            res = list(
+                read_fasta_iter(
+                    str(p),
+                    strict=False,
+                    warn=True,
+                )
+            )
+        p = self.write(tmp_path, "a.fa", ">a\nINVALID")
+        with pytest.warns(UserWarning, match="Invalid"):
+            res = list(
+                read_fasta_iter(
+                    str(p),
+                    strict=False,
+                    warn=True,
+                )
+            )

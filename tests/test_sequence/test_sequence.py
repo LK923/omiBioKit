@@ -244,6 +244,8 @@ class TestSequence:
         s = Sequence("")
         assert s.gc_content() == 0.0
         assert s.gc_content(percent=True) == "0.00%"
+        assert s.at_content() == 0.0
+        assert s.at_content(percent=True) == "0.00%"
         assert len(s) == 0
         assert s.complement().sequence == ""
         assert s.reverse_complement().sequence == ""
@@ -255,6 +257,11 @@ class TestSequence:
     # gc_content testing
     # --------------------------
     def test_gc_content_float_and_percent(self):
+        s = Sequence("ATGC", rna=False)
+        assert s.at_content() == 0.5
+        assert s.at_content(percent=True) == "50.00%"
+
+    def test_at_content_float_and_percent(self):
         s = Sequence("ATGC", rna=False)
         assert s.gc_content() == 0.5
         assert s.gc_content(percent=True) == "50.00%"

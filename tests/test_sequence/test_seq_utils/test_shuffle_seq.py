@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
-from omibio.sequence.sequence import Sequence
+from omibio.sequence.sequence import Sequence, Polypeptide
 
 
 class TestShuffleSeq:
@@ -94,3 +94,7 @@ class TestShuffleSeq:
     def test_byte_string_not_allowed(self):
         with pytest.raises(TypeError, match="must be Sequence or str"):
             shuffle_seq(b"ATCG")
+
+    def test_as_polypeptide(self):
+        res = shuffle_seq(Polypeptide("AASSAA"))
+        assert isinstance(res, Polypeptide)

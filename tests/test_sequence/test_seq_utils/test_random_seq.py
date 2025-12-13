@@ -1,5 +1,5 @@
 import pytest
-from omibio.sequence.sequence import Sequence
+from omibio.sequence.sequence import Sequence, Polypeptide
 from omibio.sequence.seq_utils.random_seq import random_seq, random_fasta
 
 
@@ -37,6 +37,10 @@ class TestRandomSeq:
             20, alphabet="AB", weights=[0.9, 0.1], seed=10, as_str=True
         )
         assert seq.count("A") > seq.count("B")
+
+    def test_as_polypeptide(self):
+        seq = random_seq(20, alphabet="AST", as_polypeptide=True)
+        assert isinstance(seq, Polypeptide)
 
 
 class TestRandomFasta:

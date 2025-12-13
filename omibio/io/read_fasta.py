@@ -76,11 +76,11 @@ def read_fasta_iter(
                 if not current_name:
                     if strict:
                         raise FastaFormatError(
-                            f"Sequence Name Missing in line {i}"
+                            f"Sequence name missing in line {i}"
                         )
                     elif warn:
                         warnings.warn(
-                            f"Sequence Name Missing in line {i}, "
+                            f"Sequence name missing in line {i}, "
                             "skip record"
                         )
                     current_name = None
@@ -97,11 +97,11 @@ def read_fasta_iter(
                     if char not in allowed_set:
                         if strict:
                             raise FastaFormatError(
-                                f"Invalid Sequence in line {i}: {line}"
+                                f"Invalid sequence in line {i}: {line}"
                             )
                         elif warn:
                             warnings.warn(
-                                f"Invalid Sequence in line {i}: {line}, "
+                                f"Invalid sequence in line {i}: {line}, "
                                 f"{'skip' if skip_invalid_seq else 'invalid'} "
                                 "record"
                             )

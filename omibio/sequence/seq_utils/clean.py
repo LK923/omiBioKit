@@ -71,7 +71,7 @@ def clean(
     remove_illegal: bool = False,
     allowed_bases: Iterable[str] | None = None,
     remove_empty: bool = True,
-    as_str: bool = True,
+    as_str: bool = False,
     as_polypeptide: bool = False,
     report: bool = False
 ) -> (

@@ -5,11 +5,10 @@ from omibio.sequence import Sequence, Polypeptide
 def shuffle_seq(
     seq: Sequence | Polypeptide | str,
     seed: int | None = None,
-    as_str: bool = False,
-    as_polypeptide: bool = False
+    as_str: bool = False
 ) -> Sequence | str | Polypeptide:
 
-    if not isinstance(seq, (Sequence, str)):
+    if not isinstance(seq, (Sequence, str, Polypeptide)):
         raise TypeError(
             "shuffle_seq() argument 'seq' must be Sequence or str, not "
             + type(seq).__name__
@@ -22,7 +21,7 @@ def shuffle_seq(
     shuffled = "".join(chars)
 
     if not as_str:
-        if as_polypeptide:
+        if isinstance(seq, Polypeptide):
             return Polypeptide(shuffled)
         else:
             return Sequence(shuffled)

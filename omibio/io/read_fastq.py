@@ -43,14 +43,6 @@ def read_fastq_iter(
 
             header = header.rstrip()
             if not header:
-                if strict:
-                    raise FastqFormatError(
-                        f"Empty line found in {line_num}"
-                    )
-                elif warn:
-                    warnings.warn(
-                        f"Empty line found in {line_num}, skip record"
-                    )
                 continue
 
             if not header.startswith("@"):
@@ -80,7 +72,7 @@ def read_fastq_iter(
                         f"Line {line_num}: invalid '+' line: {plus}, "
                         "skip record"
                     )
-                    continue
+                continue
 
             if len(seq) != len(qual):
                 if strict:
@@ -91,9 +83,10 @@ def read_fastq_iter(
                 elif warn:
                     warnings.warn(
                         f"Line {line_num-2} & {line_num}: Sequence / quality, "
+                        f"length mismatch: ({len(seq)} vs {len(qual)})"
                         "skip record"
                     )
-                    continue
+                continue
 
             skip_record = False
             for char in seq.upper():
@@ -141,8 +134,8 @@ def read_fastq(
 
 
 def main():
-    input_path = r"./examples/data/example_fastq.fastq"
-    result = read_fastq(input_path, warn=True)
+    input_path = r"./examples/data/read_fastq_test.fastq"
+    result = read_fastq_iter(input_path, warn=True)
     for entry in result:
         print(repr(entry))
 

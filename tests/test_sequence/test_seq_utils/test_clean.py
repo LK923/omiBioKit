@@ -5,6 +5,7 @@ from omibio.sequence.seq_utils.clean import (
 from omibio.sequence.sequence import Sequence
 import tempfile
 import os
+from omibio.sequence import Polypeptide
 
 
 class TestCleanFasta:
@@ -162,3 +163,15 @@ class TestCleanFasta:
         cleaned = clean(seqs, allowed_bases=["A"], name_policy="id_only")
         assert "seq" in cleaned
         assert cleaned["seq"] == "AAAAAAAAAAA"
+
+    def test_as_polypeptide(self):
+        seqs = {"seq": "AAAAAAAAAAA"}
+        cleaned = clean(seqs, as_polypeptide=True)
+        assert "seq" in cleaned
+        assert isinstance(cleaned["seq"], Polypeptide)
+
+    def test_as_str(self):
+        seqs = {"seq": "AAAAAAAAAAA"}
+        cleaned = clean(seqs, as_str=True)
+        assert "seq" in cleaned
+        assert isinstance(cleaned["seq"], str)
