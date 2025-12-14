@@ -22,7 +22,7 @@ import csv
 @click.option(
     "--top",
     type=int,
-    default=20
+    default=None
 )
 @click.option(
     "--output", "-o",
@@ -42,14 +42,13 @@ def total(
     source: TextIO,
     k: int,
     canonical: bool,
-    top: int,
+    top: int | None,
     summary: bool,
     output: str | None
 ):
     """Count k-mers in a FASTA file."""
-    fh = source
 
-    entries = read_fasta_iter(fh)
+    entries = read_fasta_iter(source)
     total_counts: dict[str, int] = Counter()
     total = 0
 
@@ -72,9 +71,14 @@ def total(
         for top_kmer in tops[:top]:
             click.echo(f"{top_kmer}:\t{total_counts[top_kmer]}")
     else:
-        results = [
-            ["total", k, key, total_counts[key]] for key in tops[:top]
-        ]
+        if top is not None:
+            results = [
+                ["total", k, key, total_counts[key]] for key in tops[:top]
+            ]
+        else:
+            results = [
+                ["total", k, key, total_counts[key]] for key in tops
+            ]
         rows = [["seq_id", "k", "kmer", "count"]] + results
         if output is not None:
             with open(output, "w", newline="", encoding="utf-8") as f:

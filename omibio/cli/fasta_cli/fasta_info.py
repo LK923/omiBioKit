@@ -2,6 +2,9 @@ import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter
 from typing import TextIO
+from omibio.sequence import Sequence
+
+_AMBIGUOUS_BASES = {"R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"}
 
 
 @fasta_group.command()
@@ -13,31 +16,47 @@ from typing import TextIO
 )
 def info(source: TextIO):
     """Display information about a FASTA file."""
-    fh = source
-    result = [e.seq for e in read_fasta_iter(fh)]
+    result = read_fasta_iter(source)
 
-    seq_num = len(result)
-    total_len = sum(len(seq) for seq in result)
+    seq_num = 0
+    total_len = 0
+    longest = 0
+    shortest = None
 
-    gc = round((sum(seq.gc_content() for seq in result) / seq_num) * 100, 2)
-    at = round((sum(seq.at_content() for seq in result) / seq_num) * 100, 2)
+    total_gc = 0.0
+    total_at = 0.0
+    total_n = 0
+    total_ambi = 0
 
-    ambiguous_bases = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V"}
-    ambiguous = sum(
-        seq.count(base) for base in ambiguous_bases for seq in result
-    )
-    ns = sum(seq.count("N") for seq in result)
+    for entry in result:
+        seq = entry.seq
+        length = len(seq)
+
+        seq_num += 1
+        total_len += length
+        longest = max(longest, length)
+
+        if not shortest:
+            shortest = length
+        else:
+            shortest = min(shortest, length)
+
+        if isinstance(seq, Sequence):
+            total_gc += float(seq.gc_content())
+            total_at += float(seq.at_content())
+        total_n += seq.count("N")
+        for base in _AMBIGUOUS_BASES:
+            total_ambi += seq.count(base)
 
     click.echo(
         f"Sequences:\t{seq_num}\n"
         f"Total length:\t{total_len} bp\n"
-        f"Longest:\t{len(max(result, key=len))} bp\n"
-        f"Shortest:\t{len(min(result, key=len))} bp\n"
+        f"Longest:\t{longest} bp\n"
+        f"Shortest:\t{shortest} bp\n"
         f"Average length:\t{total_len // seq_num} bp\n"
-        f"Median length:\t{len(sorted(result, key=len)[len(result)//2])} bp\n"
         "\n"
-        f"GC content:\t{gc}%\n"
-        f"AT content:\t{at}%\n"
-        f"N content:\t{round((ns / total_len) * 100, 2)}% ({ns} Ns)\n"
-        f"Ambiguous:\t{round((ambiguous / total_len) * 100, 2)}% ({ambiguous} Ambiguous)\n"  # noqa
+        f"GC content:\t{(total_gc / seq_num):.3f}\n"
+        f"AT content:\t{(total_at / seq_num):.3f}\n"
+        f"N content:\t{(total_n / total_len):.3f} ({total_n} Ns)\n"
+        f"Ambiguous:\t{(total_ambi / total_len):.3f} ({total_ambi} Ambiguous)\n"  # noqa
     )

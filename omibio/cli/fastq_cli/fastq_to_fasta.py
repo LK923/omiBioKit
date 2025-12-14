@@ -33,8 +33,8 @@ def to_fasta(
     prefix: str
 ):
     """Convert FASTQ to FASTA format."""
-    fh = source
-    result = read_fastq_iter(fh)
+
+    result = read_fastq_iter(source)
 
     if prefix is not None:
         count = 1

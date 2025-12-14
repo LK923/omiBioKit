@@ -1,20 +1,17 @@
 from omibio.sequence.sequence import Sequence, Polypeptide
+from omibio.bio import KmerResult
 from collections import Counter
 from omibio.sequence.seq_utils.complement import reverse_complement
-
-VALID_BASES = {
-    "A", "T", "C", "G", "U",
-    "N", "R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"
-}
+from omibio.viz import plot_kmer
 
 
 def kmer(
     seq: Sequence | str | Polypeptide,
     k: int,
+    seq_id: str | None = None,
     canonical: bool = False,
     min_count: int = 1,
-    strict: bool = False
-) -> dict[str, int]:
+) -> KmerResult:
 
     if canonical:
         cache: dict[str, str] = {}
@@ -57,14 +54,10 @@ def kmer(
     seq_str = str(seq).upper()
     n = len(seq_str)
 
-    if strict:
-        if invalid := set(seq_str) - VALID_BASES:
-            raise ValueError(
-                f"(Strict Mode) Invalid base(s) found: {invalid}"
-            )
-
     if k > n:
-        return Counter()
+        return KmerResult(
+            k=k, counts=dict(), seq_id=seq_id, type="kmer", plot_func=plot_kmer
+        )
 
     kmer_counter: dict = Counter()
 
@@ -76,7 +69,10 @@ def kmer(
         kmer_counter = Counter(
             {kmer: c for kmer, c in kmer_counter.items() if c >= min_count}
         )
-    return kmer_counter
+    return KmerResult(
+        k=k, counts=kmer_counter, seq_id=seq_id,
+        type="kmer", plot_func=plot_kmer
+    )
 
 
 def main():
@@ -84,7 +80,11 @@ def main():
     seq = read_fasta(
         r"./examples/data/example_single_long_seq.fasta"
     )["example"]
-    print(kmer(seq, 3, min_count=150))
+    res = kmer(seq, 3, min_count=30, seq_id="test")
+    print(res)
+    print(repr(res))
+    print(res["ACT"])
+    res.plot(show=True)
 
 
 if __name__ == "__main__":

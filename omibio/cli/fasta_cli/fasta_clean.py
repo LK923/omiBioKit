@@ -1,7 +1,7 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
-from typing import TextIO
+from typing import TextIO, Literal
 
 
 @fasta_group.command()
@@ -22,7 +22,7 @@ from typing import TextIO
     default="keep",
     help=(
         "Control the clean behavior of sequence names: \n"
-        "'keep', 'id_only, 'underscores'"
+        "'keep', 'id_only', 'underscores'"
     )
 )
 @click.option(
@@ -31,7 +31,7 @@ from typing import TextIO
     default="keep",
     help=(
         "Control the clean behavior of gaps: \n"
-        "'keep', 'remove, 'collapse'"
+        "'keep', 'remove', 'collapse'"
     )
 )
 @click.option(
@@ -75,8 +75,8 @@ from typing import TextIO
 def clean(
     source: TextIO,
     output: str | None,
-    name_policy: str,
-    gap_policy: str,
+    name_policy: Literal["keep", "id_only", "underscores"],
+    gap_policy: Literal["keep", "remove", "collapse"],
     strict: bool,
     min_len: int,
     max_len: int,
@@ -91,9 +91,7 @@ def clean(
     """
     from omibio.sequence.seq_utils.clean import clean as c_f
 
-    fh = source
-
-    seqs = read_fasta(fh, strict=False).seq_dict()
+    seqs = read_fasta(source, strict=False).seq_dict()
     res = c_f(
         seqs,
         name_policy=name_policy,

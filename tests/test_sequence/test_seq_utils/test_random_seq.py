@@ -70,3 +70,9 @@ class TestRandomFasta:
 
         seq = out.read_text().splitlines()[1]
         assert all(ch in "XYZ" for ch in seq)
+
+    def test_no_file_path(self, tmp_path):
+        res = random_fasta(seq_num=1, length=10, alphabet="ACTG")
+        assert isinstance(res, list)
+        assert res[0].startswith(">")
+        assert set(res[1]) <= set("ACTG")

@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from omibio.bio import SeqInterval
-from omibio.bio.analysis_result import AnalysisResult
+from omibio.bio import IntervalResult
 
 
 def plot_sliding_gc(
-    gc_list: list[SeqInterval] | AnalysisResult,
+    gc_list: list[SeqInterval] | IntervalResult,
     window_avg: bool = True,
     ax: Axes | None = None,
     show: bool = False,
@@ -32,7 +32,7 @@ def plot_sliding_gc(
             ax = plt.subplots(figsize=figsize)[1]
         return ax
 
-    if isinstance(gc_list, AnalysisResult):
+    if isinstance(gc_list, IntervalResult):
         seq_id = seq_id or gc_list.seq_id
 
     positions = [

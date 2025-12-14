@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from matplotlib.axes import Axes
+from omibio.bio.kmer_result import KmerResult
 
 
 def plot_kmer(
-    kmer_counts: list[dict[str, int]] | dict[str, int],
+    kmer_counts: list[KmerResult] | KmerResult,
     top_n: int = 20,
     ax=None,
     cmap="viridis",
@@ -13,13 +14,33 @@ def plot_kmer(
     fmt=".2f",
     show: bool = False
 ) -> Axes:
-    if isinstance(kmer_counts, dict):
-        kmer_counts = [kmer_counts]
-    kmers = []
-    k = len(list(kmer_counts[0].keys())[0])
 
-    for i, count in enumerate(kmer_counts):
-        kmers.append(pd.Series(count, name=f"seq_{i+1}"))
+    if isinstance(kmer_counts, KmerResult):
+        kmer_counts = [kmer_counts]
+
+    if not isinstance(kmer_counts, list):
+        raise TypeError(
+            "plot_kmer() argument 'kmer_counts' must be list[KmerResult] or "
+            f"KmerResult, got {type(kmer_counts).__name__}"
+        )
+
+    kmers = []
+    k_set = set()
+
+    for count in kmer_counts:
+        if not isinstance(count, KmerResult):
+            raise TypeError(
+                "plot_kmer() argument 'kmer_counts' must contains KmerResult, "
+                f"got {type(count).__name__}"
+            )
+        k_set.add(count.k)
+        kmers.append(pd.Series(count.counts, name=count.seq_id))
+
+    if len(k_set) > 1:
+        raise ValueError(
+            f"Got multiple ks for kmers: {k_set}"
+        )
+    k = k_set.pop()
     df = pd.DataFrame(kmers).fillna(0)
 
     top_kmers = df.sum().sort_values(ascending=False).head(top_n).index
@@ -45,16 +66,12 @@ def plot_kmer(
 def main():
     from omibio.io import read_fasta_iter
     from omibio.analysis import kmer
-    kmer_counts = []
-    k = 3
 
-    source = "./examples/data/example_short_seqs.fasta"
-    for entry in read_fasta_iter(source):
-        kmer_counts.append(kmer(entry.seq, k))
-        if len(kmer_counts) == 5:
-            break
-    plot_kmer(kmer_counts)
-    plt.tight_layout()
+    source = "./examples/data/example_single_short_seq.fasta"
+    seq = next(read_fasta_iter(source)).seq
+    res = kmer(seq, k=3, seq_id="test")
+    print(repr(res))
+    plot_kmer(res)
     plt.show()
 
 

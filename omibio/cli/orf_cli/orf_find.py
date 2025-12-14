@@ -15,13 +15,13 @@ import csv
     default="-"
 )
 @click.option(
-    "--min-length",
+    "--min-length", "-min",
     type=int,
     default=100,
     help="Minimum length of ORFs to consider. Defaults to 0."
 )
 @click.option(
-    "--max-length", "-min",
+    "--max-length", "-max",
     type=int,
     default=10000,
     help="Maximum length of ORFs to consider. Defaults to 10000."
@@ -84,9 +84,7 @@ def find(
         codon.strip().upper() for codon in start_codons.split(",")
     }
 
-    fh = source
-
-    seqs = read_fasta(fh).seq_dict()
+    seqs = read_fasta(source).seq_dict()
     all_orfs = []
 
     for seq_id, seq_obj in seqs.items():
@@ -128,18 +126,19 @@ def find(
             base_fields.extend([nt_seq, aa_seq])
         res.append(base_fields)
 
+    header = ["seq_id", "start", "end", "strand", "frame", "length"]
+    if show_seq:
+        header.append("nt_seq")
+        if translate:
+            header.append("aa_seq")
+
+    rows = [header] + res
+
     if output is None:
-        for base_fields in res:
-            click.echo("\t".join(str(f) for f in base_fields))
-        click.echo(f"Total: {len(res)} ORFs found")
+        for row in rows:
+            click.echo("\t".join(str(f) for f in row))
     else:
         with open(output, "w", newline="", encoding="utf-8") as f:
-            header = ["seq_id", "start", "end", "strand", "frame", "length"]
-            if show_seq:
-                header.append("nt_seq")
-                if translate:
-                    header.append("aa_seq")
             writer = csv.writer(f)
-            writer.writerow(header)
-            writer.writerows(res)
+            writer.writerows(rows)
         click.echo(f"Result written to {output}")

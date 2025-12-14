@@ -43,7 +43,7 @@ seqs: SeqCollections[SeqEntry] = read_fasta("examples/example.fasta")
 dna: Sequence = seqs["example"]
 
 # Compute GC content in sliding windows (window=200 bp, step=20 bp)
-result: AnalysisResult[SeqInterval] = sliding_gc(dna, window=200, step=20)
+result: IntervalResult[SeqInterval] = sliding_gc(dna, window=200, step=20)
 
 # Visualize easily
 result.plot(show=True)  # or: plot_sliding_gc(result, show=True)
@@ -62,11 +62,11 @@ The above code will produce results like this:
 
 #### Using **omiBio**'s Command-line interfaces:
 ```bash
-$ omibio orf example.fasta --min-length 100
+$ omibio orf find example.fasta --min-length 100
 ```
 The above CLI will produce results like this:
 ```bash
-# Seq-name  start    end   strand   frame   length
+seq_id       start   end     strand  frame   length
 example_2    70      289     -       -2      219
 example_16   53      257     +       +3      204
 example_13   118     301     +       +2      183

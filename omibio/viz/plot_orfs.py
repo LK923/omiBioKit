@@ -2,11 +2,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.axes import Axes
 from omibio.bio import SeqInterval
-from omibio.bio import AnalysisResult
+from omibio.bio import IntervalResult
 
 
 def plot_orfs(
-    orfs: list[SeqInterval] | AnalysisResult,
+    orfs: list[SeqInterval] | IntervalResult,
     seq_length: int | None = None,
     ax: Axes | None = None,
     show: bool = False
@@ -16,7 +16,7 @@ def plot_orfs(
         _, ax = plt.subplots(figsize=(9, 3))
 
     if seq_length is None:
-        if isinstance(orfs, AnalysisResult):
+        if isinstance(orfs, IntervalResult):
             seq_length = orfs.metadata["seq_length"]
         else:
             raise TypeError(
@@ -70,10 +70,10 @@ def main():
     from omibio.analysis.find_orfs import find_orfs
     from omibio.io.read_fasta import read_fasta
     seq = read_fasta(
-        "./examples/data/e_coli_c600_fragment.fasta"
-    )["CP167195.1 Escherichia coli strain C600 chromosome"]
-    orfs = find_orfs(seq, min_length=500)
-    plot_orfs(orfs, seq_length=len(seq))
+        "./examples/data/example_single_long_seq.fasta"
+    )["example"]
+    orfs = find_orfs(seq, min_length=100)
+    plot_orfs(orfs)
     plt.show()
 
 

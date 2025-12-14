@@ -3,7 +3,6 @@ from omibio.cli.kmer_cli import kmer_group
 from omibio.io import read_fasta_iter
 from omibio.analysis import kmer
 from typing import TextIO
-import sys
 import csv
 
 
@@ -47,8 +46,8 @@ def count(
     top: int | None,
 ):
     """Count k-mers in a FASTA file."""
-    fh = source or sys.stdin
-    entries = read_fasta_iter(fh)
+
+    entries = read_fasta_iter(source)
 
     results: list[list[str | int]] = []
 
@@ -66,7 +65,7 @@ def count(
     if top is not None:
         rows = [["seq_id", "k", "kmer", "count"]] + tops[:top]
     else:
-        rows = [["seq_id", "k", "kmer", "count"]] + results
+        rows = [["seq_id", "k", "kmer", "count"]] + tops
     if output is not None:
         with open(output, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f, delimiter="\t")

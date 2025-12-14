@@ -1,5 +1,5 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bio import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, IntervalResult
 
 
 def find_palindrome(
@@ -7,7 +7,7 @@ def find_palindrome(
     min_len: int = 4,
     max_len: int = 12,
     seq_id: str | None = None
-) -> AnalysisResult:
+) -> IntervalResult:
     """Find palindromic sequences in a given sequence.
 
     Args:
@@ -33,7 +33,7 @@ def find_palindrome(
     """
 
     if not seq:
-        return AnalysisResult(
+        return IntervalResult(
             intervals=[], seq_id=seq_id, type="palindrome",
             metadata={
                 "seq_length": 0,
@@ -83,8 +83,8 @@ def find_palindrome(
                     )
                 )
 
-    return AnalysisResult(
-        results, seq_id=seq_id, type="palindrome",
+    return IntervalResult(
+        intervals=results, seq_id=seq_id, type="palindrome",
         metadata={
             "seq_length": n,
             "sequence": str(seq)

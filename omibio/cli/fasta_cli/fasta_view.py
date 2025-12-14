@@ -50,10 +50,9 @@ def view(
     max_length: int
 ):
     """View FASTA file."""
-    fh = source
 
     count = 0
-    result = read_fasta_iter(fh)
+    result = read_fasta_iter(source)
 
     if min_length and max_length:
         if min_length > max_length:

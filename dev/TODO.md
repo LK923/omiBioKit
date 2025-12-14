@@ -5,7 +5,6 @@
 
 ## Important but not urgent
   - Add more analysis functions based on `read_fastq()`. such as `fastq qc` 12/09/25
-  - Modify `AnalysisResult` to be an abstract base class, and add subclasses such as `IntervalResult` and `KmerResult`.
   - Add CLI: `omibio plot orf`  
 
 ## Not important but urgent

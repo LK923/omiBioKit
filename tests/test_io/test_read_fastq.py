@@ -5,6 +5,7 @@ from omibio.io.read_fastq import (
     read_fastq,
     FastqFormatError,
 )
+import io
 
 
 class TestReadFastq:
@@ -187,3 +188,16 @@ class TestReadFastq:
             )
 
         assert len(res) == 0
+
+    def test_readfrom_stringio(self):
+        fasta_content = "@seq\nACTG\n+\nIIII"
+        fh = io.StringIO(fasta_content)
+        entries = list(read_fastq_iter(fh))
+        assert len(entries) == 1
+        assert isinstance(entries[0], SeqEntry)
+        assert entries[0].seq_id == "seq"
+        assert entries[0].seq == "ACTG"
+        assert entries[0].qual == "IIII"
+
+        seqcollections = read_fastq(fh)
+        assert seqcollections.source == "<stdin>"

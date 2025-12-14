@@ -335,7 +335,7 @@ class Sequence:
 
 def main():
     dna = Sequence("AAAATGCATGCTGACTGTAGCTGATTTATTGCTATC")
-    dna[1] = "G"
+    print(repr(dna))
 
 
 if __name__ == "__main__":

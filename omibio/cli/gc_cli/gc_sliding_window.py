@@ -34,7 +34,7 @@ import csv
     "--summary", "-s",
     is_flag=True
 )
-def window(
+def window_gc(
     source: str,
     window: int,
     step: int,
@@ -45,8 +45,7 @@ def window(
     Calculate and plot sliding window GC content for sequences in a FASTA file.
     """
 
-    fh = source
-    entries = read_fasta(fh)
+    entries = read_fasta(source)
 
     if summary:
         for entry in entries:

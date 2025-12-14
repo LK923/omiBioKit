@@ -4,7 +4,9 @@ from omibio.bio import (
     SeqInterval,
     SeqCollections,
     SeqEntry,
-    AnalysisResult
+    AnalysisResult,
+    IntervalResult,
+    KmerResult
 )
 from omibio.sequence.seq_utils.clean import CleanReport, CleanReportItem
 from omibio.io.read_fasta import FastaFormatError
@@ -14,8 +16,8 @@ __version__ = version("omibio")
 
 __all__ = [
     "Sequence", "Polypeptide",
-    "SeqInterval",
-    "SeqCollections", "SeqEntry", "AnalysisResult",
+    "SeqInterval", "SeqCollections", "SeqEntry",
+    "AnalysisResult", "IntervalResult", "KmerResult",
     "CleanReport", "CleanReportItem",
     "FastaFormatError",
     "FastqFormatError"

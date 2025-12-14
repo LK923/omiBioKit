@@ -212,7 +212,6 @@ class Polypeptide:
 
 def main():
     poly1 = Polypeptide('ADQLLKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWS')
-    poly1[1: 5] = "LLLL"
     print(repr(poly1))
 
 

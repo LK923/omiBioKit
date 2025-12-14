@@ -1,5 +1,5 @@
 from omibio.sequence.sequence import Sequence
-from omibio.bio import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, IntervalResult
 from omibio.viz.plot_motifs import plot_motifs
 from typing import Pattern
 import re
@@ -11,7 +11,7 @@ def find_motifs(
     include_reverse: bool = False,
     seq_id: str | None = None,
     ignore_case: bool = True
-) -> AnalysisResult:
+) -> IntervalResult:
     """Finds all occurrences of a motif in a given sequence.
 
     Args:
@@ -33,6 +33,14 @@ def find_motifs(
         list[SeqInterval]:
             A list of SeqInterval objects representing motif occurrences.
     """
+    if not seq:
+        return IntervalResult(
+            intervals=[], seq_id=seq_id, type="motif", plot_func=plot_motifs,
+            metadata={
+                "seq_length": 0,
+                "sequence": ""
+            }
+        )
 
     if not isinstance(seq, (str, Sequence)):
         raise TypeError(
@@ -84,8 +92,8 @@ def find_motifs(
             seq = Sequence(seq)
         find_motifs_in_strand(str(seq.reverse_complement()), strand="-")
 
-    return AnalysisResult(
-        results, seq_id=seq_id, type="motif", plot_func=plot_motifs,
+    return IntervalResult(
+        intervals=results, seq_id=seq_id, type="motif", plot_func=plot_motifs,
         metadata={
             "seq_length": n,
             "sequence": str(seq)
@@ -94,10 +102,9 @@ def find_motifs(
 
 
 def main():
-    sequence = Sequence("ACTAAAGT")
+    sequence = Sequence("AGTAATCACTGCATCGTAAGGCAGTCTTAATCGAGTCAGTC")
     res = find_motifs(sequence, "ACT", include_reverse=True)
-    print(len(res))
-    res.plot(show=True)
+    print(repr(res))
 
 
 if __name__ == "__main__":

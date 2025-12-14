@@ -1,4 +1,4 @@
-from omibio.bio import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, IntervalResult
 from omibio.sequence.sequence import Sequence
 from omibio.viz.plot_sliding_gc import plot_sliding_gc
 
@@ -8,7 +8,7 @@ def sliding_gc(
     window: int = 100,
     step: int = 10,
     seq_id: str | None = None
-) -> AnalysisResult:
+) -> IntervalResult:
     """Calculate GC content in a sliding window manner.
 
     Args:
@@ -26,7 +26,7 @@ def sliding_gc(
     """
 
     if not seq:
-        return AnalysisResult(
+        return IntervalResult(
             intervals=[], seq_id=seq_id, type="sliding_gc",
             metadata={
                 "seq_length": 0,
@@ -49,7 +49,7 @@ def sliding_gc(
     if window >= n:
         gc_count = sum(1 for b in seq if b in 'GC')
         gc_percent = round((gc_count / n), 3)
-        return AnalysisResult(
+        return IntervalResult(
             intervals=[
                 SeqInterval(
                     start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
@@ -84,7 +84,7 @@ def sliding_gc(
                 )
         )
 
-    return AnalysisResult(
+    return IntervalResult(
         intervals=gc_list,
         seq_id=seq_id,
         plot_func=plot_sliding_gc,
@@ -103,6 +103,7 @@ def main():
     )["example"]
     gc_res = sliding_gc(seq)
     print(gc_res)
+    gc_res.plot(show=True)
 
 
 if __name__ == "__main__":

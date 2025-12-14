@@ -51,10 +51,8 @@ def view(
 ):
     """View FASTQ file."""
 
-    fh = source
-
     count = 0
-    result = read_fastq_iter(fh)
+    result = read_fastq_iter(source)
 
     if min_length and max_length:
         if min_length > max_length:

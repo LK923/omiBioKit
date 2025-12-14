@@ -15,6 +15,8 @@
 
 ### bio/
   - analysis_result.py
+  - interval_result.py
+  - kmer_result.py
   - seq_collections.py
   - seq_entry.py
   - seq_interval.py

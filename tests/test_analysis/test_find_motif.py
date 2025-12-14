@@ -1,6 +1,6 @@
 import pytest
 from omibio.sequence.sequence import Sequence
-from omibio.bio.seq_interval import SeqInterval
+from omibio.bio import SeqInterval, IntervalResult
 from omibio.analysis.find_motif import find_motifs
 import re
 
@@ -92,3 +92,10 @@ class TestFindMotif:
         assert motif1.end == 3
         assert motif2.start == 3
         assert motif2.end == 6
+
+    def test_empty_seq(self):
+        seq = ""
+        res = find_motifs(seq, "ACT")
+        assert isinstance(res, IntervalResult)
+        assert not res.intervals
+        assert res.type == "motif"

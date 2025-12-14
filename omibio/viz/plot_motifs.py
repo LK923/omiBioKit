@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from omibio.bio import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, IntervalResult
 
 
 def plot_motifs(
-    motifs: list[SeqInterval] | AnalysisResult,
+    motifs: list[SeqInterval] | IntervalResult,
     seq_length: int | None = None,
     ax: Axes | None = None,
     show: bool = False
@@ -13,7 +13,7 @@ def plot_motifs(
     if ax is None:
         ax = plt.subplots(figsize=(9, 3))[1]
     if seq_length is None:
-        if isinstance(motifs, AnalysisResult):
+        if isinstance(motifs, IntervalResult):
             seq_length = motifs.metadata["seq_length"]
         else:
             raise TypeError(

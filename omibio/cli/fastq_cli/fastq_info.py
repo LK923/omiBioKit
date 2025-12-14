@@ -2,6 +2,9 @@ import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter
 from typing import TextIO
+from omibio.sequence import Sequence
+
+_AMBIGUOUS_BASES = {"R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"}
 
 
 @fastq_group.command()
@@ -13,55 +16,71 @@ from typing import TextIO
 )
 def info(source: TextIO):
     """Display information about a FASTQ file."""
-    fh = source
-    entries = read_fastq_iter(fh)
-    result = []
-    sum_q = 0
-    min_q = 100
-    max_q = 0
-    q_20 = 0
-    q_30 = 0
+    result = read_fastq_iter(source)
 
-    for entry in entries:
-        result.append(entry.seq)
-        for c in entry.qual:
-            q = ord(c) - 33
-            sum_q += q
-            min_q = min(min_q, q)
-            max_q = max(max_q, q)
-            if q >= 20:
-                q_20 += 1
-            if q >= 30:
-                q_30 += 1
+    seq_num = 0
+    total_len = 0
+    total_qual = 0
 
-    seq_num = len(result)
-    total_len = sum(len(seq) for seq in result)
+    longest = 0
+    shortest = None
 
-    gc = round((sum(seq.gc_content() for seq in result) / seq_num) * 100, 2)
-    at = round((sum(seq.at_content() for seq in result) / seq_num) * 100, 2)
+    total_gc = 0.0
+    total_at = 0.0
+    total_n = 0
+    total_ambi = 0
 
-    ambiguous_bases = {"R", "Y", "S", "W", "K", "M", "B", "D", "H", "V"}
-    ambiguous = sum(
-        seq.count(base) for base in ambiguous_bases for seq in result
-    )
-    ns = sum(seq.count("N") for seq in result)
+    max_qual = 0
+    min_qual = 200
+    q20 = 0
+    q30 = 0
+
+    for entry in result:
+        seq = entry.seq
+        length = len(seq)
+
+        seq_num += 1
+        total_len += length
+        longest = max(longest, length)
+
+        if not shortest:
+            shortest = length
+        else:
+            shortest = min(shortest, length)
+
+        if isinstance(seq, Sequence):
+            total_gc += float(seq.gc_content())
+            total_at += float(seq.at_content())
+        total_n += seq.count("N")
+        for base in _AMBIGUOUS_BASES:
+            total_ambi += seq.count(base)
+
+        if entry.qual:
+            for qual in entry.qual:
+                score = ord(qual) - 33
+                total_qual += score
+                max_qual = max(max_qual, score)
+                min_qual = min(min_qual, score)
+                if score >= 20:
+                    q20 += 1
+                if score >= 30:
+                    q30 += 1
 
     click.echo(
         f"Sequences:\t{seq_num}\n"
         f"Total length:\t{total_len} bp\n"
-        f"Longest:\t{len(max(result, key=len))} bp\n"
-        f"Shortest:\t{len(min(result, key=len))} bp\n"
+        f"Longest:\t{longest} bp\n"
+        f"Shortest:\t{shortest} bp\n"
         f"Average length:\t{total_len // seq_num} bp\n"
-        f"Median length:\t{len(sorted(result, key=len)[len(result)//2])} bp\n"
         "\n"
-        f"GC content:\t{gc}%\n"
-        f"AT content:\t{at}%\n"
-        f"N content:\t{round((ns / total_len) * 100, 2)}% ({ns} Ns)\n"
-        f"Ambiguous:\t{round((ambiguous / total_len) * 100, 2)}% ({ambiguous} Ambiguous)\n"  # noqa
+        f"GC content:\t{(total_gc / seq_num):.3f}\n"
+        f"AT content:\t{(total_at / seq_num):.3f}\n"
+        f"N content:\t{(total_n / total_len):.3f} ({total_n} Ns)\n"
+        f"Ambiguous:\t{(total_ambi / total_len):.3f} ({total_ambi} Ambiguous)\n"  # noqa
         "\n"
-        f"Average qual:\t{(sum_q / total_len):.2f}\n"
-        f"Min qual:\t{min_q}\n"
-        f"Max qual:\t{max_q}\n"
-        f"q20 bases:\t{round((q_20 / total_len) * 100, 2)}% ({q_20} q20 bases)\n"  # noqa
-        f"q30 bases:\t{round((q_30 / total_len) * 100, 2)}% ({q_30} q30 bases)\n"  # noqa
+        f"Average qual:\t{(total_qual / total_len):.3f}\n"
+        f"Min qual:\t{min_qual}\n"
+        f"Max qual:\t{max_qual}\n"
+        f"q20 bases:\t{(q20 / total_len):.3f} ({q20} q20 bases)\n"
+        f"q30 bases:\t{(q30 / total_len):.3f} ({q30} q30 bases)\n"
     )

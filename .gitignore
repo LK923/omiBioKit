@@ -20,3 +20,4 @@ env/
 .coveragerc
 .coverage
 coverage.xml
+.VSCodeCounter/

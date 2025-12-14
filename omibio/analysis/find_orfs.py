@@ -1,4 +1,4 @@
-from omibio.bio import SeqInterval, AnalysisResult
+from omibio.bio import SeqInterval, IntervalResult
 from omibio.sequence import Sequence
 from omibio.sequence.seq_utils.translate import translate_nt
 from omibio.viz import plot_orfs
@@ -68,7 +68,7 @@ def find_orfs(
     translate: bool = False,
     start_codons: set[str] | list[str] | tuple[str] = {"ATG"},
     seq_id: str | None = None
-) -> AnalysisResult:
+) -> IntervalResult:
     """Find ORFs in a given sequence.
 
     Args:
@@ -192,7 +192,7 @@ def find_orfs(
     if sort_by_length:
         results.sort(key=lambda orf: orf.length, reverse=True)
 
-    return AnalysisResult(
+    return IntervalResult(
         intervals=results,
         seq_id=seq_id,
         plot_func=plot_orfs, type="ORF",
@@ -205,10 +205,10 @@ def find_orfs(
 
 def main():
     from omibio.io.read_fasta import read_fasta
-    seqs = read_fasta(r"./examples/data/example_single_long_seq.fasta")
+    seqs = read_fasta(r"./examples/data/example_single_short_seq.fasta")
     sequence = seqs["example"]
-    res = find_orfs(sequence, translate=True, seq_id='example')
-    print(res)
+    res = find_orfs(sequence, translate=True, seq_id='example', min_length=0)
+    res.plot(show=True)
 
 
 if __name__ == "__main__":

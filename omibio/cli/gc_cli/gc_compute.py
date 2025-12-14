@@ -4,7 +4,6 @@ from omibio.cli.gc_cli import gc_group
 from omibio.sequence import Polypeptide
 from typing import TextIO
 import csv
-import sys
 
 
 @gc_group.command()
@@ -17,14 +16,12 @@ import sys
 @click.option(
     "-o", "--output",
     type=click.Path(),
-    default=None,
     help="Output file path."
 )
 def compute(source: TextIO, output: str | None) -> None:
     """Calculate the GC content of a sequence from a FASTA file."""
 
-    fh = source or sys.stdin
-    seqs = read_fasta(fh, strict=False).seq_dict()
+    seqs = read_fasta(source, strict=False).seq_dict()
     lines = []
 
     for name, seq in seqs.items():
@@ -37,7 +34,7 @@ def compute(source: TextIO, output: str | None) -> None:
 
     if output is None:
         for line in lines:
-            click.echo("\t".join(line))
+            click.echo("\t".join(map(str, line)))
     else:
         with open(output, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)

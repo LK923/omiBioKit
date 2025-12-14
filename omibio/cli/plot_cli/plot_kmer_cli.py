@@ -1,7 +1,7 @@
 import click
-from collections import defaultdict
 from omibio.cli.plot_cli import plot_group
 from omibio.viz import plot_kmer
+from omibio.bio import KmerResult
 import matplotlib.pyplot as plt
 from typing import TextIO
 from csv import DictReader
@@ -33,15 +33,25 @@ def kmer(
 ):
     """Plot k-mer counts from a TSV file."""
 
-    fh = source
-
     if output is not None:
         os.makedirs(output, exist_ok=True)
 
-    results: dict[str, dict[str, int]] = defaultdict(dict)
-    reader = DictReader(fh, delimiter="\t")
+    results: dict[str, KmerResult] = {}
+    reader = DictReader(source, delimiter="\t")
     for row in reader:
-        results[row["seq_id"]][row["kmer"]] = int(row["count"])
+        seq_id = str(row["seq_id"])
+        if seq_id not in results:
+            results[seq_id] = KmerResult(
+                k=int(row["k"]), counts={row["kmer"]: int(row["count"])},
+                seq_id=seq_id
+            )
+        else:
+            if int(row["k"]) != results[seq_id].k:
+                raise ValueError(
+                    "Got inconsistent k values: "
+                    f"{row["k"]} vs {results[seq_id].k}"
+                )
+            results[seq_id].counts[row["kmer"]] = int(row["count"])
 
     plot_kmer(list(results.values()))
 
@@ -55,4 +65,5 @@ def kmer(
             plt.close()
 
     if not no_show:
+        plt.tight_layout()
         plt.show()

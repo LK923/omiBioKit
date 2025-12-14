@@ -34,15 +34,13 @@ import csv
     is_flag=True,
     help="Whether not to show the plots."
 )
-def window(
+def window_gc(
     source: TextIO,
     output: str,
     no_show: bool,
     per_page: int
 ):
     """Plot sliding window GC from a TSV file."""
-
-    fh = source
 
     if output is not None:
         os.makedirs(output, exist_ok=True)
@@ -57,7 +55,7 @@ def window(
         )
 
     analysis_results = defaultdict(list)
-    reader = csv.DictReader(fh, delimiter="\t")
+    reader = csv.DictReader(source, delimiter="\t")
     for row in reader:
         analysis_results[row["seq_id"]].append(
             SeqInterval(

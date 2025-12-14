@@ -34,11 +34,10 @@ def shuffle(
     from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
     import random
 
-    fh = source
     res = {}
     rng = random.Random(seed)
 
-    seqs = read_fasta(fh).seq_dict()
+    seqs = read_fasta(source).seq_dict()
 
     for name, seq in seqs.items():
         seq_seed = rng.randint(0, 2**32 - 1)

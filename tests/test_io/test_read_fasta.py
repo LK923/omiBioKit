@@ -5,6 +5,7 @@ from omibio.io.read_fasta import (
     read_fasta,
     FastaFormatError,
 )
+import io
 
 
 class TestReadFasta:
@@ -154,3 +155,22 @@ class TestReadFasta:
                     warn=True,
                 )
             )
+
+    def test_readfrom_stringio(self):
+        fasta_content = """
+            >seq1
+            ATGC
+            >seq2
+            GCTA
+        """
+        fh = io.StringIO(fasta_content)
+        entries = list(read_fasta_iter(fh))
+        assert len(entries) == 2
+        assert isinstance(entries[0], SeqEntry)
+        assert entries[0].seq_id == "seq1"
+        assert str(entries[0].seq) == "ATGC"
+        assert entries[1].seq_id == "seq2"
+        assert str(entries[1].seq) == "GCTA"
+
+        seqcollections = read_fasta(fh)
+        assert seqcollections.source == "<stdin>"
