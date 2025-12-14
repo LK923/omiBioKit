@@ -14,7 +14,7 @@
   - Add `fasta_view_cli.py`
   - Remove the `__setitem__` method from the `Sequence` class and `Polypeptide`.
   - Add `slots=True` to SeqInterval class and SeqEntry class
-  - Change requirement to python >= 3.12 (former 3.9)
+  - Change requirement to python >= 3.11 (former 3.9)
 
 ## [v0.1.3] 12/11/2025
   - Deleted Gene & Genome since they're outdated and their positioning overlaps with SeqEntry & SeqCollections.
