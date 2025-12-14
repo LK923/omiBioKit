@@ -8,19 +8,19 @@
 ## [v0.1.3] 12/09/2025
   - Improve structure of CLI
   - Enhence `omibio gc compute` (previous `omibio gc`), `omibio gc compute`, etc.
-  - Add `omibio gc sliding-window` for sliding window GC CLI.
+  - Add `omibio gc window-gc` for sliding window GC CLI.
 
 ## [v0.1.3] 12/10/2025
   - Add `fasta_view_cli.py`
   - Remove the `__setitem__` method from the `Sequence` class and `Polypeptide`.
-  - Add `slots=True` to SeqInterval class and SeqEntry class
+  - Add `slots=True` to `SeqInterval` class and `SeqEntry` class
   - Change requirement to python >= 3.11 (former 3.9)
 
 ## [v0.1.3] 12/11/2025
   - Deleted Gene & Genome since they're outdated and their positioning overlaps with SeqEntry & SeqCollections.
   - Add new CLI: `omibio fastq to-fasta`, `omibio fastq view`, `omibio fasta info`.
   - Add at_content() method to Sequence class.
-  - Motify write_fasta() & write_fastq(): now support only return list of lines without writing to a specific file.
+  - Motify `write_fasta()` & `write_fastq()`: now support only return list of lines without writing to a specific file.
 
 ## [v0.1.3] 12/12/2025
   - Add tests, coverage >= 95%
