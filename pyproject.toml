@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "black>=23", "mypy"]
+dev = ["pytest>=7", "black>=23", "mypy>=1"]
 all = ["omibio[dev]"] 
 
 [project.scripts]
