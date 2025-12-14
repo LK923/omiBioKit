@@ -49,7 +49,7 @@ def kmer(
             if int(row["k"]) != results[seq_id].k:
                 raise ValueError(
                     "Got inconsistent k values: "
-                    f"{row["k"]} vs {results[seq_id].k}"
+                    f"{row['k']} vs {results[seq_id].k}"
                 )
             results[seq_id].counts[row["kmer"]] = int(row["count"])
 
