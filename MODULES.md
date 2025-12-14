@@ -43,6 +43,7 @@
 
   ### kmer_cli/
     - kmer_count.py
+    - kmer_total.py
 
 
   ### orf_cli/
@@ -50,6 +51,7 @@
 
 
   ### plot_cli/
+    - plot_kmer_cli.py
     - plot_window_gc_cli.py
 
 

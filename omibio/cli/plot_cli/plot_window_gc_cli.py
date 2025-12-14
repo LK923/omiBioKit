@@ -1,15 +1,15 @@
 import click
+from collections import defaultdict
 from omibio.cli.plot_cli import plot_group
-from math import ceil
-import matplotlib.pyplot as plt
-import os
-import sys
-from typing import TextIO, cast
-from pathlib import Path
-import csv
 from omibio.bio import SeqInterval
 from omibio.viz import plot_sliding_gc
-from collections import defaultdict
+import matplotlib.pyplot as plt
+from typing import TextIO, cast
+from pathlib import Path
+from math import ceil
+import os
+import sys
+import csv
 
 
 @plot_group.command()

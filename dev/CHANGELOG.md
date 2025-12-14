@@ -27,3 +27,6 @@
 
 ## [v0.1.3] 12/13/2025
   - Enhence CLI: support sdtin & stdout
+  - Add `omibio plot <COMMANDS>` for CLI plotting
+  - Add `omibio plot kmer`, `omibio plot window`, `omibio kmer count`, `omibio kmer total`
+  - Enhence `plot_kmer()`, now support muiltiple sequences

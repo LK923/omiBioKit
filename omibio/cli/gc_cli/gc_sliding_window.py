@@ -13,13 +13,13 @@ import sys
     required=False
 )
 @click.option(
-    "--window", "-w",
+    "--window",
     type=int,
     default=100,
     help="window size. Defaults to 100."
 )
 @click.option(
-    "--step", "-s",
+    "--step",
     type=int,
     default=10,
     help="step size. Defaults to 10."
@@ -31,7 +31,7 @@ import sys
     help="Write details to a file in csv format"
 )
 @click.option(
-    "--summary",
+    "--summary", "-s",
     is_flag=True
 )
 def window(
