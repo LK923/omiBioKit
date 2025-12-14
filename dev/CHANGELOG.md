@@ -30,3 +30,11 @@
   - Add `omibio plot <COMMANDS>` for CLI plotting
   - Add `omibio plot kmer`, `omibio plot window`, `omibio kmer count`, `omibio kmer total`
   - Enhence `plot_kmer()`, now support muiltiple sequences
+
+## [v0.1.4] 12/14/2025
+  - Modify `AnalysisResult` to abstract class, add `KmerResult` & `IntervalRsult` for different types for analysis functions.
+  - Modify analysis functions to adapt new `AnalysisResult`
+  - Enhence CLI: `omibio fasta info` & `omibio fastq info`: avoid muiltiple traversal
+  - Enhence ploting functions to adapt new `AnalysisResult`
+  - Enhence all CLIs
+  - update README.md, MOUDULES.md
