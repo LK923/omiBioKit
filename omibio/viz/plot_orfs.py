@@ -11,6 +11,28 @@ def plot_orfs(
     ax: Axes | None = None,
     show: bool = False
 ) -> Axes:
+    """Plot Open Reading Frames (ORFs) along a sequence.
+
+    Args:
+        orfs (list[SeqInterval] | IntervalResult):
+            List of ORF intervals or an IntervalResult object.
+        seq_length (int | None, optional):
+            Length of the sequence. Required if 'orfs' is a list.
+            Defaults to None.
+        ax (Axes | None, optional):
+            Matplotlib Axes to plot on. If None, a new figure and axes
+            will be created. Defaults to None.
+        show (bool, optional):
+            Whether to display the plot immediately. Defaults to False.
+
+    Raises:
+        TypeError:
+            If 'orfs' is a list and 'seq_length' is not provided.
+
+    Returns:
+        Axes:
+            The Matplotlib Axes object containing the plot.
+    """
 
     if ax is None:
         _, ax = plt.subplots(figsize=(9, 3))

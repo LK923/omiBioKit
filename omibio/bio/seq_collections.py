@@ -1,15 +1,29 @@
 from omibio.bio.seq_entry import SeqEntry
 from omibio.sequence import Sequence, Polypeptide
-from typing import Iterable
+from typing import Iterable, ItemsView, Iterator
 
 
 class SeqCollections:
+    """Class to hold a collection of SeqEntry objects."""
 
     def __init__(
         self,
         entries: Iterable[SeqEntry] | None = None,
         source: str | None = None
     ):
+        """Initialization for SeqCollection.
+
+        Args:
+            entries (Iterable[SeqEntry] | None, optional):
+                Iterable of SeqEntry objects to initialize the collection.
+                Defaults to None.
+            source (str | None, optional):
+                Source information for the collection. Defaults to None.
+
+        Raises:
+            TypeError:
+                If the input types are incorrect.
+        """
         self._entries: dict[str, SeqEntry] = {}
         self._source = source
         if entries is not None and not isinstance(entries, Iterable):
@@ -23,13 +37,16 @@ class SeqCollections:
 
     @property
     def entries(self):
+        """Return the dictionary of SeqEntry objects."""
         return self._entries
 
     @property
     def source(self):
+        """Return the source information."""
         return self._source
 
     def add_entry(self, entry: SeqEntry):
+        """Add a SeqEntry to the collection."""
         if not isinstance(entry, SeqEntry):
             raise TypeError(
                 "SeqCollections argument 'entries' must be Iterable "
@@ -43,27 +60,34 @@ class SeqCollections:
         self._entries[seq_id] = entry
 
     def get_entry(self, seq_id: str) -> SeqEntry:
+        """Return the SeqEntry for the given seq_id."""
         return self._entries[seq_id]
 
     def get_seq(self, seq_id: str) -> Sequence | Polypeptide:
+        """Return the Sequence or Polypeptide for the given seq_id."""
         return self[seq_id]
 
-    def seq_ids(self):
+    def seq_ids(self) -> list[str]:
+        """Return a list of sequence IDs in the collection."""
         return list(self._entries.keys())
 
-    def seqs(self):
+    def seqs(self) -> list[Sequence | Polypeptide]:
+        """Return a list of sequences in the collection."""
         return [e.seq for e in self._entries.values()]
 
-    def entry_list(self):
+    def entry_list(self) -> list[SeqEntry]:
+        """Return a list of SeqEntry objects in the collection."""
         return list(self._entries.values())
 
     def seq_dict(self) -> dict[str, Sequence | Polypeptide]:
+        """Return a dictionary of seq_id to Sequence or Polypeptide."""
         return {e.seq_id: e.seq for e in self._entries.values()}
 
-    def items(self):
+    def items(self) -> ItemsView[str, SeqEntry]:
+        """Return an items view of the collection."""
         return self._entries.items()
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[SeqEntry]:
         return iter(self._entries.values())
 
     def __getitem__(self, seq_id: str) -> Sequence | Polypeptide:
@@ -72,13 +96,13 @@ class SeqCollections:
     def __contains__(self, seq_id: str) -> bool:
         return seq_id in self._entries
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._entries)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"SeqCollections({list(self._entries.values())!r})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(list(self._entries.values()))
 
 

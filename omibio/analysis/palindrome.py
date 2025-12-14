@@ -17,6 +17,8 @@ def find_palindrome(
             Minimum length of palindromic sequences to find. Defaults to 4.
         max_len (int, optional):
             Maximum length of palindromic sequences to find. Defaults to 12.
+        seq_id (str | None, optional):
+            Identifier for the sequence. Defaults to None.
 
     Raises:
         TypeError:
@@ -29,7 +31,8 @@ def find_palindrome(
             If min_len is larger than max_len.
 
     Returns:
-        list[Palindrome]: List of Palindrome objects found in the sequence.
+        IntervalResult:
+            An object containing found palindrome intervals and metadata.
     """
 
     if not seq:

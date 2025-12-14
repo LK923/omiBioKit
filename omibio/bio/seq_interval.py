@@ -61,6 +61,7 @@ class SeqInterval:
 
     @property
     def length(self) -> int:
+        """Return the length of the sequence interval."""
         return self.end - self.start
 
     def to_sequence(

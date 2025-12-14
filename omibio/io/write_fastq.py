@@ -6,6 +6,27 @@ def write_fastq(
     seqs:  SeqCollections,
     file_name: str | None = None,
 ) -> list[str]:
+    """Write sequences to a FASTQ file or return as list of strings.
+
+    Args:
+        seqs (SeqCollections):
+            A SeqCollections object containing SeqEntry objects.
+        file_name (str | None, optional):
+            Path to the output FASTQ file. If None, the function
+            returns the FASTQ lines as a list of strings.
+            Defaults to None.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+        OSError:
+            If there is an error writing to the file.
+
+    Returns:
+        list[str]:
+            List of strings representing the FASTQ file lines.
+    """
+
     if not seqs:
         return []
     if not isinstance(seqs, SeqCollections):
@@ -20,7 +41,7 @@ def write_fastq(
         lines.append(f"@{entry.seq_id}")
         lines.append(str(entry.seq))
         lines.append("+")
-        lines.append(entry.qual)
+        lines.append(str(entry.qual))
 
     if file_name is not None:
         try:

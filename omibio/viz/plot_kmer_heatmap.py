@@ -14,6 +14,36 @@ def plot_kmer(
     fmt=".2f",
     show: bool = False
 ) -> Axes:
+    """Plot a heatmap of kmer counts from KmerResult objects.
+
+    Args:
+        kmer_counts (list[KmerResult] | KmerResult):
+            A list of KmerResult objects or a single KmerResult object.
+        top_n (int, optional):
+            Number of top kmers to display. Defaults to 20.
+        ax (_type_, optional):
+            Matplotlib Axes object to plot on. If None, a new figure
+            and axes are created. Defaults to None.
+        cmap (str, optional):
+            Colormap for the heatmap. Defaults to "viridis".
+        annot (bool, optional):
+            Whether to annotate the heatmap cells with values.
+            Defaults to True.
+        fmt (str, optional):
+            String format for annotations. Defaults to ".2f".
+        show (bool, optional):
+            Whether to display the plot immediately. Defaults to False.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+        ValueError:
+            If multiple k values are found in the KmerResult objects.
+
+    Returns:
+        Axes:
+            The Matplotlib Axes object containing the heatmap.
+    """
 
     if isinstance(kmer_counts, KmerResult):
         kmer_counts = [kmer_counts]

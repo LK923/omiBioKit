@@ -5,7 +5,7 @@ def gc(seq: Sequence | str, percent: bool = False) -> float | str:
     """Calculate the GC content of a sequence.
 
     Args:
-        seq (str):
+        seq (Sequence | str):
             input sequence
         percent (bool, optional):
             If True, return GC content as a percentage string.

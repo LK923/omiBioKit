@@ -1,4 +1,4 @@
-from omibio.sequence.sequence import Sequence
+from omibio.sequence import Sequence
 from collections import defaultdict
 
 IUPAC_CODES = {

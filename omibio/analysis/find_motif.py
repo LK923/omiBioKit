@@ -30,8 +30,8 @@ def find_motifs(
         ValueError: If pattern is an empty string.
 
     Returns:
-        list[SeqInterval]:
-            A list of SeqInterval objects representing motif occurrences.
+        IntervalResult:
+            An object containing found motif intervals and metadata.
     """
     if not seq:
         return IntervalResult(

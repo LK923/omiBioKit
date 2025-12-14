@@ -9,22 +9,31 @@ def write_fasta(
     file_name: str | None = None,
     line_len: int = 60
 ) -> list[str]:
-    """Writes sequences to a FASTA file.
+    """Write sequences to a FASTA file or return as list of strings.
 
     Args:
-        file_name (_type_):
-            Path to output FASTA file.
-        seqs (_type_):
-            Dictionary of sequence name (str) to sequence (str or Sequence).
+        seqs (Mapping[str, Sequence  |  Polypeptide  |  str] | SeqCollections):
+            A mapping of sequence names to Sequence or Polypeptide objects,
+            or a SeqCollections object.
+        file_name (str | None, optional):
+            Path to the output FASTA file. If None, the function
+            returns the FASTA lines as a list of strings.
+            Defaults to None.
         line_len (int, optional):
-            Number of characters per line in the FASTA file. Defaults to 60.
+            Maximum line length for sequences in the FASTA output.
+            Defaults to 60.
 
     Raises:
         TypeError:
-            if seqs is not a dict or if sequence names are not str.
+            If the input types are incorrect.
         OSError:
-            if unable to write to file.
+            If there is an error writing to the file.
+
+    Returns:
+        list[str]:
+            List of strings representing the FASTA file lines.
     """
+
     if not seqs:
         return []
 

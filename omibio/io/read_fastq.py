@@ -20,6 +20,29 @@ def read_fastq_iter(
     warn: bool = True,
     skip_invalid_seq: bool = False
 ) -> Generator["SeqEntry"]:
+    """Parse a FASTA file and return a Generator.
+
+    Raises:
+        FileNotFoundError:
+            If the specified file is not found.
+        FastqFormatError:
+            If the FASTQ format is invalid.
+        FastqFormatError:
+        If the sequence contains invalid characters.
+        FastqFormatError:
+            If the sequence name is missing.
+        FastqFormatError:
+            If the sequence is missing.
+        FastqFormatError:
+            If the quality scores length does not match the sequence length.
+        FastqFormatError:
+            If the '+' line is invalid.
+
+    Yields:
+        SeqEntry:
+            SeqEntry objects for each sequence in the FASTQ file.
+    """
+
     from omibio.bio import SeqEntry
     from omibio.sequence import Sequence
 
@@ -129,6 +152,23 @@ def read_fastq(
     warn: bool = True,
     skip_invalid_seq: bool = False
 ) -> "SeqCollections":
+    """Parse a FASTQ file and return a SeqCollections object.
+
+    Args:
+        source (str | TextIO | PathLike):
+            Path to the FASTQ file or a file-like object.
+        strict (bool, optional):
+            Whether to raise errors on format issues. Defaults to False.
+        warn (bool, optional):
+            Whether to issue warnings on format issues. Defaults to True.
+        skip_invalid_seq (bool, optional):
+            Whether to skip records with invalid sequences. Defaults to False.
+
+    Returns:
+        SeqCollections:
+            A SeqCollections object containing the parsed sequences.
+    """
+
     from omibio.bio import SeqCollections
 
     entries = []

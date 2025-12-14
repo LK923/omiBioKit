@@ -7,6 +7,26 @@ def shuffle_seq(
     seed: int | None = None,
     as_str: bool = False
 ) -> Sequence | str | Polypeptide:
+    """Return a shuffled version of the input sequence.
+
+    Args:
+        seq (Sequence | Polypeptide | str):
+            The input sequence to shuffle.
+        seed (int | None, optional):
+            Seed for the random number generator. Defaults to None.
+        as_str (bool, optional):
+            Whether to return the shuffled sequence as a string.
+            Defaults to False.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+
+    Returns:
+        Sequence | str | Polypeptide:
+            The shuffled sequence, either as a Sequence/Polypeptide object
+            or as a string, depending on the 'as_str' parameter.
+    """
 
     if not isinstance(seq, (Sequence, str, Polypeptide)):
         raise TypeError(

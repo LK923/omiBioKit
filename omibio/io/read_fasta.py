@@ -28,6 +28,25 @@ def read_fasta_iter(
     output_strict: bool = False,
     skip_invalid_seq: bool = False,
 ) -> Generator["SeqEntry"]:
+    """Parse a FASTA file and return a Generator.
+
+    Raises:
+        FileNotFoundError:
+            If the specified file is not found.
+        FastaFormatError:
+            If the FASTA format is invalid.
+        FastaFormatError:
+            If the sequence contains invalid characters.
+        FastaFormatError:
+            If the sequence name is missing.
+        FastaFormatError:
+            If the sequence is missing.
+
+    Yields:
+        SeqEntry:
+            SeqEntry objects for each sequence in the FASTA file.
+    """
+
     from omibio.sequence import Sequence, Polypeptide
     from omibio.bio import SeqEntry
 
@@ -143,6 +162,26 @@ def read_fasta(
     warn: bool = True,
     skip_invalid_seq: bool = False
 ) -> "SeqCollections":
+    """Parse a FASTA file and return a SeqCollections object.
+
+    Args:
+        source (str | TextIO | PathLike):
+            Path to the FASTA file or a file-like object.
+        strict (bool, optional):
+            Whether to raise errors on invalid sequences. Defaults to False.
+        output_strict (bool, optional):
+            Whether to enforce strictness on the output sequences.
+            Defaults to False.
+        warn (bool, optional):
+            Whether to issue warnings on invalid sequences. Defaults to True.
+        skip_invalid_seq (bool, optional):
+            Whether to skip invalid sequences. Defaults to False.
+
+    Returns:
+        SeqCollections:
+            A SeqCollections object containing the parsed sequences.
+    """
+
     from omibio.bio import SeqCollections
 
     entries = []

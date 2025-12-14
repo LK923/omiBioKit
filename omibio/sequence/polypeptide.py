@@ -2,10 +2,13 @@ from collections import Counter, defaultdict
 
 
 class Polypeptide:
+    """
+    Class representing a polypeptide (amino acid) sequence.
+    """
 
     VALID_AA = {
         "A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
-        "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V",
+        "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"
     }
 
     AA_MASS = {

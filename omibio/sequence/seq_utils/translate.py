@@ -66,6 +66,7 @@ def translate_nt(
     Returns:
         str: Translated amino acid sequence.
     """
+
     if not isinstance(seq, (Sequence, str, SeqInterval)):
         raise TypeError(
             "find_otranslaterfs() argument 'seq' must be Sequence or str, not "
@@ -110,12 +111,9 @@ def translate_nt(
 
 
 def main() -> None:
-    from omibio.io import read_fasta
-    seq = read_fasta("./examples/data/e_coil_gene_sequence.fasta").seqs()[0]
-    aa = translate_nt(
-        seq, stop_symbol=True, to_stop=True, require_start=True, frame=2
-    )
-    print(str(aa))
+    seq = Sequence("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGACCGATAG")
+    prot = translate_nt(seq, strict=False, stop_symbol=True)
+    print(prot)
 
 
 if __name__ == "__main__":

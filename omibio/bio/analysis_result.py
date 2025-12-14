@@ -6,6 +6,19 @@ from abc import ABC
 
 @dataclass
 class AnalysisResult(ABC):
+    """An abstract base class used to store the results of analysis functions,
+    including basic information such as sequence ID, and methods for plotting.
+
+    Args:
+        ABC:
+            Abstract Base Class.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+        NotImplementedError:
+            If the plot method is called but no plotting function is defined.
+    """
 
     type: str | None = None
     seq_id: str | None = None
@@ -35,6 +48,7 @@ class AnalysisResult(ABC):
             )
 
     def plot(self, **kwargs) -> Axes:
+        """Plot the analysis result using the associated plotting function."""
         if self.plot_func is None:
             raise NotImplementedError(
                 "Plotting is not supported for this analysis result."

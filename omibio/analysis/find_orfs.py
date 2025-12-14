@@ -94,14 +94,14 @@ def find_orfs(
             Identifier for the sequence. Defaults to None.
 
     Returns:
-        AnalysisResult:
-            ORF analysis result object.
+        IntervalResult:
+            An object containing found ORF intervals and metadata.
 
     Raises:
         TypeError:
             If input types are incorrect.
         ValueError:
-            If input value 'min_length' is negative or 'start_codons' is empty.
+            If input values are invalid or empty where not allowed.
     """
 
     # Type and value validation

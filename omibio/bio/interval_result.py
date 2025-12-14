@@ -6,6 +6,17 @@ from typing import Iterator
 
 @dataclass
 class IntervalResult(AnalysisResult):
+    """Store data returned by analytical functions for interval types,
+    is a subclass of AnalysisResult.
+
+    Args:
+        AnalysisResult:
+            Base class for analysis results.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+    """
 
     intervals: list[SeqInterval] = field(default_factory=list)
 

@@ -1,10 +1,20 @@
 from dataclasses import dataclass, field
 from omibio.bio.analysis_result import AnalysisResult
-from typing import Iterator
+from typing import Iterator, Iterable
 
 
 @dataclass
 class KmerResult(AnalysisResult):
+    """lass to hold kmer counting results. is a subclass of AnalysisResult.
+
+    Args:
+        AnalysisResult:
+            Base class for analysis results.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+    """
 
     k: int = field(default_factory=int)
     counts: dict[str, int] = field(default_factory=dict)
@@ -16,13 +26,16 @@ class KmerResult(AnalysisResult):
                 + type(self.counts).__name__
             )
 
-    def items(self):
+    def items(self) -> Iterable[tuple[str, int]]:
+        """Return an iterator over the (kmer, count) pairs."""
         return self.counts.items()
 
-    def keys(self):
+    def keys(self) -> Iterable[str]:
+        """Return an iterator over the kmers."""
         return self.counts.keys()
 
-    def values(self):
+    def values(self) -> Iterable[int]:
+        """Return an iterator over the counts."""
         return self.counts.values()
 
     def __len__(self) -> int:

@@ -12,21 +12,29 @@ def plot_sliding_gc(
     seq_id: str | None = None,
     figsize: tuple = (9, 3)
 ) -> Axes:
-    """Visualize GC content from sliding window analysis.
+    """Plot sliding window GC content along a sequence.
 
     Args:
-        gc_list (list[tuple]): List of tuples with (start, end, GC%).
-        seq (Sequence | str | None, optional):
-            Original sequence for total GC content reference.
-            If seq, the total GC content of the sequence will be plotted
-            in the chart. Defaults to None.
+        gc_list (list[SeqInterval] | IntervalResult):
+            List of GC content intervals or an IntervalResult object.
         window_avg (bool, optional):
-            Whether to plot window average GC content.Defaults to True.
+            Whether to plot the average GC content across all windows.
+            Defaults to True.
+        ax (Axes | None, optional):
+            Matplotlib Axes to plot on. If None, a new figure and axes
+            will be created. Defaults to None.
+        show (bool, optional):
+            Whether to display the plot immediately. Defaults to False.
+        seq_id (str | None, optional):
+            Sequence identifier for the title. Defaults to None.
+        figsize (tuple, optional):
+            Figure size if a new figure is created. Defaults to (9, 3).
 
-    Raises:
-        TypeError:
-            If seq is not Sequence or str.
+    Returns:
+        Axes:
+            The Matplotlib Axes object containing the plot.
     """
+
     if not gc_list:
         if ax is None:
             ax = plt.subplots(figsize=figsize)[1]

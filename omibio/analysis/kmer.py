@@ -12,6 +12,39 @@ def kmer(
     canonical: bool = False,
     min_count: int = 1,
 ) -> KmerResult:
+    """Count k-mers in a given sequence.
+
+    Args:
+        seq (Sequence | str | Polypeptide):
+            Input sequence to analyze.
+        k (int):
+            Length of the k-mers to count.
+        seq_id (str | None, optional):
+            An optional identifier for the sequence. Defaults to None.
+        canonical (bool, optional):
+            Whether to count canonical k-mers (considering reverse
+            complements). Defaults to False.
+        min_count (int, optional):
+            Minimum count threshold for k-mers to include in the result.
+            Defaults to 1.
+
+    Raises:
+        TypeError:
+            If the input sequence is not of type Sequence, Polypeptide,
+            or string.
+        TypeError:
+            If k is not of type int.
+        TypeError:
+            If min_count is not of type int.
+        ValueError:
+            If k is not a positive integer.
+        ValueError:
+            If min_count is negative.
+
+    Returns:
+        KmerResult:
+            An object containing k-mer counts and metadata.
+    """
 
     if canonical:
         cache: dict[str, str] = {}

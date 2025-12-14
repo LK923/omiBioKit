@@ -6,6 +6,13 @@ from typing import Any
 
 @dataclass(slots=True)
 class SeqEntry:
+    """Class to hold a sequence entry with associated metadata,
+    returned by file parsing functions.
+
+    Raises:
+        TypeError:
+            If the input types are incorrect.
+    """
     seq: Sequence | Polypeptide
     seq_id: str
 

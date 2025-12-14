@@ -24,6 +24,7 @@ def transcribe(
     Returns:
         Sequence | str: transcribed RNA sequence
     """
+
     from omibio.sequence.sequence import Sequence
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(

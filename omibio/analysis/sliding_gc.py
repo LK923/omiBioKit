@@ -12,13 +12,18 @@ def sliding_gc(
     """Calculate GC content in a sliding window manner.
 
     Args:
-        seq (str): input sequence
-        window (int, optional): window size. Defaults to 100.
-        step (int, optional): step size. Defaults to 10.
+        seq (Sequence | str):
+            input sequence
+        window (int, optional):
+            window size. Defaults to 100.
+        step (int, optional):
+            step size. Defaults to 10.
+        seq_id (str | None, optional):
+            an optional identifier for the sequence. Defaults to None.
 
     Raises:
         ValueError: if window or step is not positive.
-        TypeError: if seq is not a string.
+        TypeError: if seq is not Sequence or str.
 
     Returns:
         AnalysisResult:

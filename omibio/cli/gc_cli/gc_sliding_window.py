@@ -2,6 +2,7 @@ import click
 from omibio.io import read_fasta
 from omibio.cli.gc_cli import gc_group
 from omibio.analysis import sliding_gc
+from omibio.sequence import Polypeptide
 import csv
 
 
@@ -50,9 +51,14 @@ def window_gc(
     if summary:
         for entry in entries:
             gc_vals = []
-
+            seq = entry.seq
+            if isinstance(seq, Polypeptide):
+                raise TypeError(
+                    "GC content can only be calculated for nucleotide "
+                    "sequences, got Polypeptide"
+                )
             result = sliding_gc(
-                entry.seq, window=window, step=step, seq_id=entry.seq_id
+                seq, window=window, step=step, seq_id=entry.seq_id
             )
 
             for interval in result:
@@ -67,8 +73,14 @@ def window_gc(
     else:
         rows = [["seq_id", "start", "end", "gc"]]
         for entry in entries:
+            seq = entry.seq
+            if isinstance(seq, Polypeptide):
+                raise TypeError(
+                    "GC content can only be calculated for nucleotide "
+                    "sequences, got Polypeptide"
+                )
             for itv in list(sliding_gc(
-                entry.seq, window=window, step=step, seq_id=entry.seq_id
+                seq, window=window, step=step, seq_id=entry.seq_id
             )):
                 rows.append([
                     str(itv.seq_id), str(itv.start), str(itv.end), str(itv.gc)
