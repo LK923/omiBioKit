@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from matplotlib.axes import Axes
 
 
 def plot_kmer(
@@ -11,7 +12,7 @@ def plot_kmer(
     annot=True,
     fmt=".2f",
     show: bool = False
-):
+) -> Axes:
     if isinstance(kmer_counts, dict):
         kmer_counts = [kmer_counts]
     kmers = []

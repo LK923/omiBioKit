@@ -1,14 +1,15 @@
 import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter, write_fasta
-import sys
+from typing import TextIO
 
 
 @fastq_group.command()
 @click.argument(
-    "fastq_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--output", "-o",
@@ -26,13 +27,13 @@ import sys
     default=None
 )
 def to_fasta(
-    fastq_file: str,
-    output: str,
+    source: TextIO,
+    output: str | None,
     line_len: int,
     prefix: str
 ):
     """Convert FASTQ to FASTA format."""
-    fh = fastq_file or sys.stdin
+    fh = source
     result = read_fastq_iter(fh)
 
     if prefix is not None:

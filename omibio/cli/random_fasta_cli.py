@@ -24,7 +24,7 @@ from omibio.sequence.seq_utils.random_seq import random_fasta as rf
     help="Length of sequences"
 )
 @click.option(
-    "--alphabet",
+    "--alphabet", "-a",
     type=str,
     default="ATGC",
     help="Alphabet to sample from (default: ATGC)."

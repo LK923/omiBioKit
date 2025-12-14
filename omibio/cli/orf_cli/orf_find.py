@@ -3,15 +3,16 @@ from omibio.cli.orf_cli import orf_group
 from omibio.io import read_fasta
 from omibio.analysis.find_orfs import find_orfs
 from omibio.sequence import Polypeptide
+from typing import TextIO
 import csv
-import sys
 
 
 @orf_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--min-length",
@@ -20,7 +21,7 @@ import sys
     help="Minimum length of ORFs to consider. Defaults to 0."
 )
 @click.option(
-    "--max-length",
+    "--max-length", "-min",
     type=int,
     default=10000,
     help="Maximum length of ORFs to consider. Defaults to 10000."
@@ -66,7 +67,8 @@ import sys
     help="Whether to show orf sequence."
 )
 def find(
-    fasta_file: str,
+    source: TextIO,
+    output: str | None,
     min_length: int,
     max_length: int,
     overlap: bool,
@@ -74,8 +76,7 @@ def find(
     no_sort: bool,
     translate: bool,
     start_codons: str,
-    show_seq: bool,
-    output: str
+    show_seq: bool
 ) -> None:
     """Find orfs of sequences from a FASTA file."""
 
@@ -83,7 +84,7 @@ def find(
         codon.strip().upper() for codon in start_codons.split(",")
     }
 
-    fh = fasta_file or sys.stdin
+    fh = source
 
     seqs = read_fasta(fh).seq_dict()
     all_orfs = []

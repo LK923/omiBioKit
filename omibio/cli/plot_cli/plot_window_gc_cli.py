@@ -4,11 +4,9 @@ from omibio.cli.plot_cli import plot_group
 from omibio.bio import SeqInterval
 from omibio.viz import plot_sliding_gc
 import matplotlib.pyplot as plt
-from typing import TextIO, cast
-from pathlib import Path
+from typing import TextIO
 from math import ceil
 import os
-import sys
 import csv
 
 
@@ -16,7 +14,8 @@ import csv
 @click.argument(
     "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--output", "-o",
@@ -36,23 +35,14 @@ import csv
     help="Whether not to show the plots."
 )
 def window(
-    source: str | TextIO | os.PathLike,
+    source: TextIO,
     output: str,
     no_show: bool,
     per_page: int
 ):
-    """
-    Calculate and plot sliding window GC content for sequences in a FASTA file.
-    """
+    """Plot sliding window GC from a TSV file."""
 
-    source = source or sys.stdin
-    if hasattr(source, "read"):
-        fh = cast(TextIO, source)
-    else:
-        file_path = Path(source)
-        if not file_path.exists():
-            raise FileNotFoundError(f"File '{source}' not found.")
-        fh = open(file_path, "r")
+    fh = source
 
     if output is not None:
         os.makedirs(output, exist_ok=True)
@@ -66,19 +56,15 @@ def window(
             f"non-negative number, got {per_page}"
         )
 
-    try:
-        analysis_results = defaultdict(list)
-        reader = csv.DictReader(fh, delimiter="\t")
-        for row in reader:
-            analysis_results[row["seq_id"]].append(
-                SeqInterval(
-                    start=int(row["start"]), end=int(row["end"]),
-                    seq_id=row["seq_id"], gc=float(row["gc"])
-                )
+    analysis_results = defaultdict(list)
+    reader = csv.DictReader(fh, delimiter="\t")
+    for row in reader:
+        analysis_results[row["seq_id"]].append(
+            SeqInterval(
+                start=int(row["start"]), end=int(row["end"]),
+                seq_id=row["seq_id"], gc=float(row["gc"])
             )
-    finally:
-        if not hasattr(source, "read"):
-            fh.close()
+        )
 
     seq_ids = list(analysis_results.keys())
     per_page = per_page

@@ -3,7 +3,7 @@ import click
 
 @click.group()
 def fasta_group():
-    """FASTA related tools"""
+    """FASTA related tools."""
     pass
 
 

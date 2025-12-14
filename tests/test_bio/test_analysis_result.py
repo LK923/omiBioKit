@@ -85,7 +85,7 @@ class TestAnalysisResult:
             self.make_interval("TTT"),
         ]
         ar = AnalysisResult(intervals=itvs)
-        d = ar.to_dict(prefix="X")
+        d = ar.to_dict(key_name="X")
         assert d == {"X_1": "AAA", "X_2": "TTT"}
 
     def test_to_dict_skip_empty_nt_seq(self):

@@ -1,14 +1,15 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter
-import sys
+from typing import TextIO
 
 
 @fasta_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--head", "-h",
@@ -39,7 +40,7 @@ import sys
     type=int,
 )
 def view(
-    fasta_file: str,
+    source: TextIO,
     head: int,
     tail: int,
     id_only: bool,
@@ -49,7 +50,7 @@ def view(
     max_length: int
 ):
     """View FASTA file."""
-    fh = fasta_file or sys.stdin
+    fh = source
 
     count = 0
     result = read_fasta_iter(fh)
@@ -82,7 +83,7 @@ def view(
             return True
 
     if verbose:
-        click.echo(f"File: {fasta_file}")
+        click.echo(f"File: {source.name}")
 
     if head is not None:
         for entry in result:

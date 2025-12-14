@@ -43,17 +43,17 @@ class AnalysisResult:
 
         return self.plot_func(self, **kwargs)
 
-    def to_dict(self, prefix: str = "Analysis Result"):
-        if not isinstance(prefix, str):
+    def to_dict(self, key_name: str = "Analysis Result"):
+        if not isinstance(key_name, str):
             raise TypeError(
-                "to_dict argument 'prefix' must be dict, got "
+                "to_dict argument 'key_name' must be dict, got "
                 + type(self.plot_func).__name__
             )
         interval_dict = {}
         for i, interval in enumerate(self.intervals):
             if not interval.nt_seq:
                 continue
-            interval_dict[f"{prefix}_{i+1}"] = interval.nt_seq
+            interval_dict[f"{key_name}_{i+1}"] = interval.nt_seq
 
         return interval_dict
 

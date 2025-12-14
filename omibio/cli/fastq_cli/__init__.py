@@ -3,7 +3,7 @@ import click
 
 @click.group()
 def fastq_group():
-    """FASTQ related tools"""
+    """FASTQ related tools."""
     pass
 
 

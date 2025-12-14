@@ -2,15 +2,17 @@ import click
 from omibio.cli.kmer_cli import kmer_group
 from omibio.io import read_fasta_iter
 from omibio.analysis import kmer
+from typing import TextIO
 import sys
 import csv
 
 
 @kmer_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "-k",
@@ -37,15 +39,15 @@ import csv
     is_flag=True
 )
 def count(
-    fasta_file,
+    source: TextIO,
     k: int,
     min_count: bool,
     canonical: bool,
-    output: str,
+    output: str | None,
     top: int | None,
 ):
     """Count k-mers in a FASTA file."""
-    fh = fasta_file or sys.stdin
+    fh = source or sys.stdin
     entries = read_fasta_iter(fh)
 
     results: list[list[str | int]] = []

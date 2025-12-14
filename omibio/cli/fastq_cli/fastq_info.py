@@ -1,18 +1,19 @@
 import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter
-import sys
+from typing import TextIO
 
 
 @fastq_group.command()
 @click.argument(
-    "fastq_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
-def info(fastq_file):
+def info(source: TextIO):
     """Display information about a FASTQ file."""
-    fh = fastq_file or sys.stdin
+    fh = source
     entries = read_fastq_iter(fh)
     result = []
     sum_q = 0

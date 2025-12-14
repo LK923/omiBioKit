@@ -3,6 +3,7 @@ import click
 
 @click.group()
 def plot_group():
+    """Plotting related tools."""
     pass
 
 

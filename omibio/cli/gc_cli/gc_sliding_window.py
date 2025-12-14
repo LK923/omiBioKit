@@ -3,14 +3,14 @@ from omibio.io import read_fasta
 from omibio.cli.gc_cli import gc_group
 from omibio.analysis import sliding_gc
 import csv
-import sys
 
 
 @gc_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--window",
@@ -35,17 +35,17 @@ import sys
     is_flag=True
 )
 def window(
-    fasta_file: str,
+    source: str,
     window: int,
     step: int,
-    output: str,
+    output: str | None,
     summary: bool
 ):
     """
     Calculate and plot sliding window GC content for sequences in a FASTA file.
     """
 
-    fh = fasta_file or sys.stdin
+    fh = source
     entries = read_fasta(fh)
 
     if summary:

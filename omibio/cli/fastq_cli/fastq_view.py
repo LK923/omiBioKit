@@ -1,14 +1,15 @@
 import click
 from omibio.cli.fastq_cli import fastq_group
 from omibio.io import read_fastq_iter
-import sys
+from typing import TextIO
 
 
 @fastq_group.command()
 @click.argument(
-    "fastq_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "--head", "-h",
@@ -39,7 +40,7 @@ import sys
     is_flag=True
 )
 def view(
-    fastq_file: str,
+    source: TextIO,
     head: int,
     tail: int,
     lengths: bool,
@@ -50,7 +51,7 @@ def view(
 ):
     """View FASTQ file."""
 
-    fh = fastq_file or sys.stdin
+    fh = source
 
     count = 0
     result = read_fastq_iter(fh)
@@ -83,7 +84,7 @@ def view(
             return True
 
     if verbose:
-        click.echo(f"File: {fastq_file}")
+        click.echo(f"File: {source.name}")
 
     if head is not None:
         for entry in result:

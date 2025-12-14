@@ -2,15 +2,17 @@ import click
 from omibio.io import read_fasta
 from omibio.cli.gc_cli import gc_group
 from omibio.sequence import Polypeptide
+from typing import TextIO
 import csv
 import sys
 
 
 @gc_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "-o", "--output",
@@ -18,10 +20,10 @@ import sys
     default=None,
     help="Output file path."
 )
-def compute(fasta_file: str, output: str) -> None:
+def compute(source: TextIO, output: str | None) -> None:
     """Calculate the GC content of a sequence from a FASTA file."""
 
-    fh = fasta_file or sys.stdin
+    fh = source or sys.stdin
     seqs = read_fasta(fh, strict=False).seq_dict()
     lines = []
 

@@ -1,14 +1,15 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
-import sys
+from typing import TextIO
 
 
 @fasta_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "-o", "--output",
@@ -22,9 +23,9 @@ import sys
     help="Output file path."
 )
 def shuffle(
-    fasta_file: str,
-    output: str,
-    seed: int
+    source: TextIO,
+    output: str | None,
+    seed: int | None
 ):
     """
     Shuffle the sequences in the FASTA file
@@ -33,7 +34,7 @@ def shuffle(
     from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
     import random
 
-    fh = fasta_file or sys.stdin
+    fh = source
     res = {}
     rng = random.Random(seed)
 

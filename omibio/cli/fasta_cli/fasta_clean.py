@@ -1,14 +1,15 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
-import sys
+from typing import TextIO
 
 
 @fasta_group.command()
 @click.argument(
-    "fasta_file",
+    "source",
     type=click.File("r"),
-    required=False
+    required=False,
+    default="-"
 )
 @click.option(
     "-o", "--output",
@@ -72,17 +73,17 @@ import sys
     help="Whether to remove sequences containing only 'N' or '-'."
 )
 def clean(
-    fasta_file: str,
-    name_policy,
-    gap_policy,
+    source: TextIO,
+    output: str | None,
+    name_policy: str,
+    gap_policy: str,
     strict: bool,
     min_len: int,
     max_len: int,
     preserve_cases: bool,
     remove_illegal: bool,
     allowed_bases: str,
-    remove_empty: bool,
-    output: str
+    remove_empty: bool
 ):
     """
     Perform data cleanup on the specified FASTA file
@@ -90,7 +91,7 @@ def clean(
     """
     from omibio.sequence.seq_utils.clean import clean as c_f
 
-    fh = fasta_file or sys.stdin
+    fh = source
 
     seqs = read_fasta(fh, strict=False).seq_dict()
     res = c_f(
