@@ -128,7 +128,7 @@ def read_fastq_iter(
                     elif warn:
                         warnings.warn(
                             f"Invalid Sequence in line {line_num-2}: {seq}, "
-                            f"{"skip" if skip_invalid_seq else "invalid"} "
+                            f"{'skip' if skip_invalid_seq else 'invalid'} "
                             "record"
                         )
                     if skip_invalid_seq:
