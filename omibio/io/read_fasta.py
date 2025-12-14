@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Generator, TextIO, cast
+from typing import TYPE_CHECKING, Iterator, TextIO, cast
 from os import PathLike
 import warnings
 if TYPE_CHECKING:
@@ -27,7 +27,7 @@ def read_fasta_iter(
     warn: bool = True,
     output_strict: bool = False,
     skip_invalid_seq: bool = False,
-) -> Generator["SeqEntry"]:
+) -> Iterator["SeqEntry"]:
     """Parse a FASTA file and return a Generator.
 
     Raises:
