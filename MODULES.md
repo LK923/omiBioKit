@@ -80,6 +80,8 @@
 
 
 ### utils/
+  - ensure_iterable.py
+  - ensure_path.py
   - truncate_repr.py
 
 

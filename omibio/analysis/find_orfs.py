@@ -1,7 +1,7 @@
 from omibio.bio import SeqInterval, IntervalResult
 from omibio.sequence import Sequence
 from omibio.sequence.seq_utils.translate import translate_nt
-from omibio.viz import plot_orfs
+from omibio.viz.plot_orfs import plot_orfs
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}
 

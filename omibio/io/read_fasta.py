@@ -203,7 +203,7 @@ def read_fasta(
 
 
 def main():
-    input_path = r"./examples/data/example_lots_of_seqs.fasta"
+    input_path = r"./examples/data/read_fasta_test.fasta"
     for entry in read_fasta_iter(
         input_path, strict=False, skip_invalid_seq=False, warn=False
     ):

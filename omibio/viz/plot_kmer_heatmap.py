@@ -3,6 +3,7 @@ import seaborn as sns
 import pandas as pd
 from matplotlib.axes import Axes
 from omibio.bio.kmer_result import KmerResult
+from omibio.utils import ensure_iterable
 
 
 def plot_kmer(
@@ -45,14 +46,13 @@ def plot_kmer(
             The Matplotlib Axes object containing the heatmap.
     """
 
-    if isinstance(kmer_counts, KmerResult):
-        kmer_counts = [kmer_counts]
-
-    if not isinstance(kmer_counts, list):
+    if not isinstance(kmer_counts, (list, KmerResult)):
         raise TypeError(
             "plot_kmer() argument 'kmer_counts' must be list[KmerResult] or "
             f"KmerResult, got {type(kmer_counts).__name__}"
         )
+
+    kmer_counts = ensure_iterable(kmer_counts)
 
     kmers = []
     k_set = set()
@@ -97,10 +97,17 @@ def main():
     from omibio.io import read_fasta_iter
     from omibio.analysis import kmer
 
-    source = "./examples/data/example_single_short_seq.fasta"
-    seq = next(read_fasta_iter(source)).seq
-    res = kmer(seq, k=3, seq_id="test")
-    plot_kmer(res, cmap="Purples")
+    source = "./examples/data/example_short_seqs.fasta"
+    count = 0
+    results = []
+
+    for entry in read_fasta_iter(source):
+        results.append(kmer(entry.seq, k=3, seq_id="test"))
+        count += 1
+        if count == 5:
+            break
+
+    plot_kmer(results, cmap="Purples")
     plt.show()
 
 

@@ -4,7 +4,7 @@ COMMANDS = [
     "pytest --cov=omibio --cov-report=term-missing tests/",
     "mypy omibio",
     "flake8 omibio tests",
-    "python ./dev/generate_directory.py"
+    "python ./dev/generate_directory.py",
 ]
 
 
