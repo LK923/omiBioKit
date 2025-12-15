@@ -15,7 +15,7 @@ import csv
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--output", "-o",
@@ -34,11 +34,17 @@ import csv
     is_flag=True,
     help="Whether not to show the plots."
 )
+@click.option(
+    "--no-window-avg",
+    is_flag=True,
+    help="Whether to disable plotting the window average line."
+)
 def window_gc(
     source: TextIO,
     output: str,
     no_show: bool,
-    per_page: int
+    per_page: int,
+    no_window_avg: bool
 ):
     """Plot sliding window GC from a TSV file."""
 
@@ -81,7 +87,8 @@ def window_gc(
 
         for seq_id, ax in zip(page_seq_ids, axes):
             plot_sliding_gc(
-                analysis_results[seq_id], ax=ax, figsize=(6, 2)
+                analysis_results[seq_id], ax=ax, figsize=(6, 2),
+                window_avg=not no_window_avg
             )
 
         if output is not None:

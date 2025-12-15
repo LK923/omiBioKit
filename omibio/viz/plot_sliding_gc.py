@@ -37,7 +37,7 @@ def plot_sliding_gc(
 
     if not gc_list:
         if ax is None:
-            ax = plt.subplots(figsize=figsize)[1]
+            ax = plt.subplots(figsize)[1]
         return ax
 
     if isinstance(gc_list, IntervalResult):
@@ -62,7 +62,7 @@ def plot_sliding_gc(
             linestyle='--', label=f'Window average GC%: {window_average:.2f}'
         )
 
-        ax.plot(positions, gc_vals, color="#005AEB", linewidth=1)
+    ax.plot(positions, gc_vals, color="#005AEB", linewidth=1)
 
     if seq_id is not None:
         ax.set_title(f"Sliding Window GC% of {seq_id}")
@@ -72,7 +72,8 @@ def plot_sliding_gc(
     ax.set_ylabel("GC%")
     ax.set_ylim(0, 100)
     ax.grid(True, linestyle='--', alpha=0.5)
-    ax.legend(loc='upper right')
+    if window_avg:
+        ax.legend(loc='upper right')
 
     if show:
         plt.show()

@@ -12,7 +12,7 @@ import csv
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--min-length", "-min",

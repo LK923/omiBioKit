@@ -11,7 +11,7 @@ import csv
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--window",
@@ -33,7 +33,8 @@ import csv
 )
 @click.option(
     "--summary", "-s",
-    is_flag=True
+    is_flag=True,
+    help="Whether to print a summary instead of full details."
 )
 def window_gc(
     source: str,

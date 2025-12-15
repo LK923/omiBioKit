@@ -9,22 +9,25 @@ from typing import TextIO
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--output", "-o",
     type=click.Path(),
-    default=None
+    default=None,
+    help="Output file path"
 )
 @click.option(
     "--line-len", "-l",
     type=int,
-    default=60
+    default=60,
+    help="Line length for FASTA output. Defaults to 60."
 )
 @click.option(
     "--prefix", "-p",
     type=str,
-    default=None
+    default=None,
+    help="Prefix for sequence IDs in output FASTA."
 )
 def to_fasta(
     source: TextIO,

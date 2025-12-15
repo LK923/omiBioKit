@@ -16,16 +16,19 @@ import csv
 @click.option(
     "-k",
     type=int,
-    required=True
+    required=True,
+    help="Length of the k-mers to count."
 )
 @click.option(
     "--min-count", "-min",
     type=int,
-    default=1
+    default=1,
+    help="Minimum count threshold for k-mers. Defaults to 1."
 )
 @click.option(
     "--top",
     type=int,
+    help="Number of top k-mers to display. Defaults to all."
 )
 @click.option(
     "--output", "-o",
@@ -35,7 +38,13 @@ import csv
 )
 @click.option(
     "--canonical", "-c",
-    is_flag=True
+    is_flag=True,
+    help="Whether to count canonical k-mers."
+)
+@click.option(
+    "--no-sort",
+    is_flag=True,
+    help="Whether nto to sort k-mer results in a decreasing order."
 )
 def count(
     source: TextIO,
@@ -44,8 +53,9 @@ def count(
     canonical: bool,
     output: str | None,
     top: int | None,
+    no_sort: bool
 ):
-    """Count k-mers in a FASTA file."""
+    """Count k-mers for each sequence in a FASTA file."""
 
     entries = read_fasta_iter(source)
 
@@ -58,9 +68,12 @@ def count(
         for km, c in counts.items():
             results.append([entry.seq_id, k, km, c])
 
-    tops = sorted(
-        results, reverse=True, key=lambda res: res[-1]
-    )
+    if (not no_sort) or (top is not None):
+        tops = sorted(
+            results, reverse=True, key=lambda res: res[-1]
+        )
+    else:
+        tops = results
 
     if top is not None:
         rows = [["seq_id", "k", "kmer", "count"]] + tops[:top]

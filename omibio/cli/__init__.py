@@ -1,8 +1,9 @@
 import click
+from omibio import __version__
 
 
 @click.version_option(
-    version="0.1.3",
+    version=f"{__version__}",
     prog_name="omibio",
     message="%(prog)s %(version)s"
 )

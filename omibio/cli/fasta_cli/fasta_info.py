@@ -12,7 +12,7 @@ _AMBIGUOUS_BASES = {"R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"}
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 def info(source: TextIO):
     """Display information about a FASTA file."""

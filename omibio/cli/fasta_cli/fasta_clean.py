@@ -21,7 +21,7 @@ from typing import TextIO, Literal
     type=str,
     default="keep",
     help=(
-        "Control the clean behavior of sequence names: \n"
+        "Control the clean behavior of sequence names: "
         "'keep', 'id_only', 'underscores'"
     )
 )
@@ -30,7 +30,7 @@ from typing import TextIO, Literal
     type=str,
     default="keep",
     help=(
-        "Control the clean behavior of gaps: \n"
+        "Control the clean behavior of gaps: "
         "'keep', 'remove', 'collapse'"
     )
 )

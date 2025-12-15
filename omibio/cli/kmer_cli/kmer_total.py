@@ -12,31 +12,45 @@ import csv
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "-k",
     type=int,
-    required=True
+    required=True,
+    help="Length of the k-mers to count."
 )
 @click.option(
     "--top",
     type=int,
-    default=None
+    default=None,
+    help="Number of top k-mers to display. Defaults to all."
 )
 @click.option(
     "--output", "-o",
     type=click.Path(),
     default=None,
-    help="Directory to save plots"
+    help="Directory to save plots",
+)
+@click.option(
+    "--min-count", "-min",
+    default=1,
+    help="Minimum count threshold for k-mers. Defaults to 1."
 )
 @click.option(
     "--canonical", "-c",
-    is_flag=True
+    is_flag=True,
+    help="Whether to count canonical k-mers."
 )
 @click.option(
     "--summary", "-s",
-    is_flag=True
+    is_flag=True,
+    help="Whether to print a summary instead of full counts."
+)
+@click.option(
+    "--no-sort",
+    is_flag=True,
+    help="Whether nto to sort k-mer results in a decreasing order."
 )
 def total(
     source: TextIO,
@@ -44,9 +58,11 @@ def total(
     canonical: bool,
     top: int | None,
     summary: bool,
-    output: str | None
+    output: str | None,
+    no_sort: bool,
+    min_count: int
 ):
-    """Count k-mers in a FASTA file."""
+    """Count k-mers in total for all sequence in a FASTA file."""
 
     entries = read_fasta_iter(source)
     total_counts: dict[str, int] = Counter()
@@ -60,9 +76,12 @@ def total(
             total_counts[km] += c
             total += c
 
-    tops = sorted(
-        total_counts.keys(), key=lambda n: total_counts[n], reverse=True
-    )
+    tops = [
+        key for key in total_counts.keys()
+        if total_counts[key] >= min_count
+    ]
+    if (not no_sort) or (top is not None):
+        tops = sorted(tops, key=lambda n: total_counts[n], reverse=True)
 
     if summary:
         click.echo(f"k = {k}")

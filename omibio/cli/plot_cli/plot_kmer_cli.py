@@ -13,13 +13,30 @@ import os
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--output", "-o",
     type=click.Path(),
     default=None,
     help="Directory to save plots"
+)
+@click.option(
+    "--cmap",
+    type=str,
+    default="viridis",
+    help="Colormap to use for the heatmap."
+)
+@click.option(
+    "--fmt",
+    type=str,
+    default=".2f",
+    help="Format string for heatmap annotations."
+)
+@click.option(
+    "--no-annot",
+    is_flag=True,
+    help="Whether to disable annotations on the heatmap."
 )
 @click.option(
     "--no-show",
@@ -30,6 +47,9 @@ def kmer(
     source: TextIO,
     output: str,
     no_show: bool,
+    cmap: str,
+    fmt: str,
+    no_annot: bool
 ):
     """Plot k-mer counts from a TSV file."""
 
@@ -53,7 +73,7 @@ def kmer(
                 )
             results[seq_id].counts[row["kmer"]] = int(row["count"])
 
-    plot_kmer(list(results.values()))
+    plot_kmer(list(results.values()), cmap=cmap, fmt=fmt, annot=not no_annot)
 
     if output is not None:
         plt.tight_layout()

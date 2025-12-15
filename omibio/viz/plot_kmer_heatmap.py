@@ -100,8 +100,7 @@ def main():
     source = "./examples/data/example_single_short_seq.fasta"
     seq = next(read_fasta_iter(source)).seq
     res = kmer(seq, k=3, seq_id="test")
-    print(repr(res))
-    plot_kmer(res)
+    plot_kmer(res, cmap="Purples")
     plt.show()
 
 

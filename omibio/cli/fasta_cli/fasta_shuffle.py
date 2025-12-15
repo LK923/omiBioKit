@@ -9,7 +9,7 @@ from typing import TextIO
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "-o", "--output",

@@ -9,35 +9,42 @@ from typing import TextIO
     "source",
     type=click.File("r"),
     required=False,
-    default="-"
+    default="-",
 )
 @click.option(
     "--head", "-h",
     type=int,
+    help="Number of sequences to show from the start of the file."
 )
 @click.option(
     "--tail", "-t",
     type=int,
-)
-@click.option(
-    "--lengths", "-l",
-    is_flag=True
-)
-@click.option(
-    "--id-only", "-id",
-    is_flag=True
-)
-@click.option(
-    "--verbose", "-v",
-    is_flag=True
+    help="Number of sequences to show from the end of the file."
 )
 @click.option(
     "--min-length", "-min",
     type=int,
+    help="Minimum sequence length to include."
 )
 @click.option(
     "--max-length", "-max",
     type=int,
+    help="Maximum sequence length to include."
+)
+@click.option(
+    "--lengths", "-l",
+    is_flag=True,
+    help="Whether to show only sequence IDs and lengths."
+)
+@click.option(
+    "--id-only", "-id",
+    is_flag=True,
+    help="Whether to show only sequence IDs."
+)
+@click.option(
+    "--verbose", "-v",
+    is_flag=True,
+    help="Whether to show verbose output."
 )
 def view(
     source: TextIO,

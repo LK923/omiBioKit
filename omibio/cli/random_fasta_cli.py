@@ -9,7 +9,6 @@ from omibio.sequence.seq_utils.random_seq import random_fasta as rf
     "-n", "--number",
     type=int,
     default=1,
-    help="Number of random sequences to generate (default: 1)."
 )
 @click.option(
     "-p", "--prefix",
