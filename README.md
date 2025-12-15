@@ -33,7 +33,7 @@ The **omiBio** toolkit is organized into the following modules:
 | `omibio.analysis` | Sequence analysis functions | `gc()`, `sliding_gc()`, `find_orfs()` |
 | `omibio.utils` | General-purpose utility functions | `truncate_repr()` |
 | `omibio.viz` | Simple and easy-to-use data visualization | `plot_orf()`, `plot_sliding_gc()` |
-| `omibio.cli` | Command-line interfaces for common workflows | `omibio random-fasta`, `omibio clean` |
+| `omibio.cli` | Command-line interfaces for common workflows | `omibio fasta view`, `omibio gc window-gc` |
 
 ## Release Notes - omiBio [v0.1.4] 12/14/25
 
