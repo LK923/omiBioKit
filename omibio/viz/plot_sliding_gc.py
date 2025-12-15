@@ -37,7 +37,7 @@ def plot_sliding_gc(
 
     if not gc_list:
         if ax is None:
-            ax = plt.subplots(figsize)[1]
+            ax = plt.subplots(figsize=figsize)[1]
         return ax
 
     if isinstance(gc_list, IntervalResult):
