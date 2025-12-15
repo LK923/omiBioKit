@@ -46,9 +46,10 @@ dev = [
     "pytest>=7",
     "pytest-cov",
     "black>=23",
-    "isort",
     "mypy>=1",
-    "ruff",
+    "types-seaborn",
+    "pandas-stubs",
+    "flake8",
 ]
 all = ["omibio[dev]"]
 

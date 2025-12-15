@@ -204,10 +204,10 @@ def read_fasta(
 
 def main():
     input_path = r"./examples/data/example_lots_of_seqs.fasta"
-    for entry in read_fasta(
-        input_path, strict=False, skip_invalid_seq=True, warn=True
+    for entry in read_fasta_iter(
+        input_path, strict=False, skip_invalid_seq=False, warn=False
     ):
-        print(entry.source)
+        print(entry.seq_id)
 
 
 if __name__ == "__main__":
