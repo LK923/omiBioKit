@@ -4,9 +4,9 @@ ATGCGTAGCTAGCTAGCTAGCTAG
 ATGCGTACGTACGTA
 >seq
 ATGCTAGCTAGCTAGC
->seq4--alignment
+>seq4_alignment
 ATG-CGT-A-TGC
->seq4--alignment_1
+>seq4_alignment_1
 ATG-CGT-A-TGC
 >seq5_remove_gaps
 ATG-CGTA-T-G

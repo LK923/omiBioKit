@@ -390,13 +390,14 @@ def write_report(out_path: str, report: CleanReport) -> None:
     # Write to file
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
+        f.write("\n")
 
 
 def main():
     from omibio.io import write_fasta, read_fasta
     input_path = "./examples/data/example_dirty.fasta"
     output_path = "./examples/output/clean_fasta_output.fasta"
-    report_path = "./examples/output/clean_report.txt"
+    report_path = "./examples/output/clean_report_output.txt"
 
     seqs = read_fasta(input_path, strict=False).seq_dict()
 
