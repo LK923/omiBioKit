@@ -56,8 +56,9 @@ VALID_BASES = {
     "N", "R", "Y", "K", "M", "B", "V", "D", "H", "S", "W"
 }
 WHITESPACE_RE = re.compile(r"\s+")
-INVALID_NAME_CHAR_RE = re.compile(r"[^ A-Za-z0-9_.-]")
+INVALID_NAME_CHAR_RE = re.compile(r"[^ A-Za-z0-9_.]")
 ALIG_SYMBOL_RE = re.compile(r"-+")
+MUILTIPLE_UNDERSCORE_RE = re.compile(r"_+")
 
 
 def clean(
@@ -181,6 +182,7 @@ def clean(
         if name_policy == "underscores":
             name = name.replace(" ", "_")
 
+        name = MUILTIPLE_UNDERSCORE_RE.sub("_", name)
         if not name:
             name = "unnamed"
 

@@ -18,6 +18,14 @@ def ensure_iterable(x: T) -> list[T]: ...
 
 
 def ensure_iterable(x):
+    """Ensure the input is iterable.
+
+    Args:
+        x: The input to ensure is iterable.
+
+    Returns:
+        list: The input wrapped in a list if it was not already iterable.
+    """
     if x is None:
         return []
     if isinstance(x, (str, bytes, Path, dict)):

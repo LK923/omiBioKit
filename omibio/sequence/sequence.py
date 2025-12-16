@@ -1,4 +1,5 @@
 from omibio.sequence.polypeptide import Polypeptide
+from omibio.utils import to_percentage, truncate_repr
 
 
 class Sequence:
@@ -127,8 +128,8 @@ class Sequence:
 
         gc = self.sequence.count("G") + self.sequence.count("C")
 
-        return (round(gc / seq_length, 4) if not percent
-                else f"{(gc / seq_length) * 100:.2f}%")
+        return (round(gc / seq_length, 3) if not percent
+                else to_percentage(gc / seq_length))
 
     def at_content(self, percent: bool = False) -> float | str:
         """Calculate and return the AT content of the sequence."""
@@ -138,8 +139,8 @@ class Sequence:
 
         at = self.sequence.count("A") + self.sequence.count("T")
 
-        return (round(at / seq_length, 4) if not percent
-                else f"{(at / seq_length) * 100:.2f}%")
+        return (round(at / seq_length, 3) if not percent
+                else to_percentage(at / seq_length))
 
     def complement(self) -> "Sequence":
         """Return the complement of the sequence."""
@@ -247,7 +248,6 @@ class Sequence:
         return self.sequence
 
     def __repr__(self) -> str:
-        from omibio.utils.truncate_repr import truncate_repr
         seq_repr = truncate_repr(self.sequence)
         return (
             f"Sequence({seq_repr}, "
@@ -334,8 +334,8 @@ class Sequence:
 
 
 def main():
-    dna = Sequence("AAAATGCATGCTGACTGTAGCTGATTTATTGCTATC")
-    print(repr(dna))
+    dna = Sequence()
+    print(dna.gc_content(percent=True))
 
 
 if __name__ == "__main__":

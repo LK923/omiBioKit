@@ -82,7 +82,9 @@
 ### utils/
   - ensure_iterable.py
   - ensure_path.py
+  - to_percentage.py
   - truncate_repr.py
+  - within_range.py
 
 
 ### viz/

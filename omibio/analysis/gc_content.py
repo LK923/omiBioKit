@@ -1,4 +1,5 @@
 from omibio.sequence.sequence import Sequence
+from omibio.utils import to_percentage
 
 
 def gc(seq: Sequence | str, percent: bool = False) -> float | str:
@@ -28,12 +29,12 @@ def gc(seq: Sequence | str, percent: bool = False) -> float | str:
         gc_content = (seq.count("C") + seq.count("G")) / len(seq)
         return (
             round(gc_content, 4) if not percent
-            else f"{gc_content * 100:.2f}%"
+            else to_percentage(gc_content)
         )
 
 
 def main():
-    print(gc(Sequence("ACTG")))
+    print(gc("ACTG", percent=True))
 
 
 if __name__ == "__main__":

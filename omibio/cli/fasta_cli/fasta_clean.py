@@ -53,6 +53,11 @@ from typing import TextIO, Literal
     help="Allowed bases to exist in the sequence."
 )
 @click.option(
+    "--report-to",
+    type=click.Path(),
+    help="Write clean report to a .txt file"
+)
+@click.option(
     "--strict", "-s",
     is_flag=True,
     help="Whether to be strict to invalid bases."
@@ -83,14 +88,16 @@ def clean(
     preserve_cases: bool,
     remove_illegal: bool,
     allowed_bases: str,
-    remove_empty: bool
+    remove_empty: bool,
+    report_to: str
 ):
     """
     Perform data cleanup on the specified FASTA file
     and output the results to the specified file.
     """
-    from omibio.sequence.seq_utils.clean import clean as c_f
+    from omibio.sequence.seq_utils.clean import clean as c_f, write_report
 
+    report: bool = report_to is not None
     seqs = read_fasta(source, strict=False).seq_dict()
     res = c_f(
         seqs,
@@ -103,10 +110,11 @@ def clean(
         remove_empty=remove_empty,
         remove_illegal=remove_illegal,
         allowed_bases=set(allowed_bases),
-        report=False
+        report=report
     )
     if isinstance(res, tuple):
-        cleaned = res[0]
+        cleaned, clean_report = res
+        write_report(report_to, clean_report)
     else:
         cleaned = res
     if output is not None:

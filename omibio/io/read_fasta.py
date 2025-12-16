@@ -1,4 +1,4 @@
-from pathlib import Path
+from omibio.utils import ensure_path
 from typing import TYPE_CHECKING, Iterator, TextIO, cast
 from os import PathLike
 import warnings
@@ -55,9 +55,7 @@ def read_fasta_iter(
         file_name = "<stdin>"
         faa = False
     else:
-        file_path = Path(source)
-        if not file_path.exists():
-            raise FileNotFoundError(f"File '{source}' not found.")
+        file_path = ensure_path(source)
 
         suffix = file_path.suffix.lower()
         if suffix not in {".faa", ".fa", ".fasta", ".fna"}:

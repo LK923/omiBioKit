@@ -37,8 +37,8 @@ class TestCleanFasta:
         assert cleaned["seq1 good_sequence"] == "ATGCATGCATGC"
         assert cleaned["seq2 spaces_and_lowercase"] == "ATGCATGC"
         assert cleaned["seq 3 invalid_name"] == "ATGNCATNGC"
-        assert cleaned["seq4--alignment collapse_test"] == "ATG---CATGC"
-        assert "seq4--alignment collapse_test" in cleaned
+        assert cleaned["seq4_alignment collapse_test"] == "ATG---CATGC"
+        assert "seq4_alignment collapse_test" in cleaned
         assert cleaned["seq5_remove_gaps"] == "---ATGC---"
         assert cleaned["seq10_illegal_characters"] == "ATGCNNNATGC"
         assert cleaned["seq11_mixed_rna_dna"] == "AUGCATGCUA"
@@ -90,7 +90,7 @@ class TestCleanFasta:
         assert "seq1" in names
         assert "seq2" in names
         assert "seq" in names
-        assert "seq4--alignment" in names
+        assert "seq4_alignment" in names
 
     def test_name_policy_underscores(self):
         cleaned = clean(
@@ -102,14 +102,14 @@ class TestCleanFasta:
         cleaned = clean(
             self.seqs, gap_policy="remove", min_len=4, name_policy="id_only"
         )
-        assert "-" not in cleaned["seq4--alignment"]
-        assert "-" not in cleaned["seq4--alignment_1"]
+        assert "-" not in cleaned["seq4_alignment"]
+        assert "-" not in cleaned["seq4_alignment_1"]
 
     def test_gap_policy_collapse(self):
         cleaned = clean(
             self.seqs, gap_policy="collapse", min_len=4, name_policy="id_only"
         )
-        assert "--" not in cleaned["seq4--alignment"]
+        assert "--" not in cleaned["seq4_alignment"]
 
     def test_strict_mode(self):
         with pytest.raises(ValueError):

@@ -94,7 +94,7 @@ def window_gc(
         if output is not None:
             fig.tight_layout()
             output_path = os.path.join(
-                output, f"gc_page_{page+1}.png"
+                output, f"window_gc_page_{page+1}.png"
             )
             fig.savefig(output_path)
             if no_show:
