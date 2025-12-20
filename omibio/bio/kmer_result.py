@@ -3,7 +3,7 @@ from omibio.bio.analysis_result import AnalysisResult
 from typing import Iterator, Iterable
 
 
-@dataclass
+@dataclass(slots=True)
 class KmerResult(AnalysisResult):
     """lass to hold kmer counting results. is a subclass of AnalysisResult.
 

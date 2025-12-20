@@ -5,7 +5,7 @@ from omibio.utils import ensure_iterable
 from typing import Iterator
 
 
-@dataclass
+@dataclass(slots=True)
 class IntervalResult(AnalysisResult):
     """Store data returned by analytical functions for interval types,
     is a subclass of AnalysisResult.

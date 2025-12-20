@@ -4,7 +4,7 @@ from typing import Callable, Any
 from abc import ABC
 
 
-@dataclass
+@dataclass(slots=True)
 class AnalysisResult(ABC):
     """An abstract base class used to store the results of analysis functions,
     including basic information such as sequence ID, and methods for plotting.

@@ -108,11 +108,14 @@ class TestSeqCollections:
         d = sc.seq_dict()
         assert d == {"a": e1.seq, "b": e2.seq}
 
-    def test_items(self):
-        e = self.make_entry("k")
+    def test_dict_methods(self):
+        e = self.make_entry(seq_id="test", seq="ATGC")
         sc = SeqCollections(entries=[e], source="test")
         items = dict(sc.items())
-        assert items["k"] is e
+        assert items["test"] is e
+
+        assert list(sc.keys())[0] == "test"
+        assert list(sc.values())[0] is e
 
     def test_iter(self):
         e1 = self.make_entry("a")

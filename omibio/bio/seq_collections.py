@@ -87,6 +87,12 @@ class SeqCollections:
         """Return an items view of the collection."""
         return self._entries.items()
 
+    def keys(self):
+        return self._entries.keys()
+
+    def values(self):
+        return self._entries.values()
+
     def __iter__(self) -> Iterator[SeqEntry]:
         return iter(self._entries.values())
 

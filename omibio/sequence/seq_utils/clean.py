@@ -1,4 +1,5 @@
-from omibio.sequence.sequence import Sequence, Polypeptide
+from omibio.sequence import Sequence, Polypeptide
+from omibio.bio import SeqCollections, SeqEntry
 from omibio.utils import within_range
 from typing import Literal, Iterable, Mapping
 from dataclasses import dataclass
@@ -63,7 +64,8 @@ MUILTIPLE_UNDERSCORE_RE = re.compile(r"_+")
 
 
 def clean(
-    seqs: Mapping[str, str | Sequence | Polypeptide],
+    seqs: Mapping[str, str | Sequence | Polypeptide] | SeqCollections,
+    source: str | None = None,
     name_policy: Literal["keep", "id_only", "underscores"] = "keep",
     gap_policy: Literal["keep", "remove", "collapse"] = "keep",
     strict: bool = False,
@@ -73,13 +75,9 @@ def clean(
     remove_illegal: bool = False,
     allowed_bases: Iterable[str] | None = None,
     remove_empty: bool = True,
-    as_str: bool = False,
     as_polypeptide: bool = False,
     report: bool = False
-) -> (
-    dict[str, str | Sequence | Polypeptide]
-    | tuple[dict[str, str | Sequence | Polypeptide], CleanReport]
-):
+) -> SeqCollections | tuple[SeqCollections, CleanReport]:
     """Clean sequences according to specified policies.
 
     Args:
@@ -134,9 +132,10 @@ def clean(
                 "clean() argument 'allowed_bases' must be an iterable "
                 "of single-character strings."
             )
-    if not isinstance(seqs, dict):
+    if not isinstance(seqs, (dict, SeqCollections)):
         raise TypeError(
-            f"clean() argument 'seqs' must be dict, got {type(seqs).__name__}"
+            "clean() argument 'seqs' must be dict or SeqCollections, got "
+            + type(seqs).__name__
         )
     if name_policy not in {"keep", "id_only", "underscores"}:
         raise ValueError(
@@ -167,9 +166,14 @@ def clean(
         raise ValueError(
             "clean() argument 'min_length' cannot be larger than 'max_length'"
         )
-    cleaned_seqs = {}
+    cleaned_seqs = []
+    cleaned_names = set()
     if report:
         clean_report = CleanReport()
+    if isinstance(seqs, SeqCollections):
+        if source is None:
+            source = seqs.source
+        seqs = seqs.seq_dict()
 
     # ---------------- name processing ----------------
     def process_name(name) -> str:
@@ -183,7 +187,7 @@ def clean(
         if name_policy == "underscores":
             name = name.replace(" ", "_")
 
-        name = MUILTIPLE_UNDERSCORE_RE.sub("_", name)
+        name = MUILTIPLE_UNDERSCORE_RE.sub("_", name).rstrip("_")
         if not name:
             name = "unnamed"
 
@@ -270,10 +274,10 @@ def clean(
                 clean_report.add(item)
             continue
 
-        if cleaned_name in cleaned_seqs:
+        if cleaned_name in cleaned_names:
             count = 1
             new_name = f"{cleaned_name}_{count}"
-            while new_name in cleaned_seqs:
+            while new_name in cleaned_names:
                 count += 1
                 new_name = f"{cleaned_name}_{count}"
             cleaned_name = new_name
@@ -284,24 +288,28 @@ def clean(
         if cleaned_name != raw_name:
             item.name_changed = True
 
-        cleaned_seq: str | Sequence | Polypeptide
-        if not as_str:
-            if as_polypeptide:
-                cleaned_seq = Polypeptide(cleaned)
-            else:
-                cleaned_seq = Sequence(cleaned)
+        cleaned_seq: Polypeptide | Sequence
+        if as_polypeptide:
+            cleaned_seq = Polypeptide(cleaned)
         else:
-            cleaned_seq = cleaned
+            cleaned_seq = Sequence(cleaned)
 
-        cleaned_seqs[cleaned_name] = cleaned_seq
+        cleaned_seqs.append(
+            SeqEntry(seq=cleaned_seq, seq_id=cleaned_name, source=source)
+        )
+        cleaned_names.add(cleaned_name)
 
         if report:
             clean_report.add(item)
 
+    cleaned_collections = SeqCollections(
+        entries=cleaned_seqs, source=source
+    )
+
     if not report:
-        return cleaned_seqs
+        return cleaned_collections
     else:
-        return cleaned_seqs, clean_report
+        return cleaned_collections, clean_report
 
 
 def write_report(out_path: str, report: CleanReport) -> None:

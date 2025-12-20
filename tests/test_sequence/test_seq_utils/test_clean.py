@@ -2,10 +2,10 @@ import pytest
 from omibio.sequence.seq_utils.clean import (
     clean, write_report, CleanReport, CleanReportItem
 )
-from omibio.sequence.sequence import Sequence
+from omibio.sequence import Polypeptide, Sequence
+from omibio.bio import SeqCollections, SeqEntry
 import tempfile
 import os
-from omibio.sequence import Polypeptide
 
 
 class TestCleanFasta:
@@ -32,7 +32,7 @@ class TestCleanFasta:
 
     def test_clean_basic(self):
         cleaned, report = clean(self.seqs, min_length=4, report=True)
-        assert isinstance(cleaned, dict)
+        assert isinstance(cleaned, SeqCollections)
         assert isinstance(report, CleanReport)
         assert cleaned["seq1 good_sequence"] == "ATGCATGCATGC"
         assert cleaned["seq2 spaces_and_lowercase"] == "ATGCATGC"
@@ -133,11 +133,6 @@ class TestCleanFasta:
         ]:
             assert name in removed_names
 
-    def test_as_str_option(self):
-        cleaned = clean(self.seqs, min_length=4, as_str=False)
-        for seq in cleaned.values():
-            assert isinstance(seq, Sequence)
-
     def test_write_report_creates_file(self):
         _, report = clean(self.seqs, min_length=4, report=True)
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -171,8 +166,12 @@ class TestCleanFasta:
         assert "seq" in cleaned
         assert isinstance(cleaned["seq"], Polypeptide)
 
-    def test_as_str(self):
-        seqs = {"seq": "AAAAAAAAAAA"}
-        cleaned = clean(seqs, as_str=True)
-        assert "seq" in cleaned
-        assert isinstance(cleaned["seq"], str)
+    def test_seq_collections_input(self):
+        entry = SeqEntry(
+            seq=Sequence("   ACAWDSFXXJ--JAIWOD"), seq_id="Invalid$$$  Seq"
+        )
+        cl = SeqCollections(entries=[entry], source="test")
+        result = clean(cl, name_policy="id_only", gap_policy="collapse")
+        assert isinstance(result, SeqCollections)
+        assert result.source == "test"
+        assert "Invalid" in result
