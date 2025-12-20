@@ -10,9 +10,14 @@ class AnalysisResult(ABC):
     including basic information such as sequence ID, and methods for plotting.
 
     Args:
-        ABC:
-            Abstract Base Class.
-
+        type (str | None):
+            The type of the analysis result.
+        seq_id (str | None):
+            The sequence ID associated with the analysis result.
+        plot_func (Callable | None):
+            A callable function that can be used to plot the analysis result.
+        metadata (dict[str, Any]):
+            Additional metadata related to the analysis result.
     Raises:
         TypeError:
             If the input types are incorrect.

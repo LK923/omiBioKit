@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from omibio.bio.analysis_result import AnalysisResult
 from omibio.bio.seq_interval import SeqInterval
+from omibio.utils import ensure_iterable
 from typing import Iterator
 
 
@@ -10,8 +11,8 @@ class IntervalResult(AnalysisResult):
     is a subclass of AnalysisResult.
 
     Args:
-        AnalysisResult:
-            Base class for analysis results.
+        intervals(list[SeqInterval] | SeqInterval):
+            A list of SeqInterval objects or a single SeqInterval object.
 
     Raises:
         TypeError:
@@ -21,11 +22,12 @@ class IntervalResult(AnalysisResult):
     intervals: list[SeqInterval] = field(default_factory=list)
 
     def __post_init__(self):
-        if not isinstance(self.intervals, list):
+        if not isinstance(self.intervals, (list, SeqInterval)):
             raise TypeError(
-                "IntervalResult argument 'intervals' must be list, got "
-                + type(self.intervals).__name__
+                "IntervalResult argument 'intervals' must be list or "
+                f"a single SeqInterval, got {type(self.intervals).__name__}"
             )
+        self.intervals = ensure_iterable(self.intervals)
 
     def __len__(self) -> int:
         return len(self.intervals)
@@ -47,15 +49,9 @@ class IntervalResult(AnalysisResult):
 
 
 def main():
-    from omibio.viz import plot_motifs
-    intervals = [
-        SeqInterval(0, 4, nt_seq="ACTG"), SeqInterval(8, 12, nt_seq="ACTG")
-    ]
-    result = IntervalResult(
-        intervals=intervals, seq_id="test", type="motif", plot_func=plot_motifs
-    )
-    print(result)
-    print(type(result))
+    itv = SeqInterval(1, 10)
+    res = IntervalResult(intervals=itv)
+    print(repr(res))
 
 
 if __name__ == "__main__":

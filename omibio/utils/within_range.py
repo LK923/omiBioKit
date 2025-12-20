@@ -1,4 +1,6 @@
-def within_range(n: int, min: int, max: int) -> bool:
+def within_range(
+    n: int, min: int | None = None, max: int | None = None
+) -> bool:
     """Check if a number is within a range."""
     if not n:
         return False

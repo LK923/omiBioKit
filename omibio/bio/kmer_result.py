@@ -8,8 +8,10 @@ class KmerResult(AnalysisResult):
     """lass to hold kmer counting results. is a subclass of AnalysisResult.
 
     Args:
-        AnalysisResult:
-            Base class for analysis results.
+        k (int):
+            The length of the kmer.
+        counts (dict[str, int]):
+            A dictionary mapping kmers to their counts.
 
     Raises:
         TypeError:
