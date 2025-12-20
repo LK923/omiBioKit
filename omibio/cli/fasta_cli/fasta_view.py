@@ -1,6 +1,7 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter
+from omibio.utils import within_range
 from typing import TextIO
 
 
@@ -77,23 +78,12 @@ def view(
             return (f"{entry.seq_id}\t{len(entry.seq)}")
         return f">{entry.seq_id}\n{entry.seq}"
 
-    if min_length or max_length:
-        def check_length(entry) -> bool:
-            length = len(entry.seq)
-            return not (
-                (min_length and length < min_length)
-                or (max_length and length > max_length)
-            )
-    else:
-        def check_length(entry) -> bool:
-            return True
-
     if verbose:
         click.echo(f"File: {source.name}")
 
     if head is not None:
         for entry in result:
-            if check_length(entry):
+            if within_range(len(entry.seq), min_length, max_length):
                 click.echo(message(entry))
             if count >= head:
                 break
@@ -102,14 +92,14 @@ def view(
         from collections import deque
         entries: deque = deque(maxlen=tail)
         for entry in result:
-            if check_length(entry):
+            if within_range(len(entry.seq), min_length, max_length):
                 entries.append(entry)
         for entry in entries:
             click.echo(message(entry))
 
     if not head and not tail:
         for entry in result:
-            if check_length(entry):
+            if within_range(len(entry.seq), min_length, max_length):
                 click.echo(message(entry))
 
     if verbose:

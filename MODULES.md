@@ -59,6 +59,7 @@
 
 
 ### io/
+  - read.py
   - read_fasta.py
   - read_fastq.py
   - write_fasta.py
@@ -82,6 +83,7 @@
 ### utils/
   - ensure_iterable.py
   - ensure_path.py
+  - get_suffix.py
   - to_percentage.py
   - truncate_repr.py
   - within_range.py

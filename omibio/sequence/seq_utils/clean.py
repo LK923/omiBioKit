@@ -1,7 +1,8 @@
 from omibio.sequence.sequence import Sequence, Polypeptide
+from omibio.utils import within_range
 from typing import Literal, Iterable, Mapping
-import re
 from dataclasses import dataclass
+import re
 
 
 @dataclass
@@ -66,8 +67,8 @@ def clean(
     name_policy: Literal["keep", "id_only", "underscores"] = "keep",
     gap_policy: Literal["keep", "remove", "collapse"] = "keep",
     strict: bool = False,
-    min_len: int = 10,
-    max_len: int = 100_000,
+    min_length: int = 10,
+    max_length: int = 100_000,
     normalize_case: bool = True,
     remove_illegal: bool = False,
     allowed_bases: Iterable[str] | None = None,
@@ -91,9 +92,9 @@ def clean(
             Policy for handling gaps in sequences. Defaults to "keep".
         strict (bool, optional):
             If True, raises an error on illegal characters. Defaults to False.
-        min_len (int, optional):
+        min_length (int, optional):
             Minimum length for sequences to keep. Defaults to 10.
-        max_len (int, optional):
+        max_length (int, optional):
             Maximum length for sequences to keep. Defaults to 100,000.
         normalize_case (bool, optional):
             If True, converts sequences to uppercase. Defaults to True.
@@ -147,24 +148,24 @@ def clean(
             "clean() argument 'gap_policy' must be one of: "
             "'keep', 'remove', 'collapse'"
         )
-    if not isinstance(min_len, int):
+    if not isinstance(min_length, int):
         raise TypeError(
-            "clean() argument 'min_len' must be int, got "
-            + type(min_len).__name__
+            "clean() argument 'min_length' must be int, got "
+            + type(min_length).__name__
         )
-    if not isinstance(max_len, int):
+    if not isinstance(max_length, int):
         raise TypeError(
-            "clean() argument 'max_len' must be int, got "
-            + type(max_len).__name__
+            "clean() argument 'max_length' must be int, got "
+            + type(max_length).__name__
         )
-    if min_len < 0 or max_len < 0:
+    if min_length < 0 or max_length < 0:
         raise ValueError(
-            "clean() argument 'min_len' and 'max_len' must be "
+            "clean() argument 'min_length' and 'max_length' must be "
             "non-negative numbers"
         )
-    if min_len > max_len:
+    if min_length > max_length:
         raise ValueError(
-            "clean() argument 'min_len' cannot be larger than 'max_len'"
+            "clean() argument 'min_length' cannot be larger than 'max_length'"
         )
     cleaned_seqs = {}
     if report:
@@ -233,11 +234,11 @@ def clean(
             item.illegal_removed = illegal_removed
             item.illegal_replaced = illegal_replaced
 
-        if remove_empty and set(cleaned) <= {"N", "-"}:
+        if remove_empty and (not cleaned or set(cleaned) <= {"N", "-"}):
             item.reason = "empty_or_N_only"
             return ""
 
-        if not cleaned or not (min_len <= len(cleaned) <= max_len):
+        if not within_range(len(cleaned), min_length, max_length):
             item.reason = "length_filter"
             return ""
 

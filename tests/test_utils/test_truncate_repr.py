@@ -12,7 +12,7 @@ class TestTruncateRepr:
         s = "ACGT"
         assert truncate_repr(s) == repr(s)
 
-    def test_exact_max_len(self):
+    def test_exact_max_length(self):
         s = "A" * 30
         assert truncate_repr(s) == repr(s)
 
@@ -24,17 +24,17 @@ class TestTruncateRepr:
 
     def test_long_string_custom_max(self):
         s = "ACGT" * 20
-        result = truncate_repr(s, max_len=20)
+        result = truncate_repr(s, max_length=20)
         assert result.startswith("'ACGTACG")
         assert result.endswith("ACGTACGT'")
 
     def test_unicode_string(self):
         s = "😊" * 50
-        result = truncate_repr(s, max_len=10)
+        result = truncate_repr(s, max_length=10)
         assert result.startswith("'😊😊")
         assert result.endswith("😊😊'")
 
-    def test_max_len_less_than_three(self):
+    def test_max_length_less_than_three(self):
         s = "ABCDEFG"
-        result = truncate_repr(s, max_len=2)
+        result = truncate_repr(s, max_length=2)
         assert result == repr("ABCDEFG")

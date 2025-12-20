@@ -3,6 +3,7 @@ from omibio.io import read_fasta
 from omibio.cli.gc_cli import gc_group
 from omibio.analysis import sliding_gc
 from omibio.sequence import Polypeptide
+from omibio.utils import to_percentage
 import csv
 
 
@@ -68,8 +69,10 @@ def window_gc(
 
             average = sum(gc_vals) / len(gc_vals)
             click.echo(
-                f"{entry.seq_id}\tmean={average:.2f}%\t"
-                f"max={max(gc_vals)}%\tmin={min(gc_vals)}%"
+                f"{entry.seq_id}\t"
+                f"mean={to_percentage(average)}\t"
+                f"max={to_percentage(max(gc_vals))}\t"
+                f"min={to_percentage(min(gc_vals))}"
             )
     else:
         rows = [["seq_id", "start", "end", "gc"]]

@@ -1,4 +1,4 @@
-from pathlib import Path
+from omibio.utils import ensure_path
 from typing import TYPE_CHECKING, Iterator, TextIO, cast
 from os import PathLike
 import warnings
@@ -28,7 +28,7 @@ def read_fastq_iter(
         FastqFormatError:
             If the FASTQ format is invalid.
         FastqFormatError:
-        If the sequence contains invalid characters.
+            If the sequence contains invalid characters.
         FastqFormatError:
             If the sequence name is missing.
         FastqFormatError:
@@ -50,14 +50,12 @@ def read_fastq_iter(
         fh = cast(TextIO, source)
         file_name = "<stdin>"
     else:
-        file_path = Path(source)
-        if not file_path.exists():
-            raise FileNotFoundError(f"File '{source}' not found.")
-
+        file_path = ensure_path(source)
         suffix = file_path.suffix.lower()
+
         if suffix not in {".fastq", ".fq"}:
             raise FastqFormatError(
-                f"Invalid format to read: {suffix}"
+                f"Invalid format to read: {suffix!r}"
             )
         file_name = str(file_path)
         fh = open(file_path, "r")

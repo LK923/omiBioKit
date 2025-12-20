@@ -35,13 +35,13 @@ from typing import TextIO, Literal
     )
 )
 @click.option(
-    "--min-len", "-min",
+    "--min-length", "-min",
     type=int,
     default=10,
     help="The shortest length of the sequence to be retained"
 )
 @click.option(
-    "--max-len", "-max",
+    "--max-length", "-max",
     type=int,
     default=100_000,
     help="The longest length of the sequence to be retained"
@@ -83,8 +83,8 @@ def clean(
     name_policy: Literal["keep", "id_only", "underscores"],
     gap_policy: Literal["keep", "remove", "collapse"],
     strict: bool,
-    min_len: int,
-    max_len: int,
+    min_length: int,
+    max_length: int,
     preserve_cases: bool,
     remove_illegal: bool,
     allowed_bases: str,
@@ -98,14 +98,14 @@ def clean(
     from omibio.sequence.seq_utils.clean import clean as c_f, write_report
 
     report: bool = report_to is not None
-    seqs = read_fasta(source, strict=False).seq_dict()
+    seqs = read_fasta(source, strict=False, warn=False).seq_dict()
     res = c_f(
         seqs,
         name_policy=name_policy,
         gap_policy=gap_policy,
         strict=strict,
-        min_len=min_len,
-        max_len=max_len,
+        min_length=min_length,
+        max_length=max_length,
         normalize_case=not preserve_cases,
         remove_empty=remove_empty,
         remove_illegal=remove_illegal,

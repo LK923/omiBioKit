@@ -56,7 +56,6 @@ def read_fasta_iter(
         faa = False
     else:
         file_path = ensure_path(source)
-
         suffix = file_path.suffix.lower()
         if suffix not in {".faa", ".fa", ".fasta", ".fna"}:
             raise FastaFormatError(

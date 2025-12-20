@@ -4,8 +4,8 @@ from omibio.bio import SeqInterval, IntervalResult
 
 def find_palindrome(
     seq: Sequence | str,
-    min_len: int = 4,
-    max_len: int = 12,
+    min_length: int = 4,
+    max_length: int = 12,
     seq_id: str | None = None
 ) -> IntervalResult:
     """Find palindromic sequences in a given sequence.
@@ -13,9 +13,9 @@ def find_palindrome(
     Args:
         seq (Sequence | str):
             Input sequence to search for palindromes.
-        min_len (int, optional):
+        min_length (int, optional):
             Minimum length of palindromic sequences to find. Defaults to 4.
-        max_len (int, optional):
+        max_length (int, optional):
             Maximum length of palindromic sequences to find. Defaults to 12.
         seq_id (str | None, optional):
             Identifier for the sequence. Defaults to None.
@@ -24,11 +24,11 @@ def find_palindrome(
         TypeError:
             If the input sequence is not of type Sequence or string.
         TypeError:
-            If min_len or max_len is not of type int.
+            If min_length or max_length is not of type int.
         ValueError:
-            If min_len is larger than the length of the sequence.
+            If min_length is larger than the length of the sequence.
         ValueError:
-            If min_len is larger than max_len.
+            If min_length is larger than max_length.
 
     Returns:
         IntervalResult:
@@ -48,22 +48,23 @@ def find_palindrome(
             "find_palindrome() argument 'seq' must be Sequence or str, got "
             + type(seq).__name__
         )
-    if not isinstance(min_len, int) or not isinstance(max_len, int):
+    if not isinstance(min_length, int) or not isinstance(max_length, int):
         raise TypeError(
-            "find_palindrome() argument 'min_len' and 'max_len must be int."
+            "find_palindrome() argument 'min_length' and 'max_length "
+            "must be int."
         )
 
     n = len(seq)
 
-    if min_len > n:
+    if min_length > n:
         raise ValueError(
-            f"find_palindrome() argument 'min_len' {min_len}"
+            f"find_palindrome() argument 'min_length' {min_length}"
             f"cannot be larger than the length of sequence {n}"
         )
-    if max_len < min_len:
+    if max_length < min_length:
         raise ValueError(
-            f"find_palindrome() argument 'min_len' {min_len} "
-            f"cannot be larger than 'max_len' {max_len}"
+            f"find_palindrome() argument 'min_length' {min_length} "
+            f"cannot be larger than 'max_length' {max_length}"
         )
 
     if isinstance(seq, str):
@@ -72,9 +73,9 @@ def find_palindrome(
     rev_seq = seq.reverse_complement()
     results = []
 
-    start = (max_len) if max_len % 2 == 0 else (max_len - 1)
+    start = (max_length) if max_length % 2 == 0 else (max_length - 1)
 
-    for length in range(start, min_len - 1, -2):
+    for length in range(start, min_length - 1, -2):
 
         for i in range(0, n - length + 1):
             candidate = seq[i: i+length]

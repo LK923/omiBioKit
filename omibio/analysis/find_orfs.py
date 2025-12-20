@@ -2,6 +2,7 @@ from omibio.bio import SeqInterval, IntervalResult
 from omibio.sequence import Sequence
 from omibio.sequence.seq_utils.translate import translate_nt
 from omibio.viz.plot_orfs import plot_orfs
+from omibio.utils import within_range
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}
 
@@ -30,22 +31,22 @@ def find_orfs_in_frame(
             for start_idx in active_starts:
                 orf_length = i + 3 - start_idx
 
-                if not (min_length <= orf_length <= max_length):
-                    continue
-
-                nt_seq = seq[start_idx: end_idx]
-                aa_seq = (
-                    str(translate_nt(nt_seq, stop_symbol=False)) if translate
-                    else None
-                )
-                orf_list.append(
-                    SeqInterval(
-                        start=start_idx, end=end_idx,
-                        nt_seq=nt_seq, type='ORF',
-                        strand=strand, frame=frame+1,
-                        aa_seq=aa_seq, seq_id=seq_id
+                if within_range(orf_length, min_length, max_length):
+                    nt_seq = seq[start_idx: end_idx]
+                    aa_seq = (
+                        str(
+                            translate_nt(nt_seq, stop_symbol=False)
+                        ) if translate
+                        else None
                     )
-                )
+                    orf_list.append(
+                        SeqInterval(
+                            start=start_idx, end=end_idx,
+                            nt_seq=nt_seq, type='ORF',
+                            strand=strand, frame=frame+1,
+                            aa_seq=aa_seq, seq_id=seq_id
+                        )
+                    )
             active_starts = []
         else:
             if codon in start_codons:
