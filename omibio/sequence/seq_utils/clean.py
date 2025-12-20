@@ -81,9 +81,9 @@ def clean(
     """Clean sequences according to specified policies.
 
     Args:
-        seqs (dict[str, str  |  Sequence]):
-            Dictionary of sequence names to sequences
-            (as strings or Sequence objects).
+        seqs (Mapping[str, str | Sequence | Polypeptide] | SeqCollections):
+            Dictionary of sequence names to sequences or a SeqCollections
+            object.
         name_policy (Literal["keep", "id_onbly", "underscores"], optional):
             Policy for cleaning sequence names. Defaults to "keep".
         gap_policy (Literal["keep", "remove", "collapse"], optional):
@@ -104,9 +104,6 @@ def clean(
         remove_empty (bool, optional):
             If True, removes sequences that are empty or contain only 'N's.
             Defaults to True.
-        as_str (bool, optional):
-            If True, returns cleaned sequences as strings.
-            If False, returns them as Sequence objects. Defaults to True.
         report (bool, optional):
             If True, generates a cleaning report. Defaults to False.
 
@@ -117,9 +114,9 @@ def clean(
             If input types are incorrect.
 
     Returns:
-        dict[str, str | Sequence] |
-        tuple[dict[str, str | Sequence], CleanReport]:
-            Cleaned sequences, optionally with a cleaning report.
+        SeqCollections | tuple[SeqCollections, CleanReport]:
+            SeqCollections containing cleaned SeqEntries, optionally with a
+            cleaning report.
     """
 
     if allowed_bases is None:
