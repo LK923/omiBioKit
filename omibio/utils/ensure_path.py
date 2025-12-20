@@ -13,7 +13,7 @@ def ensure_path(path: str | PathLike) -> Path:
             If the path does not exist.
     Returns:
         Path:
-            The path if it exists.
+            The path as a Path object if it exists.
     """
     p = Path(path)
     if not p.exists():
