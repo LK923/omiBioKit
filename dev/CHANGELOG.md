@@ -38,3 +38,8 @@
   - Enhence ploting functions to adapt new `AnalysisResult`
   - Enhence all CLIs
   - update README.md, MOUDULES.md
+
+## [v0.1.4] 12/19/2025
+  - `Add read()` as a unified interface for file parsing functions.
+  - Add `get_suffix` to utils.
+  - Implement utils.
