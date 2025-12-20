@@ -7,6 +7,7 @@ def plot_motifs(
     motifs: list[SeqInterval] | IntervalResult,
     seq_length: int | None = None,
     ax: Axes | None = None,
+    figsize: tuple = (9, 4),
     show: bool = False
 ) -> Axes:
     """Plot motif occurrences along a sequence.
@@ -33,7 +34,7 @@ def plot_motifs(
     """
 
     if ax is None:
-        ax = plt.subplots(figsize=(9, 3))[1]
+        ax = plt.subplots(figsize=figsize)[1]
     if seq_length is None:
         if isinstance(motifs, IntervalResult):
             seq_length = motifs.metadata["seq_length"]
@@ -74,6 +75,7 @@ def plot_motifs(
     ax.legend(handles=[handle_plus, handle_minus])
 
     if show:
+        plt.tight_layout()
         plt.show()
     return ax
 

@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from pathlib import Path
 from typing import TypeVar, overload, Iterable as TypingIterable
 
@@ -24,14 +23,14 @@ def ensure_iterable(x):
         x: The input to ensure is iterable.
 
     Returns:
-        list: The input wrapped in a list if it was not already iterable.
+        list: The input wrapped in a list.
     """
     if x is None:
         return []
     if isinstance(x, (str, bytes, Path, dict)):
         return [x]
-    if isinstance(x, Iterable):
-        return list(x)
+    if isinstance(x, (tuple, set, list)):
+        return x
     return [x]
 
 

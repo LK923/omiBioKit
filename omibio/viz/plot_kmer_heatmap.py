@@ -58,6 +58,7 @@ def plot_kmer(
     k_set = set()
 
     for count in kmer_counts:
+        print(repr(count))
         if not isinstance(count, KmerResult):
             raise TypeError(
                 "plot_kmer() argument 'kmer_counts' must contains KmerResult, "

@@ -9,6 +9,7 @@ def plot_orfs(
     orfs: list[SeqInterval] | IntervalResult,
     seq_length: int | None = None,
     ax: Axes | None = None,
+    figsize: tuple = (9, 4),
     show: bool = False
 ) -> Axes:
     """Plot Open Reading Frames (ORFs) along a sequence.
@@ -35,7 +36,7 @@ def plot_orfs(
     """
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(9, 3))
+        _, ax = plt.subplots(figsize=figsize)
 
     if seq_length is None:
         if isinstance(orfs, IntervalResult):
@@ -84,6 +85,7 @@ def plot_orfs(
     ax.grid(True, linestyle='--', alpha=0.5)
 
     if show:
+        plt.tight_layout()
         plt.show()
     return ax
 

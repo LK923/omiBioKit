@@ -10,7 +10,7 @@ def plot_sliding_gc(
     ax: Axes | None = None,
     show: bool = False,
     seq_id: str | None = None,
-    figsize: tuple = (9, 3)
+    figsize: tuple = (9, 4)
 ) -> Axes:
     """Plot sliding window GC content along a sequence.
 
