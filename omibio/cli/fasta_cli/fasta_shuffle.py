@@ -1,4 +1,6 @@
 import click
+from omibio.sequence import shuffle_seq
+import random
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta, write_fasta
 from typing import TextIO
@@ -31,8 +33,6 @@ def shuffle(
     Shuffle the sequences in the FASTA file
     and output them to the specified file.
     """
-    from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
-    import random
 
     res = {}
     rng = random.Random(seed)

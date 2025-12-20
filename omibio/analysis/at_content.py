@@ -2,38 +2,38 @@ from omibio.sequence.sequence import Sequence
 from omibio.utils import to_percentage
 
 
-def gc(seq: Sequence | str, percent: bool = False) -> float | str:
-    """Calculate the GC content of a sequence.
+def at(seq: Sequence | str, percent: bool = False) -> float | str:
+    """Calculate the AT content of a sequence.
 
     Args:
         seq (Sequence | str):
             input sequence
         percent (bool, optional):
-            If True, return GC content as a percentage string.
+            If True, return AT content as a percentage string.
             Defaults to False.
 
     Returns:
-        float | str: GC content as a float or percentage string.
+        float | str: AT content as a float or percentage string.
     """
     if not isinstance(seq, (Sequence, str)):
         raise TypeError(
-            "gc() argument 'seq' must be Sequence or str, not "
+            "at() argument 'seq' must be Sequence or str, not "
             + type(seq).__name__
         )
     if isinstance(seq, Sequence):
-        return seq.gc_content(percent=percent)
+        return seq.at_content(percent=percent)
     elif isinstance(seq, str):
         if not seq:
             return 0.0 if not percent else "0.00%"
-        gc_content = (seq.count("C") + seq.count("G")) / len(seq)
+        at_content = (seq.count("A") + seq.count("T")) / len(seq)
         return (
-            round(gc_content, 4) if not percent
-            else to_percentage(gc_content)
+            round(at_content, 4) if not percent
+            else to_percentage(at_content)
         )
 
 
 def main():
-    print(gc("ACTG", percent=True))
+    print(at("ATG", percent=False))
 
 
 if __name__ == "__main__":

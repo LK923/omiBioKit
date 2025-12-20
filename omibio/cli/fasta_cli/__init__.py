@@ -12,11 +12,13 @@ def register_commands():
     from .fasta_clean import clean
     from .fasta_shuffle import shuffle
     from .fasta_info import info
+    from .fasta_translate import translate
 
     fasta_group.add_command(view)
     fasta_group.add_command(clean)
     fasta_group.add_command(shuffle)
     fasta_group.add_command(info)
+    fasta_group.add_command(translate)
 
 
 register_commands()
