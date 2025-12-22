@@ -1,6 +1,7 @@
 import click
 from omibio.cli.fasta_cli import fasta_group
 from omibio.io import read_fasta_iter, write_fasta
+from omibio.sequence import Sequence, Polypeptide
 from typing import TextIO
 
 
@@ -52,15 +53,23 @@ def translate(
     require_start: bool,
     prefix: str | None
 ):
+    """
+    Translate nucleotide sequences to amino acid sequences. If the fasta file
+    contains amino acid sequences, they will be returned as is.
+    """
     result = read_fasta_iter(source)
     aa_dict = {}
     count = 1
 
     for entry in result:
-        aa_seq = entry.seq.translate_nt(
-            frame=frame, stop_symbol=stop_symbol,
-            to_stop=to_stop, require_start=require_start
-        )
+        if isinstance(entry.seq, Sequence):
+            aa_seq = str(entry.seq.translate_nt(
+                frame=frame, as_str=True, stop_symbol=stop_symbol,
+                to_stop=to_stop, require_start=require_start,
+            ))
+        elif isinstance(entry.seq, Polypeptide):
+            aa_seq = str(entry.seq)
+
         if prefix is None:
             aa_dict[f"{entry.seq_id}_amino_acids"] = aa_seq
         else:

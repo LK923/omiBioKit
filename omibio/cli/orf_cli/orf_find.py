@@ -122,15 +122,17 @@ def find(
         ]
         if show_seq:
             nt_seq = str(orf.nt_seq) if orf.nt_seq is not None else "None"
+            base_fields.extend([nt_seq])
+        if translate:
             aa_seq = str(orf.aa_seq) if orf.aa_seq is not None else "None"
-            base_fields.extend([nt_seq, aa_seq])
+            base_fields.extend([aa_seq])
         res.append(base_fields)
 
     header = ["seq_id", "start", "end", "strand", "frame", "length"]
     if show_seq:
         header.append("nt_seq")
-        if translate:
-            header.append("aa_seq")
+    if translate:
+        header.append("aa_seq")
 
     rows = [header] + res
 
@@ -139,6 +141,6 @@ def find(
             click.echo("\t".join(str(f) for f in row))
     else:
         with open(output, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
+            writer = csv.writer(f, delimiter="\t")
             writer.writerows(rows)
         click.echo(f"Result written to {output}")

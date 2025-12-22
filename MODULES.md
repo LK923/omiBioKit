@@ -3,10 +3,12 @@
 [![Latest Version](https://img.shields.io/github/v/release/LK923/omiBioKit?color=blue)](https://github.com/LK923/omiBioKit/releases)
 
 ### analysis/
+  - at_content.py
   - consensus.py
   - find_motif.py
   - find_orfs.py
   - gc_content.py
+  - get_formula.py
   - kmer.py
   - palindrome.py
   - protein_mass.py
@@ -29,6 +31,7 @@
     - fasta_clean.py
     - fasta_info.py
     - fasta_shuffle.py
+    - fasta_translate.py
     - fasta_view.py
 
 
