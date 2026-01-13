@@ -4,6 +4,7 @@ from omibio.utils.ensure_iterable import ensure_iterable
 from omibio.utils.to_percentage import to_percentage
 from omibio.utils.get_suffix import get_suffix
 from omibio.utils.within_range import within_range
+from omibio.utils.chunked import chunked
 
 __all__ = [
     "truncate_repr",
@@ -12,4 +13,5 @@ __all__ = [
     "to_percentage",
     "get_suffix",
     "within_range",
+    "chunked",
 ]
