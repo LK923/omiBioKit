@@ -4,6 +4,7 @@ from omibio.sequence.seq_utils.random_seq import random_seq, random_fasta
 from omibio.sequence.seq_utils.shuffle_seq import shuffle_seq
 from omibio.sequence.seq_utils.transcribe import transcribe, reverse_transcribe
 from omibio.sequence.seq_utils.translate import translate_nt
+from omibio.sequence.seq_utils.encode_dna import encode_dna, decode_dna
 
 
 __all__ = [
@@ -17,5 +18,7 @@ __all__ = [
     "shuffle_seq",
     "transcribe",
     "reverse_transcribe",
-    "translate_nt"
+    "translate_nt",
+    "encode_dna",
+    "decode_dna"
 ]

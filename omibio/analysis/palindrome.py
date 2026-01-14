@@ -37,7 +37,7 @@ def find_palindrome(
 
     if not seq:
         return IntervalResult(
-            intervals=[], seq_id=seq_id, type="palindrome",
+            intervals=(), seq_id=seq_id, type="palindrome",
             metadata={
                 "seq_length": 0,
                 "sequence": ""
@@ -88,7 +88,7 @@ def find_palindrome(
                 )
 
     return IntervalResult(
-        intervals=results, seq_id=seq_id, type="palindrome",
+        intervals=tuple(results), seq_id=seq_id, type="palindrome",
         metadata={
             "seq_length": n,
             "sequence": str(seq)

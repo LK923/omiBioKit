@@ -32,7 +32,7 @@ def sliding_gc(
 
     if not seq:
         return IntervalResult(
-            intervals=[], seq_id=seq_id, type="sliding_gc",
+            intervals=(), seq_id=seq_id, type="sliding_gc",
             metadata={
                 "seq_length": 0,
                 "sequence": ""
@@ -55,11 +55,11 @@ def sliding_gc(
         gc_count = sum(1 for b in seq if b in 'GC')
         gc_percent = round((gc_count / n), 3)
         return IntervalResult(
-            intervals=[
+            intervals=(
                 SeqInterval(
                     start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
-                )
-            ],
+                ),
+            ),
             seq_id=seq_id, type="sliding_gc", plot_func=plot_sliding_gc,
             metadata={
                 "seq_length": n,
@@ -90,7 +90,7 @@ def sliding_gc(
         )
 
     return IntervalResult(
-        intervals=gc_list,
+        intervals=tuple(gc_list),
         seq_id=seq_id,
         plot_func=plot_sliding_gc,
         type="sliding_gc",

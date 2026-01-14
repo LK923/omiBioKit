@@ -8,7 +8,7 @@ from omibio.sequence.sequence import Sequence
 
 class TestSlidingGC:
     def test_empty_seq(self):
-        assert sliding_gc("").intervals == []
+        assert sliding_gc("").intervals == ()
 
     def test_invalid_seq_type(self):
         with pytest.raises(TypeError):

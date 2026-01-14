@@ -35,7 +35,7 @@ def find_motifs(
     """
     if not seq:
         return IntervalResult(
-            intervals=[], seq_id=seq_id, type="motif", plot_func=plot_motifs,
+            intervals=(), seq_id=seq_id, type="motif", plot_func=plot_motifs,
             metadata={
                 "seq_length": 0,
                 "sequence": ""
@@ -93,7 +93,8 @@ def find_motifs(
         find_motifs_in_strand(str(seq.reverse_complement()), strand="-")
 
     return IntervalResult(
-        intervals=results, seq_id=seq_id, type="motif", plot_func=plot_motifs,
+        intervals=tuple(results), seq_id=seq_id,
+        type="motif", plot_func=plot_motifs,
         metadata={
             "seq_length": n,
             "sequence": str(seq)

@@ -6,7 +6,8 @@ from omibio.sequence.seq_utils import (
     random_seq, random_fasta,
     shuffle_seq,
     transcribe, reverse_transcribe,
-    translate_nt
+    translate_nt,
+    encode_dna, decode_dna
 )
 
 
@@ -23,5 +24,7 @@ __all__ = [
     "shuffle_seq",
     "transcribe",
     "reverse_transcribe",
-    "translate_nt"
+    "translate_nt",
+    "encode_dna",
+    "decode_dna"
 ]

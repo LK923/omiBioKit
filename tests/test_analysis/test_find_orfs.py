@@ -111,6 +111,13 @@ class TestFindORFs:
         )
         assert len(orfs) == 1
 
+    def test_frame(self):
+        seq = "ATGTAACATGTAA"
+        orfs = find_orfs(
+            seq, min_length=0, frames=0, include_reverse=False
+        )
+        assert len(orfs) == 1
+
     def test_invalid_length_not_int(self):
         with pytest.raises(TypeError):
             find_orfs("ATGAAATAA", min_length=[])
@@ -146,6 +153,12 @@ class TestFindORFs:
     def test_invalid_seq_id(self):
         with pytest.raises(TypeError):
             find_orfs("ATGAAATAA", seq_id=1)
+
+    def test_invalid_frames(self):
+        with pytest.raises(TypeError):
+            find_orfs("ATGAAATAA", frames="A")
+        with pytest.raises(ValueError):
+            find_orfs("ATGAAATAA", frames=5)
 
     def test_sort_by_length_descending(self):
         seq = "ATGAAAAATAAATGAAATAA"
@@ -185,7 +198,7 @@ class TestFindORFs:
         orfs = find_orfs_in_frame(
             seq, min_length=6, max_length=12, overlap=False,
             strand='+', frame=0, translate=False,
-            start_codons={"ATG"}, seq_id="test"
+            start_codons={"ATG"}, seq_id="test", str_seq=True
         )
         assert len(orfs) == 1
         assert orfs[0].seq_id == "test"

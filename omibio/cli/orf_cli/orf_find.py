@@ -3,6 +3,7 @@ from omibio.cli.orf_cli import orf_group
 from omibio.io import read_fasta
 from omibio.analysis.find_orfs import find_orfs
 from omibio.sequence import Polypeptide
+from omibio.bio import SeqInterval
 from typing import TextIO
 import csv
 
@@ -85,7 +86,7 @@ def find(
     }
 
     seqs = read_fasta(source).seq_dict()
-    all_orfs = []
+    all_orfs: list[SeqInterval] = []
 
     for seq_id, seq_obj in seqs.items():
         if isinstance(seq_obj, Polypeptide):

@@ -62,7 +62,7 @@ class TestFindMotif:
 
     def test_no_match(self):
         res = find_motifs("ACGTACGT", "ZZZ")
-        assert res.intervals == []
+        assert res.intervals == ()
 
     def test_overlap_not_captured(self):
         res = find_motifs("AAAAA", "AA")

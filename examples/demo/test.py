@@ -8,15 +8,17 @@ from concurrent.futures import ProcessPoolExecutor
 def analysis(sequences: list[Sequence]):
     results = []
     for seq in sequences:
-        orfs = find_orfs(seq)
+        orfs = find_orfs(
+            seq, str_seq=False, sort_by_length=False, include_reverse=False,
+        )
         for orf in orfs:
             results.append(orf)
     return results
 
 
 def main():
-    seqs = read_fasta("./huge_data/huge.fasta").seqs()
-    chunks = chunked(seqs, chunk_size=10)
+    seqs: list[Sequence] = read_fasta("./huge_data/huge.fasta").seqs()
+    chunks: list[Sequence] = chunked(seqs, chunk_size=200)
     results = []
 
     with ProcessPoolExecutor(max_workers=10) as pool:

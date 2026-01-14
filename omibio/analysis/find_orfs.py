@@ -3,6 +3,7 @@ from omibio.sequence import Sequence
 from omibio.sequence.seq_utils.translate import translate_nt
 from omibio.viz.plot_orfs import plot_orfs
 from omibio.utils import within_range
+from typing import Iterable, Union
 
 STOP_CODONS = {"TAA", "TAG", "TGA"}
 
@@ -16,7 +17,8 @@ def find_orfs_in_frame(
     frame: int,
     translate: bool,
     start_codons: set[str],
-    seq_id: str | None = None
+    str_seq: bool,
+    seq_id: str | None,
 ) -> list[SeqInterval]:
     """Internal helper function. Scan a single frame and return raw ORFs."""
 
@@ -32,12 +34,14 @@ def find_orfs_in_frame(
                 orf_length = i + 3 - start_idx
 
                 if within_range(orf_length, min_length, max_length):
-                    nt_seq = seq[start_idx: end_idx]
+                    nt_seq = (
+                        seq[start_idx: end_idx]
+                        if translate or str_seq else None
+                    )
                     aa_seq = (
                         str(
                             translate_nt(nt_seq, stop_symbol=False)
-                        ) if translate
-                        else None
+                        ) if translate else None
                     )
                     orf_list.append(
                         SeqInterval(
@@ -67,8 +71,10 @@ def find_orfs(
     include_reverse: bool = True,
     sort_by_length: bool = True,
     translate: bool = False,
-    start_codons: set[str] | list[str] | tuple[str] = {"ATG"},
-    seq_id: str | None = None
+    start_codons: Union[list[str], tuple[str], set[str]] = {"ATG"},
+    seq_id: str | None = None,
+    frames: Iterable[int] | int = {0, 1, 2},
+    str_seq: bool = True
 ) -> IntervalResult:
     """Find ORFs in a given sequence.
 
@@ -89,10 +95,12 @@ def find_orfs(
         translate (bool, optional):
             Whether to translate the nucleotide sequences to amino acid
             sequences. Defaults to False.
-        start_codons (set[str], optional):
+        start_codons (Iterable[str], optional):
             Set of start codons to consider. Defaults to {"ATG"}.
         seq_id (str | None, optional):
             Identifier for the sequence. Defaults to None.
+        frames (Iterable[int] | int, optional):
+            Reading frames to consider (0, 1, 2). Defaults to {0, 1, 2}.
 
     Returns:
         IntervalResult:
@@ -153,31 +161,48 @@ def find_orfs(
             "find_orfs() argument 'seq_id' must be str, not "
             + type(seq_id).__name__
         )
+    # Input: frames
+    if not isinstance(frames, (set, list, tuple, int)):
+        raise TypeError(
+            "find_orfs() argument 'frames' must be Iterable contains int or "
+            f"int, not {type(frames).__name__}"
+        )
 
     if isinstance(seq, str):
         seq = Sequence(seq, strict=False)
     if seq.is_rna is True:
         seq = seq.reverse_transcribe()
+    if isinstance(frames, int):
+        frames = {frames}
+    else:
+        frames = set(frames)
+    for f in frames:
+        if f not in {0, 1, 2}:
+            raise ValueError(
+                f"Invalid frame: {f}, frame must be 0, 1, or 2"
+            )
 
     seq_length = len(seq)
     results = []
 
-    for frame in (0, 1, 2):
+    for frame in frames:
         results.extend(
             find_orfs_in_frame(
                 seq.sequence, min_length=min_length, max_length=max_length,
                 overlap=overlap, strand='+', frame=frame, translate=translate,
-                start_codons=validated_start_codons, seq_id=seq_id
+                start_codons=validated_start_codons, seq_id=seq_id,
+                str_seq=str_seq
             )
         )
 
     if include_reverse:
         rev_seq = seq.reverse_complement()
-        for frame in (0, 1, 2):
+        for frame in frames:
             rev_orfs = find_orfs_in_frame(
                 rev_seq.sequence, min_length=min_length, max_length=max_length,
                 overlap=overlap, strand='-', frame=frame, translate=translate,
-                start_codons=validated_start_codons, seq_id=seq_id
+                start_codons=validated_start_codons, seq_id=seq_id,
+                str_seq=str_seq
                 )
             for orf in rev_orfs:
                 results.append(
@@ -194,7 +219,7 @@ def find_orfs(
         results.sort(key=lambda orf: orf.length, reverse=True)
 
     return IntervalResult(
-        intervals=results,
+        intervals=tuple(results),
         seq_id=seq_id,
         plot_func=plot_orfs, type="ORF",
         metadata={
@@ -208,8 +233,10 @@ def main():
     from omibio.io.read_fasta import read_fasta
     seqs = read_fasta(r"./examples/data/example_single_short_seq.fasta")
     sequence = seqs["example"]
-    res = find_orfs(sequence, translate=True, seq_id='example', min_length=0)
-    res.plot(show=True)
+    res = find_orfs(
+        sequence, translate=True, seq_id='example', min_length=0, frames=2
+    )
+    print(res)
 
 
 if __name__ == "__main__":
