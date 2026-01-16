@@ -210,7 +210,7 @@ def find_orfs(
                         start=seq_length - orf.end,
                         end=seq_length - orf.start,
                         nt_seq=orf.nt_seq, type='ORF',
-                        strand='-', frame=-(frame + 1),
+                        strand='-', frame=frame+1,
                         aa_seq=orf.aa_seq, seq_id=seq_id
                     )
                 )
@@ -231,12 +231,16 @@ def find_orfs(
 
 def main():
     from omibio.io.read_fasta import read_fasta
-    seqs = read_fasta(r"./examples/data/example_single_short_seq.fasta")
+    seqs = read_fasta(r"./examples/data/example_single_long_seq.fasta")
     sequence = seqs["example"]
     res = find_orfs(
-        sequence, translate=True, seq_id='example', min_length=0, frames=2
+        sequence, translate=True, seq_id='example', min_length=0
     )
-    print(res)
+    for orf in res:
+        if orf.strand == '-':
+            print('-', orf.frame)
+        else:
+            print('+', orf.frame)
 
 
 if __name__ == "__main__":

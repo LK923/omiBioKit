@@ -109,13 +109,13 @@ $ omibio orf find example.fasta --min-length 100
 The above CLI will produce results like this:
 ```bash
 seq_id       start   end     strand  frame   length
-example_2    70      289     -       -2      219
-example_16   53      257     +       +3      204
-example_13   118     301     +       +2      183
-example_4    92      272     -       -1      180
-example_2    157     322     +       +2      165
-example_5    17      173     -       -1      156
-example_16   176     332     -       -1      156
+example_2    70      289     -       2      219
+example_16   53      257     +       3      204
+example_13   118     301     +       2      183
+example_4    92      272     -       1      180
+example_2    157     322     +       2      165
+example_5    17      173     -       1      156
+example_16   176     332     -       1      156
 ...
 
 ```

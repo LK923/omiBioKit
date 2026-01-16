@@ -112,13 +112,12 @@ def find(
     res: list[list[str | None]] = []
 
     for orf in all_orfs:
-        frame = f"{orf.frame:+}" if orf.frame > 0 else orf.frame
         base_fields = [
             orf.seq_id,
             str(orf.start),
             str(orf.end),
             orf.strand,
-            str(frame),
+            str(orf.frame),
             str(orf.length)
         ]
         if show_seq:

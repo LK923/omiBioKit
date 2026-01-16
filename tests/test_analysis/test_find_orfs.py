@@ -191,7 +191,7 @@ class TestFindORFs:
             seq, min_length=6, max_length=15,
             include_reverse=True, start_codons={"ATG"}
         )
-        assert orfs[0].frame in (-1, -2, -3)
+        assert orfs[0].frame in (1, 2, 3)
 
     def test_find_orfs_in_frame_direct_call(self):
         seq = "ATGAAATAA"
