@@ -59,7 +59,7 @@ def plot_orfs(
         ax.axhline(y=i, color="#C8C7CE", linestyle="--")
 
     for orf in orfs:
-        frame_key = f"+{orf.frame}" if orf.frame > 0 else str(orf.frame)
+        frame_key = f"{orf.strand}{orf.frame}"
         y = frame_y[frame_key]
         color = positive_color if orf.strand == '+' else negative_color
 

@@ -74,7 +74,7 @@ def find_orfs(
     start_codons: Union[list[str], tuple[str], set[str]] = {"ATG"},
     seq_id: str | None = None,
     frames: Iterable[int] | int = {0, 1, 2},
-    str_seq: bool = True
+    str_seq: bool = True,
 ) -> IntervalResult:
     """Find ORFs in a given sequence.
 
@@ -224,7 +224,13 @@ def find_orfs(
         plot_func=plot_orfs, type="ORF",
         metadata={
             "seq_length": seq_length,
-            "sequence": str(seq)
+            "length_range": (min_length, max_length),
+            "include_str_seq": str_seq,
+            "include_overlap": overlap,
+            "include_reverse": include_reverse,
+            "translate": translate,
+            "start_codons": start_codons,
+            "frames": frames
         }
     )
 
@@ -236,11 +242,7 @@ def main():
     res = find_orfs(
         sequence, translate=True, seq_id='example', min_length=0
     )
-    for orf in res:
-        if orf.strand == '-':
-            print('-', orf.frame)
-        else:
-            print('+', orf.frame)
+    print(res.metadata)
 
 
 if __name__ == "__main__":

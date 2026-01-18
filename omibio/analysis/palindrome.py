@@ -32,7 +32,7 @@ def find_palindrome(
 
     Returns:
         IntervalResult:
-            An object containing found palindrome intervals and metadata.
+            An object containing found palindrome intervals.
     """
 
     if not seq:
@@ -40,7 +40,7 @@ def find_palindrome(
             intervals=(), seq_id=seq_id, type="palindrome",
             metadata={
                 "seq_length": 0,
-                "sequence": ""
+                "length_range": (min_length, max_length)
             }
         )
     if not isinstance(seq, (Sequence, str)):
@@ -90,8 +90,7 @@ def find_palindrome(
     return IntervalResult(
         intervals=tuple(results), seq_id=seq_id, type="palindrome",
         metadata={
-            "seq_length": n,
-            "sequence": str(seq)
+            "seq_length": n
         }
     )
 

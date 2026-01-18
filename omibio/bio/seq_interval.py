@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from omibio.sequence.sequence import Sequence
 from omibio.sequence.polypeptide import Polypeptide
+from typing import Sequence as typing_Sequence, Any
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class SeqInterval:
     """
     Stores information about the sequence range.
@@ -86,6 +87,21 @@ class SeqInterval:
                 "Cannot create Polypeptide: aa_seq is not set. "
             )
 
+    def get_attributes(
+        self,
+        attribute_names: typing_Sequence[str] = ["start", "end"],
+    ) -> list[Any]:
+        attribute_mp = self.__dict__
+        attributes: list[Any] = []
+
+        for attribute_name in attribute_names:
+            if attribute_name == "length":
+                attributes.append(self.length)
+                continue
+            attributes.append(str(attribute_mp[attribute_name]))
+
+        return attributes
+
     def __len__(self) -> int:
         return self.length
 
@@ -130,7 +146,7 @@ def main():
         type="ORF",
         frame=1
     )
-    print(repr(seq))
+    print(seq.to_csv_line())
 
 
 if __name__ == "__main__":

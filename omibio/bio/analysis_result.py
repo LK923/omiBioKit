@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from matplotlib.axes import Axes
 from typing import Callable, Any
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
-@dataclass(slots=True)
+@dataclass()
 class AnalysisResult(ABC):
     """An abstract base class used to store the results of analysis functions,
     including basic information such as sequence ID, and methods for plotting.
@@ -60,6 +60,10 @@ class AnalysisResult(ABC):
             )
 
         return self.plot_func(self, **kwargs)
+
+    @abstractmethod
+    def info(self):
+        ...
 
 
 def main():

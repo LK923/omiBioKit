@@ -1,5 +1,5 @@
 import numpy as np
-from omibio.sequence.seq_utils import encode_dna
+from . import encode_dna
 
 
 def count_nt(seq):

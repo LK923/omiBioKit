@@ -31,14 +31,14 @@ def find_motifs(
 
     Returns:
         IntervalResult:
-            An object containing found motif intervals and metadata.
+            An object containing found motif intervals.
     """
     if not seq:
         return IntervalResult(
             intervals=(), seq_id=seq_id, type="motif", plot_func=plot_motifs,
             metadata={
                 "seq_length": 0,
-                "sequence": ""
+                "include_reverse": include_reverse
             }
         )
 
@@ -97,7 +97,7 @@ def find_motifs(
         type="motif", plot_func=plot_motifs,
         metadata={
             "seq_length": n,
-            "sequence": str(seq)
+            "include_reverse": include_reverse
         }
     )
 

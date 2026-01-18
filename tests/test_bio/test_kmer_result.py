@@ -25,14 +25,14 @@ class TestKmerResult:
 
     def test_items_keys_values(self):
         counts = {"AA": 2, "AT": 3}
-        r = KmerResult(counts=counts)
+        r = KmerResult(counts=counts, k=2)
         assert list(r.items()) == list(counts.items())
         assert list(r.keys()) == list(counts.keys())
         assert list(r.values()) == list(counts.values())
 
     def test_iter_and_getitem(self):
         counts = {"AA": 2, "AT": 3}
-        r = KmerResult(counts=counts)
+        r = KmerResult(counts=counts, k=2)
         collected = list(iter(r))
         assert collected == list(counts.keys())
         assert r["AA"] == 2
@@ -40,7 +40,7 @@ class TestKmerResult:
 
     def test_repr_and_str(self):
         counts = {"AA": 2}
-        r = KmerResult(counts=counts, seq_id="id1", type="k")
+        r = KmerResult(counts=counts, seq_id="id1", type="k", k=2)
         rep = repr(r)
         st = str(r)
         assert "KmerResult" in rep

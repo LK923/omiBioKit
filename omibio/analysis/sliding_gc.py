@@ -34,8 +34,7 @@ def sliding_gc(
         return IntervalResult(
             intervals=(), seq_id=seq_id, type="sliding_gc",
             metadata={
-                "seq_length": 0,
-                "sequence": ""
+                "seq_length": 0
             }
         )
     if not isinstance(seq, (Sequence, str)):
@@ -57,13 +56,13 @@ def sliding_gc(
         return IntervalResult(
             intervals=(
                 SeqInterval(
-                    start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id
+                    start=0, end=n, gc=gc_percent, type="GC", seq_id=seq_id,
                 ),
             ),
             seq_id=seq_id, type="sliding_gc", plot_func=plot_sliding_gc,
             metadata={
                 "seq_length": n,
-                "sequence": str(seq)
+                "window": window, "step": step
             }
         )
 
@@ -86,7 +85,7 @@ def sliding_gc(
             SeqInterval(
                 start=i, end=i+window,
                 gc=gc_percent, type="GC", seq_id=seq_id
-                )
+            )
         )
 
     return IntervalResult(
@@ -96,7 +95,7 @@ def sliding_gc(
         type="sliding_gc",
         metadata={
             "seq_length": n,
-            "sequence": str(seq)
+            "window": window, "step": step
         }
     )
 

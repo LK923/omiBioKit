@@ -4,7 +4,7 @@ from omibio.utils.truncate_repr import truncate_repr
 from typing import Any
 
 
-@dataclass(slots=True)
+@dataclass()
 class SeqEntry:
     """Class to hold a sequence entry with associated metadata,
     returned by file parsing functions.

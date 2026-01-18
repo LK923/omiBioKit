@@ -76,8 +76,6 @@
   ### seq_utils/
     - clean.py
     - complement.py
-    - count_nt.py
-    - encode_dna.py
     - random_seq.py
     - shuffle_seq.py
     - transcribe.py
@@ -86,6 +84,7 @@
 
 
 ### utils/
+  - check_if_exsit.py
   - chunked.py
   - ensure_iterable.py
   - ensure_path.py

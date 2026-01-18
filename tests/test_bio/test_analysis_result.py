@@ -9,12 +9,17 @@ def fake_plot(res, **kwargs):
 
 class TestAnalysisResult:
     class DummyResult(AnalysisResult):
+        def info(self):
+            ...
         pass
 
     class PlotResult(AnalysisResult):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.called = False
+
+        def info(self):
+            ...
 
     def test_init_valid(self):
         r = self.DummyResult(type="type1", seq_id="id1", metadata={"a": 1})

@@ -63,9 +63,3 @@ class TestSeqEntry:
         meta = {"a": 1}
         e = SeqEntry(seq=s, seq_id="s1", metadata=meta)
         assert e.metadata is meta
-
-    def test_slots_prevent_new_attr(self):
-        s = self.make_seq("ATGC")
-        e = SeqEntry(seq=s, seq_id="s1")
-        with pytest.raises(AttributeError):
-            e.new_attr = 1

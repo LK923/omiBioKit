@@ -43,7 +43,7 @@ def kmer(
 
     Returns:
         KmerResult:
-            An object containing k-mer counts and metadata.
+            An object containing k-mer counts.
     """
 
     if canonical:
@@ -89,7 +89,12 @@ def kmer(
 
     if k > n:
         return KmerResult(
-            k=k, counts=dict(), seq_id=seq_id, type="kmer", plot_func=plot_kmer
+            k=k, counts=dict(), seq_id=seq_id, type="kmer",
+            plot_func=plot_kmer,
+            metadata={
+                "seq_length": n,
+                "canonical": canonical
+            }
         )
 
     kmer_counter: dict = Counter()
@@ -104,7 +109,11 @@ def kmer(
         )
     return KmerResult(
         k=k, counts=kmer_counter, seq_id=seq_id,
-        type="kmer", plot_func=plot_kmer
+        type="kmer", plot_func=plot_kmer,
+        metadata={
+            "seq_length": n,
+            "canonical": canonical
+        }
     )
 
 
