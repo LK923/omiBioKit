@@ -142,3 +142,43 @@ class TestSeqCollections:
         e = self.make_entry("s")
         sc = SeqCollections(entries=[e], source="test")
         assert str(sc) == str([e])
+
+    def test_clean(self):
+        e1 = self.make_entry("seq1", "ATGC--C")
+        e2 = self.make_entry("seq2", "NNNNNN")
+        sc = SeqCollections(entries=[e1, e2], source="test")
+
+        cleaned_sc = sc.clean(
+            name_policy="underscores",
+            gap_policy="remove",
+            strict=False,
+            remove_empty=True,
+            inplace=False,
+            remove_illegal=True,
+            min_length=3
+        )
+
+        assert len(cleaned_sc) == 1
+        assert "seq1" in cleaned_sc
+        assert str(cleaned_sc.get_seq("seq1")) == "ATGCC"
+        assert cleaned_sc.source == "test"
+
+    def test_clean_inplace(self):
+        e1 = self.make_entry("seq1", "ATGC--C")
+        e2 = self.make_entry("seq2", "NNNNNN")
+        sc = SeqCollections(entries=[e1, e2], source="test")
+
+        sc.clean(
+            name_policy="underscores",
+            gap_policy="remove",
+            strict=False,
+            remove_empty=True,
+            inplace=True,
+            remove_illegal=True,
+            min_length=3
+        )
+
+        assert len(sc) == 1
+        assert "seq1" in sc
+        assert str(sc.get_seq("seq1")) == "ATGCC"
+        assert sc.source == "test"

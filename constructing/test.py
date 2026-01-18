@@ -9,7 +9,7 @@ def analysis(sequences: list[Sequence]):
     results = []
     for seq in sequences:
         orfs = find_orfs(
-            seq, str_seq=False, sort_by_length=False, include_reverse=False,
+            seq, str_seq=False
         )
         for orf in orfs:
             results.append(orf)
@@ -17,7 +17,9 @@ def analysis(sequences: list[Sequence]):
 
 
 def main():
-    seqs: list[Sequence] = read_fasta("./huge_data/huge.fasta").seqs()
+    seqs: list[Sequence] = read_fasta(
+        "./huge_data/huge.fasta", warn=False
+    ).seqs()
     chunks: list[Sequence] = chunked(seqs, chunk_size=200)
     results = []
 

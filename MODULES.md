@@ -76,6 +76,7 @@
   ### seq_utils/
     - clean.py
     - complement.py
+    - count_nt.py
     - encode_dna.py
     - random_seq.py
     - shuffle_seq.py

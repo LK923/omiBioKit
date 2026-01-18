@@ -99,26 +99,37 @@ def clean(
 
     report: bool = report_to is not None
     seqs = read_fasta(source, strict=False, warn=False).seq_dict()
-    res = c_f(
-        seqs,
-        name_policy=name_policy,
-        gap_policy=gap_policy,
-        strict=strict,
-        min_length=min_length,
-        max_length=max_length,
-        normalize_case=not preserve_cases,
-        remove_empty=remove_empty,
-        remove_illegal=remove_illegal,
-        allowed_bases=set(allowed_bases),
-        report=report
-    )
-    if isinstance(res, tuple):
-        cleaned, clean_report = res
-        write_report(report_to, clean_report)
+    if report:
+        res, rep = c_f(
+            seqs=seqs,
+            name_policy=name_policy,
+            gap_policy=gap_policy,
+            strict=strict,
+            min_length=min_length,
+            max_length=max_length,
+            normalize_case=not preserve_cases,
+            remove_empty=remove_empty,
+            remove_illegal=remove_illegal,
+            allowed_bases=set(allowed_bases),
+            report=True,
+        )
+        write_report(report_to, rep)
     else:
-        cleaned = res
+        res = c_f(
+            seqs=seqs,
+            name_policy=name_policy,
+            gap_policy=gap_policy,
+            strict=strict,
+            min_length=min_length,
+            max_length=max_length,
+            normalize_case=not preserve_cases,
+            remove_empty=remove_empty,
+            remove_illegal=remove_illegal,
+            allowed_bases=set(allowed_bases),
+            report=False,
+        )
     if output is not None:
-        write_fasta(file_name=output, seqs=cleaned)
+        write_fasta(file_name=output, seqs=res)
     else:
-        for line in write_fasta(seqs=cleaned):
+        for line in write_fasta(seqs=res):
             click.echo(line)

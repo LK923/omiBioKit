@@ -1,7 +1,7 @@
 from omibio.sequence import Sequence, Polypeptide
 from omibio.bio import SeqCollections, SeqEntry
 from omibio.utils import within_range
-from typing import Literal, Iterable, Mapping
+from typing import Literal, Iterable, Mapping, overload
 from dataclasses import dataclass
 import re
 
@@ -63,6 +63,42 @@ ALIG_SYMBOL_RE = re.compile(r"-+")
 MUILTIPLE_UNDERSCORE_RE = re.compile(r"_+")
 
 
+@overload
+def clean(
+    seqs: Mapping[str, str | Sequence | Polypeptide] | SeqCollections,
+    source: str | None = ...,
+    name_policy: Literal["keep", "id_only", "underscores"] = ...,
+    gap_policy: Literal["keep", "remove", "collapse"] = ...,
+    strict: bool = ...,
+    min_length: int = ...,
+    max_length: int = ...,
+    normalize_case: bool = ...,
+    remove_illegal: bool = ...,
+    allowed_bases: Iterable[str] | None = ...,
+    remove_empty: bool = ...,
+    as_polypeptide: bool = ...,
+    report: Literal[False] = ...,
+) -> SeqCollections: ...
+
+
+@overload
+def clean(
+    seqs: Mapping[str, str | Sequence | Polypeptide] | SeqCollections,
+    source: str | None = ...,
+    name_policy: Literal["keep", "id_only", "underscores"] = ...,
+    gap_policy: Literal["keep", "remove", "collapse"] = ...,
+    strict: bool = ...,
+    min_length: int = ...,
+    max_length: int = ...,
+    normalize_case: bool = ...,
+    remove_illegal: bool = ...,
+    allowed_bases: Iterable[str] | None = ...,
+    remove_empty: bool = ...,
+    as_polypeptide: bool = ...,
+    report: Literal[True] = ...,
+) -> tuple[SeqCollections, CleanReport]: ...
+
+
 def clean(
     seqs: Mapping[str, str | Sequence | Polypeptide] | SeqCollections,
     source: str | None = None,
@@ -84,6 +120,8 @@ def clean(
         seqs (Mapping[str, str | Sequence | Polypeptide] | SeqCollections):
             Dictionary of sequence names to sequences or a SeqCollections
             object.
+        source (str | None, optional):
+            Source description for the cleaning report. Defaults to None.
         name_policy (Literal["keep", "id_onbly", "underscores"], optional):
             Policy for cleaning sequence names. Defaults to "keep".
         gap_policy (Literal["keep", "remove", "collapse"], optional):
@@ -400,23 +438,11 @@ def write_report(out_path: str, report: CleanReport) -> None:
 
 
 def main():
-    from omibio.io import write_fasta, read_fasta
+    from omibio.io import write_fasta, read_fasta  # noqa
     input_path = "./examples/data/example_dirty.fasta"
-    output_path = "./examples/output/clean_fasta_output.fasta"
-    report_path = "./examples/output/clean_report_output.txt"
 
-    seqs = read_fasta(input_path, strict=False).seq_dict()
-
-    cleaned_seqs, report = clean(
-        seqs, name_policy="id_only", gap_policy="collapse",
-        report=True, remove_illegal=True
-    )
-
-    write_fasta(file_name=output_path, seqs=cleaned_seqs)
-    print(f"Cleaned: {output_path}")
-
-    write_report(report_path, report)
-    print(f"Report: {report_path}")
+    seqs = read_fasta(input_path, strict=False, warn=False)
+    seqs.clean(inplace=True)
 
 
 if __name__ == "__main__":
