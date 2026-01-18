@@ -43,3 +43,14 @@
   - `Add read()` as a unified interface for file parsing functions.
   - Add `get_suffix` to utils.
   - Implement utils.
+
+## [v0.1.4] 01/18/2026
+  -Update analysis functions: no longer add original sequence to `AnalysisResult.metadata`. Add more detailed metadata.
+  - Update `omibio.__init__`
+  - Remove `slots=True` from dataclass
+  - Add `info()` abstract method  to `AnalysisResult`, and add corresponding method to `IntervalResult` & `KmerResult`
+  - Add `to_csv()` to` IntervalResult` & `KmerResult`
+  - Fix bugs of `plot_orfs()` where '+' '-' strand did not show correctly
+  - Add utils: `check_if_exsit.py`
+  - And some small-scalar modifications
+  - Some features needs to test still.
