@@ -89,7 +89,7 @@ class SeqInterval:
 
     def get_attributes(
         self,
-        attribute_names: typing_Sequence[str] = ["start", "end"],
+        attribute_names: typing_Sequence[str] = ["seq_id", "start", "end"],
     ) -> list[Any]:
         attribute_mp = self.__dict__
         attributes: list[Any] = []
@@ -98,7 +98,7 @@ class SeqInterval:
             if attribute_name == "length":
                 attributes.append(self.length)
                 continue
-            attributes.append(str(attribute_mp[attribute_name]))
+            attributes.append(attribute_mp[attribute_name])
 
         return attributes
 

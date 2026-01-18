@@ -42,3 +42,53 @@ class TestIntervalResult:
         assert "id1" in rep
         assert "type1" in rep
         assert st == str(intervals)
+
+    def test_to_csv(self, tmp_path):
+        intervals = (
+            SeqInterval(0, 2, nt_seq="AT", seq_id="s1", type="ORF", strand="+",
+                        frame=0, aa_seq="test"),
+            SeqInterval(3, 5, nt_seq="GC", seq_id="s1", type="ORF", strand="-",
+                        frame=1, aa_seq="test"),
+        )
+        r = IntervalResult(
+            intervals=intervals, seq_id="s1", type="ORF",
+            metadata={"translate": True, "include_str_seq": True}
+        )
+        csv_path = tmp_path / "intervals.csv"
+        r.to_csv(csv_path)
+
+        with open(csv_path, "r", encoding="utf-8") as f:
+            lines = f.read().strip().split("\n")
+
+        assert lines[0] == (
+            "seq_id\tstart\tend\tstrand\tframe\tlength\tnt_seq\taa_seq"
+        )
+        assert lines[1] == "s1\t0\t2\t+\t0\t2\tAT\ttest"
+        assert lines[2] == "s1\t3\t5\t-\t1\t2\tGC\ttest"
+
+        intervals_gc = (
+            SeqInterval(0, 2, nt_seq="AT", seq_id="s1", type="sliding_gc",
+                        gc=0.5),
+            SeqInterval(3, 5, nt_seq="GC", seq_id="s1", type="sliding_gc",
+                        gc=1.0),
+        )
+        r_gc = IntervalResult(
+            intervals=intervals_gc, seq_id="s1", type="sliding_gc"
+        )
+        csv_path_gc = tmp_path / "intervals_gc.csv"
+        r_gc.to_csv(csv_path_gc)
+        with open(csv_path_gc, "r", encoding="utf-8") as f:
+            lines_gc = f.read().strip().split("\n")
+        assert lines_gc[0] == "seq_id\tstart\tend\tgc"
+        assert lines_gc[1] == "s1\t0\t2\t0.5"
+        assert lines_gc[2] == "s1\t3\t5\t1.0"
+
+    def test_info(self, capsys):
+        intervals = (self.make_interval(), )
+        r = IntervalResult(intervals=intervals, seq_id="s1", type="test")
+        r.info()
+        captured = capsys.readouterr()
+        assert "IntervalResult" in captured.out
+        assert "Type: 'test'" in captured.out
+        assert "1 intervals" in captured.out
+        assert "Seq id: 's1'" in captured.out

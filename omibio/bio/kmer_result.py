@@ -39,6 +39,7 @@ class KmerResult(AnalysisResult):
 
     def info(self) -> None:
         func = self.plot_func.__name__ if self.plot_func else "N/A"
+
         message = f"""
 {type(self)}
     Type: {check_if_exsit(self.type)!r}
@@ -47,6 +48,7 @@ class KmerResult(AnalysisResult):
     Plot function: {func}
     Available metadata: {list(self.metadata.keys())!r}
         """
+
         print(message)
 
     def to_csv(self, path: Path | str, sep: str = "\t") -> None:

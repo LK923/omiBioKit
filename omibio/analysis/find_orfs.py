@@ -240,7 +240,8 @@ def main():
     seqs = read_fasta(r"./examples/data/example_single_long_seq.fasta")
     sequence = seqs["example"]
     res = find_orfs(
-        sequence, translate=True, seq_id='example', min_length=0
+        sequence, translate=True, seq_id='example', min_length=0,
+        str_seq=True
     )
     print(res.metadata)
 

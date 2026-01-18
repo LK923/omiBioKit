@@ -47,3 +47,40 @@ class TestKmerResult:
         assert "id1" in rep
         assert "k" in rep
         assert st == str(counts)
+
+    def test_kmer_does_not_match_k(self):
+        counts = {"AA": 2, "ATA": 3}
+        with pytest.raises(TypeError):
+            KmerResult(counts=counts, k=2)
+
+    def test_to_csv(self, tmp_path):
+        counts = {"AA": 2, "AT": 3}
+        r = KmerResult(counts=counts, k=2, seq_id="s1")
+        csv_path = tmp_path / "kmer_counts.csv"
+        r.to_csv(csv_path)
+
+        with open(csv_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        assert lines[0].strip() == "seq_id\tk\tkmer\tcount"
+        expected_lines = {"s1\t2\tAA\t2", "s1\t2\tAT\t3"}
+        actual_lines = {line.strip() for line in lines[1:]}
+        assert actual_lines == expected_lines
+
+    def test_info_prints_expected(self, capsys):
+        obj = KmerResult(
+            counts={"AA": 5, "AC": 3, "AG": 2},
+            k=2,
+            seq_id="test",
+            type="kmer",
+            metadata={"example_key": "example_value"}
+        )
+
+        obj.info()
+
+        captured = capsys.readouterr()
+        out = captured.out
+
+        assert "kmers" in out
+        assert f"k={obj.k}" in out
+        assert "Available metadata" in out

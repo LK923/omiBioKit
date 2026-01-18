@@ -7,9 +7,9 @@
   - Modify `plot_orfs()`
   - Add CLI: `omibio plot orf`  
   - Motify IntervalResult: apply `tuple` as container of `SeqInterval`
-  - (Considering) Apply multiprocessing to `find_orf()`
 
 ## Not important but urgent
 
 
 ## Not important and not urgent
+  - (Considering) Apply multiprocessing to `find_orf()`

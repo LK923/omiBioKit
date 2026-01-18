@@ -50,9 +50,9 @@ class IntervalResult(AnalysisResult):
         match self.type:
             case "ORF":
                 attributes.extend(["strand", "frame", "length"])
-                if self.metadata.get("include_str_seq", False):
+                if self.metadata.get("include_str_seq", False) is True:
                     attributes.append("nt_seq")
-                if self.metadata.get("translate", False):
+                if self.metadata.get("translate", False) is True:
                     attributes.append("aa_seq")
             case "sliding_gc":
                 attributes.append("gc")

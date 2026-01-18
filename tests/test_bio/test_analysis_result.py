@@ -10,8 +10,7 @@ def fake_plot(res, **kwargs):
 class TestAnalysisResult:
     class DummyResult(AnalysisResult):
         def info(self):
-            ...
-        pass
+            return "info"
 
     class PlotResult(AnalysisResult):
         def __init__(self, **kwargs):
@@ -20,6 +19,9 @@ class TestAnalysisResult:
 
         def info(self):
             ...
+
+    class badResult(AnalysisResult):
+        pass
 
     def test_init_valid(self):
         r = self.DummyResult(type="type1", seq_id="id1", metadata={"a": 1})
@@ -55,3 +57,11 @@ class TestAnalysisResult:
         res = r.plot()
         assert res == "ok"
         assert r.called is True
+
+    def test_info_abstract(self):
+        with pytest.raises(TypeError):
+            self.badResult()
+
+    def test_info_method(self):
+        r = self.DummyResult()
+        assert r.info() == "info"

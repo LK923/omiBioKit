@@ -98,3 +98,14 @@ class TestSeqInterval:
         assert str(s) == "AAAAAAAAA"
         s = SeqInterval(0, 9)
         assert str(s) == ""
+
+    def test_get_attributes(self):
+        s = SeqInterval(
+            0, 9, "ATGAAATAC", "ORF", "test", "+", 0.22, "MK", 0
+        )
+        assert s.get_attributes() == ["test", 0, 9]
+        assert s.get_attributes(["nt_seq"]) == ["ATGAAATAC"]
+        assert s.get_attributes(["type", "type"]) == ["ORF", "ORF"]
+        assert s.get_attributes(["length"]) == [9]
+        with pytest.raises(KeyError):
+            s.get_attributes(["nonexistent"])
