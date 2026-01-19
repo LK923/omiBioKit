@@ -84,7 +84,7 @@
 
 
 ### utils/
-  - check_if_exsit.py
+  - check_if_exist.py
   - chunked.py
   - ensure_iterable.py
   - ensure_path.py

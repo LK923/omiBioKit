@@ -5,7 +5,7 @@ from omibio.utils.to_percentage import to_percentage
 from omibio.utils.get_suffix import get_suffix
 from omibio.utils.within_range import within_range
 from omibio.utils.chunked import chunked
-from omibio.utils.check_if_exsit import check_if_exsit
+from omibio.utils.check_if_exist import check_if_exist
 
 __all__ = [
     "truncate_repr",
@@ -15,5 +15,5 @@ __all__ = [
     "get_suffix",
     "within_range",
     "chunked",
-    "check_if_exsit"
+    "check_if_exist"
 ]

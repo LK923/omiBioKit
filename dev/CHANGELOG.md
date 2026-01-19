@@ -51,6 +51,5 @@
   - Add `info()` abstract method  to `AnalysisResult`, and add corresponding method to `IntervalResult` & `KmerResult`
   - Add `to_csv()` to` IntervalResult` & `KmerResult`
   - Fix bugs of `plot_orfs()` where '+' '-' strand did not show correctly
-  - Add utils: `check_if_exsit.py`
+  - Add utils: `check_if_exist.py`
   - And some small-scalar modifications
-  - Some features needs to test still.

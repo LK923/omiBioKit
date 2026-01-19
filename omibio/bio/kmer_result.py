@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from omibio.bio.analysis_result import AnalysisResult
 from typing import Iterator, Iterable
-from omibio.utils import check_if_exsit
+from omibio.utils import check_if_exist
 from pathlib import Path
 import csv
 
@@ -42,9 +42,9 @@ class KmerResult(AnalysisResult):
 
         message = f"""
 {type(self)}
-    Type: {check_if_exsit(self.type)!r}
+    Type: {check_if_exist(self.type)!r}
     {len(self.counts)} kmers, k={self.k}
-    Seq id: {check_if_exsit(self.seq_id)!r}
+    Seq id: {check_if_exist(self.seq_id)!r}
     Plot function: {func}
     Available metadata: {list(self.metadata.keys())!r}
         """
@@ -62,7 +62,7 @@ class KmerResult(AnalysisResult):
         """
 
         rows: list[list[str | int]] = [["seq_id", "k", "kmer", "count"]]
-        seq_id = check_if_exsit(self.seq_id)
+        seq_id = check_if_exist(self.seq_id)
         for kmer, count in self.counts.items():
             rows.append([seq_id, self.k, kmer, count])
 

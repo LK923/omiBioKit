@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from omibio.bio.analysis_result import AnalysisResult
 from omibio.bio.seq_interval import SeqInterval
-from omibio.utils import ensure_iterable, check_if_exsit
+from omibio.utils import ensure_iterable, check_if_exist
 from typing import Iterator, Union
 from pathlib import Path
 import csv
@@ -37,9 +37,9 @@ class IntervalResult(AnalysisResult):
         func = self.plot_func.__name__ if self.plot_func else "N/A"
         message = f"""
 {type(self)}
-    Type: {check_if_exsit(self.type)!r}
+    Type: {check_if_exist(self.type)!r}
     {len(self.intervals)} intervals
-    Seq id: {check_if_exsit(self.seq_id)!r}
+    Seq id: {check_if_exist(self.seq_id)!r}
     Plot function: {func}
     Available metadata: {list(self.metadata.keys())!r}
         """
